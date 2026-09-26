@@ -32,11 +32,12 @@ Then open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Project Structure
 
 ```
-public/             Static assets (images, icons)
-src/app/            Pages, layouts, and global styles
-src/app/components/ Shared UI components
-src/utils/          Helper functions
-styles/             CSS modules and stylesheets
+components/   Shared UI components
+images/       Image assets
+pages/        Page routes
+public/       Static files served as-is
+src/          App directory, additional components, and utilities
+styles/       CSS modules and global stylesheets
 ```
 
 ## Deployment
