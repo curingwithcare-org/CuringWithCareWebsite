@@ -62,7 +62,8 @@ const Navbar = () => {
         <Link href="/events" className="transition-colors duration-300 ease-in-out min-w-fit" onClick={closeMobileMenu}>Past Events</Link>
         <Link href="/branches" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Branches</Link>
         <Link href="/team" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Team</Link>
-        <a href="https://blog.curingwithcare.org" className="transition-colors duration-300 ease-in-out">Blog</a>
+        {/* Hidden while blog.curingwithcare.org (Ghost on Oracle Cloud) is down. Uncomment once it's back up.
+        <a href="https://blog.curingwithcare.org" className="transition-colors duration-300 ease-in-out">Blog</a> */}
       </div>
     </nav>
   );
