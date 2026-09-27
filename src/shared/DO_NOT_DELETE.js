@@ -216,10 +216,10 @@ export default function Home() {
 
       <section 
         ref={eventsRef}
-        className="text-center flex gap-8 justify-center items-center min-h-[100vh] mt-24 pt-8 relative"
+        className="text-center flex gap-8 justify-center items-center min-h-screen mt-24 pt-8 relative"
       >
           <motion.h1 
-            className="--font-fredoka-old col-span-3 font-bold text-[7rem] leading-none text-color-300 md:text-color-800 bg-[rgba(0,0,0,0.6)] md:bg-[transparent] pb-8 mb-8 z-10 w-[fit-content] p-4 rounded-xl"
+            className="--font-fredoka-old col-span-3 font-bold text-[7rem] leading-none text-color-300 md:text-color-800 bg-[rgba(0,0,0,0.6)] md:bg-transparent pb-8 mb-8 z-10 w-fit p-4 rounded-xl"
             initial={{ scale: 0.8 }}
             animate={eventsInView ? { scale: 1 } : { scale: 0.8 }}
             transition={{ duration: 1, delay: eventsInView ? 0.5 : 0 }}

@@ -3,21 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Navbar from '../src/app/components/Navbar';
-import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from '@supabase/supabase-js';
+import Navbar from '../src/shared/components/Navbar';
+import { motion, AnimatePresence } from "motion/react";
 import dynamic from 'next/dynamic';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"; // Fixed import
 import "yet-another-react-lightbox/plugins/thumbnails.css"; // Added proper CSS import
-import Button from '@/app/components/Button';
+import Button from '@/shared/components/Button';
+import { supabase } from "../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Global state for lightbox
 let lightboxState = {
@@ -131,7 +127,7 @@ export default function Events() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
         <title>Past Events | CARE Nonprofit Organization</title>
         <meta name="description" content="Explore past events hosted by CARE" />
@@ -145,9 +141,9 @@ export default function Events() {
           className="text-center mb-12"
         >
           <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">Our Past Events</h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Explore the events we've hosted across our branches. Each event showcases our commitment to making a positive impact in communities worldwide.
+            Explore the events we&apos;ve hosted across our branches. Each event showcases our commitment to making a positive impact in communities worldwide.
           </p>
         </motion.section>
         <motion.section
@@ -156,7 +152,7 @@ export default function Events() {
           transition={{ duration: 0.4 }}
           className="mb-12"
         >
-          <div className="rounded-3xl border border-green-100 bg-white/80 p-6 shadow-xl backdrop-blur md:p-8">
+          <div className="rounded-3xl border border-green-100 bg-white/80 p-6 shadow-xl backdrop-blur-sm md:p-8">
             <div className="mb-6 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="text-sm font-semibold uppercase tracking-[0.24em] text-green-600">
@@ -173,7 +169,7 @@ export default function Events() {
             </div>
 
             <div className="grid gap-4 md:grid-cols-2">
-              <div className="rounded-2xl border border-green-100 bg-gradient-to-br from-green-50 to-white p-5 shadow-sm">
+              <div className="rounded-2xl border border-green-100 bg-linear-to-br from-green-50 to-white p-5 shadow-xs">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-green-600">
                   First Edition
                 </p>
@@ -189,7 +185,7 @@ export default function Events() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5 shadow-sm">
+              <div className="rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-5 shadow-xs">
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-emerald-600">
                   2nd Edition
                 </p>
@@ -441,7 +437,7 @@ function EventCard({ event, branchData, openGlobalLightbox, isPittsburgh }) {
                 {images.slice(0, 6).map((image, index) => (
                   <div 
                     key={image.id} 
-                    className="relative aspect-square overflow-hidden rounded cursor-pointer"
+                    className="relative aspect-square overflow-hidden rounded-sm cursor-pointer"
                     onClick={() => openLightbox(index)}
                   >
                     <Image 
@@ -453,7 +449,7 @@ function EventCard({ event, branchData, openGlobalLightbox, isPittsburgh }) {
                       className="hover:scale-110 transition-transform duration-300"
                     />
                     {index === 5 && images.length > 6 && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70 text-white font-bold">
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/70 text-white font-bold">
                         +{images.length - 6} more
                       </div>
                     )}

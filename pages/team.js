@@ -1,15 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '../src/app/components/Navbar';
+import Navbar from '../src/shared/components/Navbar';
 import Head from 'next/head';
-import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from "@supabase/supabase-js";
+import { motion, AnimatePresence } from "motion/react";
+import { supabase } from "../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Teams = () => {
   const [boardMembers, setBoardMembers] = useState([]);
@@ -95,7 +91,7 @@ const Teams = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
         <title>Our Team | CARE Nonprofit Organization</title>
         <meta name="description" content="Meet the dedicated board members behind CARE nonprofit organization" />
@@ -109,7 +105,7 @@ const Teams = () => {
           className="text-center mb-16"
         >
           <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">Our Board</h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
             Meet the dedicated individuals who guide our mission and work tirelessly 
             to ensure CARE makes a meaningful difference around the world.
@@ -151,14 +147,14 @@ const Teams = () => {
                         e.target.src = "/team-placeholder.png";
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
+                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
                       <h2 className="text-2xl font-bold text-white">{member.name}</h2>
                       <p className="text-green-300 font-medium">{member.position}</p>
                     </div>
                   </div>
                   
-                  <div className="p-5 flex-grow flex flex-col">
-                    <div className="flex-grow">
+                  <div className="p-5 grow flex flex-col">
+                    <div className="grow">
                       {expandedId === member.id ? (
                         <AnimatePresence>
                           <motion.div
@@ -181,7 +177,7 @@ const Teams = () => {
                     {member.description && member.description.length > 100 && (
                       <button 
                         onClick={() => toggleExpand(member.id)}
-                        className="text-green-600 hover:text-green-700 font-medium mt-2 focus:outline-none group flex items-center"
+                        className="text-green-600 hover:text-green-700 font-medium mt-2 focus:outline-hidden group flex items-center"
                       >
                         {expandedId === member.id ? 'Read Less' : 'Read More'}
                         <svg 
@@ -234,7 +230,7 @@ const Teams = () => {
           >
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-green-500 mb-6">Research & Design Team</h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+              <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
             </div>
             
             <div className="max-w-5xl mx-auto">
@@ -260,8 +256,8 @@ const Teams = () => {
                       show: { opacity: 1, y: 0 }
                     }}
                     whileHover={{ scale: 1.05 }}
-                    className={`py-6 px-3 rounded-lg shadow-sm
-                               bg-gradient-to-br from-${getRandomColor(index)}-50 to-${getRandomColor(index)}-100
+                    className={`py-6 px-3 rounded-lg shadow-xs
+                               bg-linear-to-br from-${getRandomColor(index)}-50 to-${getRandomColor(index)}-100
                                border border-${getRandomColor(index)}-200`}
                   >
                     <span className="font-medium text-gray-800 block">
@@ -284,7 +280,7 @@ const Teams = () => {
           >
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-green-500 mb-6">Journalism Team</h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+              <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
             </div>
 
             <div className="max-w-5xl mx-auto">
@@ -308,8 +304,8 @@ const Teams = () => {
                       show: { opacity: 1, y: 0 }
                     }}
                     whileHover={{ scale: 1.05 }}
-                    className={`py-6 px-3 rounded-lg shadow-sm
-                               bg-gradient-to-br from-${getRandomColor(index)}-50 to-${getRandomColor(index)}-100
+                    className={`py-6 px-3 rounded-lg shadow-xs
+                               bg-linear-to-br from-${getRandomColor(index)}-50 to-${getRandomColor(index)}-100
                                border border-${getRandomColor(index)}-200`}
                   >
                     <span className="font-medium text-gray-800 block">
@@ -332,7 +328,7 @@ const Teams = () => {
           >
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-green-500 mb-6">Our Interns</h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+              <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
             </div>
             
             <div className="max-w-6xl mx-auto">

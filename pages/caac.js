@@ -7,7 +7,7 @@ export default function CAAC() {
         <title>Cancer Awareness & Action Challenge | CARE</title>
         <meta name="description" content="Join the Cancer Awareness & Action Challenge and make a difference!" />
       </Head>
-      <div className="p-6 md:p-12 pt-24 md:pt-36 min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center py-12 px-4">
+      <div className="p-6 md:p-12 pt-24 md:pt-36 min-h-screen bg-linear-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center py-12 px-4">
         <main className="w-full flex flex-col items-center justify-center">
           {/* Info Section */}
           <div className="w-full max-w-4xl mb-12">
@@ -20,9 +20,9 @@ export default function CAAC() {
             <h1 className="--font-fredoka font-bold text-4xl md:text-5xl text-green-600 mb-4 text-center">
               2025 Cancer Awareness & Action Challenge
             </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded"></div>
+            <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded-sm"></div>
             <p className="text-lg md:text-xl text-gray-700 mb-6 text-center">
-              Cancer is among the globe's most crucial global health issues. This
+              Cancer is among the globe&apos;s most crucial global health issues. This
               disease affects hundreds of thousands of individuals each year.{" "}
               <span className="font-semibold text-green-700">curingwithCARE</span>{" "}
               and the{" "}
@@ -50,7 +50,7 @@ export default function CAAC() {
               This challenge only requires your ability to include passion,
               feasibility, and impact in one submission!
             </p>
-            <div className="bg-white/70 rounded-xl shadow p-4 mb-6">
+            <div className="bg-white/70 rounded-xl shadow-sm p-4 mb-6">
               <h2 className="text-xl md:text-2xl font-bold text-green-700 mb-2 text-center">
                 Eligibility
               </h2>
@@ -67,7 +67,7 @@ export default function CAAC() {
                 </li>
               </ul>
             </div>
-            <div className="bg-white/70 rounded-xl shadow p-4 mb-6">
+            <div className="bg-white/70 rounded-xl shadow-sm p-4 mb-6">
               <h2 className="text-xl md:text-2xl font-bold text-green-700 mb-2 text-center">
                 2025 Prompt
               </h2>
@@ -87,13 +87,13 @@ export default function CAAC() {
                 href="https://hshrf.org/caac"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-gradient-to-r from-green-500 to-emerald-400 text-white font-bold px-6 py-3 rounded-lg shadow hover:scale-105 transition-transform text-center"
+                className="bg-linear-to-r from-green-500 to-emerald-400 text-white font-bold px-6 py-3 rounded-lg shadow-sm hover:scale-105 transition-transform text-center"
               >
                 Full Guidelines Document
               </a>
               <button
                 disabled
-                className="bg-white border border-green-400 text-green-700 font-bold px-6 py-3 rounded-lg shadow cursor-not-allowed opacity-70"
+                className="bg-white border border-green-400 text-green-700 font-bold px-6 py-3 rounded-lg shadow-sm cursor-not-allowed opacity-70"
                 title="Opens Aug 1st"
               >
                 Submission (Opens Aug 1st)
