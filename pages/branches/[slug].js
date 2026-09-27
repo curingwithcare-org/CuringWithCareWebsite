@@ -5,12 +5,8 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { createClient } from "@supabase/supabase-js";
+import { supabase, supabaseUrl } from "../../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const BranchDetail = () => {
   const router = useRouter();

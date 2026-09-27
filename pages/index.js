@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useCallback, Suspense } from "react";
-import { createClient } from "@supabase/supabase-js";
 import Image from "next/image";
 import Button from "../src/app/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,11 +10,8 @@ import { useInView } from "react-intersection-observer";
 import { throttle } from "../src/utils/throttle";
 import Head from "next/head";
 import ErrorBoundary from "../src/app/components/ErrorBoundary";
+import { supabase } from "../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Animation variants for better performance
 const fadeIn = {

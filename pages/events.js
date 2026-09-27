@@ -5,7 +5,6 @@ import Head from 'next/head';
 import Image from 'next/image';
 import Navbar from '../src/app/components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from '@supabase/supabase-js';
 import dynamic from 'next/dynamic';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
@@ -13,11 +12,8 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"; // Fixed import
 import "yet-another-react-lightbox/plugins/thumbnails.css"; // Added proper CSS import
 import Button from '@/app/components/Button';
+import { supabase } from "../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Global state for lightbox
 let lightboxState = {

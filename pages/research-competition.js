@@ -15,7 +15,7 @@ export default function ResearchCompetition() {
     author: "Angela Choi", 
     award: "First Place", 
     abstract: "",
-    pdfUrl: "https://sharex.shuchir.dev/u/ORb5uK.pdf",
+    pdfUrl: "/research/angela-choi-cervical-cancer-research.pdf",
   };
 
   const runnerUps = [

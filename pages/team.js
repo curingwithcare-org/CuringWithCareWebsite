@@ -4,12 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../src/app/components/Navbar';
 import Head from 'next/head';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Teams = () => {
   const [boardMembers, setBoardMembers] = useState([]);

@@ -6,12 +6,8 @@ import Button from '../src/app/components/Button';
 import Head from 'next/head';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../src/utils/supabase";
 
-// Initialize Supabase client
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const Branches = () => {
   const [hoveredId, setHoveredId] = useState(null);
@@ -173,7 +169,7 @@ const Branches = () => {
             <div className="flex flex-wrap justify-center gap-4">
               <Button 
                 text="Start a Branch" 
-                onClick={() => window.location.href = "/start"} 
+                link="https://forms.gle/S2WH6htwdTTHK2gy9"
               />
             </div>
           </div>
