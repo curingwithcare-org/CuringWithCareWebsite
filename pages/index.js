@@ -11,6 +11,7 @@ import { throttle } from "../src/utils/throttle";
 import Head from "next/head";
 import ErrorBoundary from "../src/shared/components/ErrorBoundary";
 import { supabase } from "../src/utils/supabase";
+import { useChapterCount } from "../src/utils/chapters";
 
 
 // Animation variants for better performance
@@ -48,6 +49,7 @@ export default function Home() {
   const [featuresRef, featuresInView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [eventsRef, eventsInView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [numbersRef, numbersInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const chapterCount = useChapterCount();
   const [stayUpToDateRef, stayUpToDateInView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   // Check for mobile device on mount with a more efficient approach
@@ -402,7 +404,7 @@ export default function Home() {
             {[
               { number: "900+", text: "Members worldwide", blob: "blob3.svg" },
               { number: "$30k+", text: "raised", blob: "blob2.svg" },
-              { number: "40+", text: "Chapters", blob: "blob.svg" }
+              { number: chapterCount, text: "Chapters", blob: "blob.svg" }
             ].map((item, index) => (
               <motion.div 
                 key={index}

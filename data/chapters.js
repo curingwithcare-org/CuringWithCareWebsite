@@ -1,6 +1,7 @@
 // Curing with Care chapters, 2026–2027
 // Source: "New All Members List 2026-2027" → Branch & Chapter list tab
 // To update: edit this file only. Do not add emails or phone numbers.
+// Confirmed with Director of Chapters (Isha V), 9/27/26. Upper St. Clair confirmed as new.
 
 const chapters = [
   {
@@ -37,7 +38,7 @@ const chapters = [
   {
     region: "Germantown, MD",
     chapters: [
-      { school: "Northwest High School", state: "MD", heads: ["Valeria Manjano", "Protikha Das"] },
+      { school: "Northwest High School", state: "MD", heads: ["Valeria Majano", "Protikha Das"] },
     ],
   },
   {
@@ -77,7 +78,7 @@ const chapters = [
       { school: "North Allegheny", state: "PA", heads: ["Isha Vyawahare"] },
       { school: "Seneca Valley High School", state: "PA", heads: ["Soumil Mohanty"] },
       { school: "South Fayette High School", state: "PA", heads: ["Shrita Machineni"] },
-      { school: "Upper St. Clair High School", state: "PA", heads: ["Aanya Agrawal", "Aadhya Agrawal"] },
+      { school: "Upper St. Clair High School", state: "PA", heads: ["Aanya Agrawal", "Aadhya Agrawal"], isNew: true },
     ],
   },
   {
@@ -94,16 +95,16 @@ const chapters = [
     ],
   },
   {
-    region: "San Francisco Bay Area, CA",
+    region: "San Jose, CA",
     chapters: [
-      { school: "Branham High School", state: "CA", heads: ["Megha Soumayaji", "Sanviti Amarnath", "Esther Moon"] },
+      { school: "Branham High School", state: "CA", heads: ["Megha Somayaji", "Sanviti Amarnath", "Esther Moon"] },
       { school: "Santa Teresa High School", state: "CA", heads: ["Stuti Puranik"] },
     ],
   },
   {
     region: "Irvine, CA",
     chapters: [
-      { school: "Irvine", state: "CA", heads: ["Emy Reetoo"] },
+      { school: "Irvine Community Chapter", state: "CA", heads: ["Emy Reetoo"], note: "Not affiliated with a school" },
     ],
   },
   {
@@ -111,9 +112,9 @@ const chapters = [
     chapters: [
       { school: "Interlake High School", state: "WA", heads: ["Gyanvi Jaiswal", "Mehekpreet Kaur"] },
       { school: "Jackson High School", state: "WA", heads: ["Raaga Egamamidi"] },
-      { school: "Lake Stevens High School", state: "WA", heads: ["Vishwath Vinesh"] },
+      { school: "Lake Stevens High School", state: "WA", heads: ["Vishvath Vinesh"] },
       { school: "North Creek High School", state: "WA", heads: ["Varalika Konduri", "Shrita Kopparthi"] },
-      { school: "Redmond High School", state: "WA", heads: ["Prisha Aravat", "Evelyn"] },
+      { school: "Redmond High School", state: "WA", heads: ["Prisha Aravat", "Evelyn Ma"] },
     ],
   },
 ];

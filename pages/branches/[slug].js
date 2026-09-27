@@ -5,7 +5,9 @@ import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
 import { motion } from "motion/react";
-import { supabase, supabaseUrl } from "../../src/utils/supabase";
+import ChapterCard from "../../src/shared/components/ChapterCard";
+import RegionImage from "../../src/shared/components/RegionImage";
+import { fetchRegion, regionName } from "../../src/utils/chapters";
 
 
 const BranchDetail = () => {
@@ -22,23 +24,17 @@ const BranchDetail = () => {
 
       try {
         setLoading(true);
-        const { data, error } = await supabase
-          .from('branches')
-          .select('*')
-          .eq('slug', slug)
-          .single();
-        
-        if (error) {
-          console.error("Error fetching branch data:", error);
-          setError("Failed to load branch information");
-        } else if (data) {
-          setBranch(data);
-        } else {
+        const data = await fetchRegion(slug);
+        if (!data) {
           setError("Branch not found");
+        } else if (!data.active) {
+          setError("This branch is no longer active");
+        } else {
+          setBranch(data);
         }
       } catch (e) {
-        console.error("Unexpected error:", e);
-        setError("An unexpected error occurred");
+        console.error("Error fetching branch data:", e);
+        setError("Failed to load branch information");
       } finally {
         setLoading(false);
       }
@@ -76,11 +72,13 @@ const BranchDetail = () => {
     return null;
   }
 
+  const name = regionName(branch);
+
   return (
     <div className="min-h-screen mt-16 bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
-        <title>{branch.city} Branch | CARE Nonprofit Organization</title>
-        <meta name="description" content={`Learn about CARE's work in ${branch.city} and how we're making a difference locally.`} />
+        <title>{`${name} Branch | CARE Nonprofit Organization`}</title>
+        <meta name="description" content={`Learn about CARE's work in ${name} and how we're making a difference locally.`} />
       </Head>
       
       <main className="container mx-auto px-4 py-12">
@@ -91,17 +89,7 @@ const BranchDetail = () => {
           transition={{ duration: 1 }}
           className="relative h-96 rounded-2xl overflow-hidden mb-12"
         >
-          <div className="absolute inset-0">
-            <img 
-              src={branch.image} 
-              alt={`${branch.city} Branch`}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.src = "/branch-placeholder.png";
-              }}
-            />
-            <div className={`absolute inset-0 bg-linear-to-r ${branch.color || "from-green-600 to-emerald-500"} opacity-70`}></div>
-          </div>
+          <RegionImage src={branch.image} alt={`${name} Branch`} logo="corner" />
           
           <div className="absolute inset-0 flex flex-col justify-center text-white p-12">
             <motion.div
@@ -109,83 +97,46 @@ const BranchDetail = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.8 }}
             >
-              <h1 className="text-5xl md:text-6xl font-bold mb-4 drop-shadow-md">{branch.city}</h1>
+              <h1 className="text-5xl md:text-6xl font-bold mb-4 drop-shadow-md">{name}</h1>
               <div className="w-20 h-1 bg-white mb-6"></div>
-              <p className="text-xl max-w-2xl">{branch.description}</p>
+              {branch.description && <p className="text-xl max-w-2xl">{branch.description}</p>}
             </motion.div>
           </div>
         </motion.section>
         
-        {/* Branch Details Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 mb-16">
-          <motion.div 
+        {/* About (only when the branch has a description) */}
+        {branch.description && (
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
-            className="lg:col-span-2 bg-white rounded-xl p-8 shadow-md"
+            className="bg-white rounded-xl p-8 shadow-md mb-12"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">About Our {branch.city} Branch</h2>
-            <p className="text-gray-700 leading-relaxed mb-8 text-lg">{branch.description}</p>
-            
-            {/* Chapters Section */}
-            {branch.chapters && branch.chapters.length > 0 && (
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">Our Local Chapters</h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                  {branch.chapters.map((chapter, index) => (
-                    <motion.div 
-                      key={index}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.1 * index, duration: 0.5 }}
-                      className={`p-4 rounded-lg text-white bg-linear-to-br ${branch.color || "from-green-600 to-emerald-500"}`}
-                    >
-                      <div className="font-medium">{chapter}</div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">About Our {name} Branch</h2>
+            <p className="text-gray-700 leading-relaxed text-lg">{branch.description}</p>
           </motion.div>
-          
-          {/* Regional Directors Section */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="bg-white rounded-xl p-8 shadow-md"
+        )}
+
+        {/* Chapters */}
+        {branch.chapters.length > 0 && (
+          <motion.section
+            initial="hidden"
+            animate="visible"
+            variants={{ visible: { transition: { delayChildren: 0.3, staggerChildren: 0.1 } } }}
+            className="mb-16"
           >
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Regional Directors</h2>
-            {branch.rds && branch.rds.length > 0 ? (
-              <div className="space-y-6">
-                {branch.rds.map((rd, index) => (
-                  <div key={index} className="flex items-center">
-                    <div className="mr-4 w-16 h-16 rounded-full overflow-hidden bg-gray-200">
-                      <img 
-                        src={`${supabaseUrl}/storage/v1/object/public/images/RDs/${rd.image}`} 
-                        alt={rd.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.src = "/avatar-placeholder.png";
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-gray-800">{rd.name}</h3>
-                      <p className="text-sm text-gray-500">Regional Director</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-gray-500">No regional directors listed at this time.</p>
-            )}
-          </motion.div>
-        </div>
-        
+            <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Local Chapters</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {branch.chapters.map((chapter) => (
+                <ChapterCard key={chapter.id} chapter={chapter} />
+              ))}
+            </div>
+          </motion.section>
+        )}
+
         {/* Back to All Branches */}
         <div className="text-center mt-12">
-          <Link href="/branches" className="inline-flex items-center text-green-600 hover:text-green-700 transition-colors">
+          <Link href="/branches" className="inline-flex items-center min-h-11 text-green-600 hover:text-green-700 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
