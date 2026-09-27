@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion } from "motion/react";
 import { supabase, supabaseUrl } from "../../src/utils/supabase";
 
 
@@ -63,7 +63,7 @@ const BranchDetail = () => {
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-4 py-20">
         <div className="max-w-4xl mx-auto text-center py-12 bg-red-50 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-red-700 mb-4">{error}</h2>
-          <p className="text-gray-600 mb-6">We couldn't find the information you're looking for.</p>
+          <p className="text-gray-600 mb-6">We couldn&apos;t find the information you&apos;re looking for.</p>
           <Link href="/branches" className="inline-block px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
             Return to All Branches
           </Link>

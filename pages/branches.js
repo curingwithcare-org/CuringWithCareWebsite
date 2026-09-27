@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '../src/app/components/Navbar';
-import Button from '../src/app/components/Button';
+import Navbar from '../src/shared/components/Navbar';
+import Button from '../src/shared/components/Button';
 import Head from 'next/head';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion } from "motion/react";
 import { supabase } from "../src/utils/supabase";
 
 
@@ -66,7 +66,7 @@ const Branches = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
             CARE has established branches across the world.
-            Explore our locations below and discover how we're making a difference in each region.
+            Explore our locations below and discover how we&apos;re making a difference in each region.
           </p>
         </motion.section>
         

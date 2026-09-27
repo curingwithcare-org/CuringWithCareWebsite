@@ -1,8 +1,8 @@
 "use client";
 
 import Head from "next/head";
-import Navbar from "../src/app/components/Navbar";
-import { motion } from "framer-motion";
+import Navbar from "../src/shared/components/Navbar";
+import { motion } from "motion/react";
 
 const prompts = [
   "The moral issues surrounding the availability of treatment and the new technologies developed.",

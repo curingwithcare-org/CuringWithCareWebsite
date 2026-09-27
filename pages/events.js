@@ -3,15 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Navbar from '../src/app/components/Navbar';
-import { motion, AnimatePresence } from 'framer-motion';
+import Navbar from '../src/shared/components/Navbar';
+import { motion, AnimatePresence } from "motion/react";
 import dynamic from 'next/dynamic';
 import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails"; // Fixed import
 import "yet-another-react-lightbox/plugins/thumbnails.css"; // Added proper CSS import
-import Button from '@/app/components/Button';
+import Button from '@/shared/components/Button';
 import { supabase } from "../src/utils/supabase";
 
 
@@ -143,7 +143,7 @@ export default function Events() {
           <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">Our Past Events</h1>
           <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Explore the events we've hosted across our branches. Each event showcases our commitment to making a positive impact in communities worldwide.
+            Explore the events we&apos;ve hosted across our branches. Each event showcases our commitment to making a positive impact in communities worldwide.
           </p>
         </motion.section>
         <motion.section

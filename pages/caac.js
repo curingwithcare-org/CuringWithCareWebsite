@@ -22,7 +22,7 @@ export default function CAAC() {
             </h1>
             <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded"></div>
             <p className="text-lg md:text-xl text-gray-700 mb-6 text-center">
-              Cancer is among the globe's most crucial global health issues. This
+              Cancer is among the globe&apos;s most crucial global health issues. This
               disease affects hundreds of thousands of individuals each year.{" "}
               <span className="font-semibold text-green-700">curingwithCARE</span>{" "}
               and the{" "}

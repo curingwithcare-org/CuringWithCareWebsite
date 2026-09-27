@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '../src/app/components/Navbar';
+import Navbar from '../src/shared/components/Navbar';
 import Head from 'next/head';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../src/utils/supabase";
 
 

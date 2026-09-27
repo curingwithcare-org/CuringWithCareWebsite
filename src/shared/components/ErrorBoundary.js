@@ -22,7 +22,7 @@ class ErrorBoundary extends React.Component {
       return this.props.fallback || (
         <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
           <h2 className="text-xl font-semibold text-red-700">Something went wrong</h2>
-          <p className="text-red-600 mt-2">The component couldn't be displayed.</p>
+          <p className="text-red-600 mt-2">The component couldn&apos;t be displayed.</p>
         </div>
       );
     }

@@ -1,6 +1,8 @@
-import "../src/app/globals.css";
-import "../src/app/typekit.css";
-import Navbar from "../src/app/components/Navbar";
+import "../src/shared/globals.css";
+import "../src/shared/typekit.css";
+import "../src/shared/components/navbar.css";
+import Link from "next/link";
+import Navbar from "../src/shared/components/Navbar";
 
 import '@fortawesome/fontawesome-svg-core/styles.css';
 import { config } from '@fortawesome/fontawesome-svg-core';
@@ -24,13 +26,13 @@ function CareApp({ Component, pageProps }) {
         <div className="flex gap-12">
           <div className="flex flex-col text-right">
             <a href="https://www.zeffy.com/en-US/donation-form/donate-to-curingwithcare" className="text-gray-600 hover:text-gray-800">Donate</a>
-            <a href="/about" className="text-gray-600 hover:text-gray-800">Past Events</a>
-            <a href="/branches" className="text-gray-600 hover:text-gray-800">Branches</a>
-            <a href="/team" className="text-gray-600 hover:text-gray-800">Team</a>
+            <Link href="/about" className="text-gray-600 hover:text-gray-800">Past Events</Link>
+            <Link href="/branches" className="text-gray-600 hover:text-gray-800">Branches</Link>
+            <Link href="/team" className="text-gray-600 hover:text-gray-800">Team</Link>
           </div>
 
           <div className="flex flex-col text-right">
-            <a href="/about" className="text-gray-600 hover:text-gray-800">About</a>
+            <Link href="/about" className="text-gray-600 hover:text-gray-800">About</Link>
             <a href="https://www.instagram.com/curingwithcare/" className="text-gray-600 hover:text-gray-800" target="_blank">Instagram</a>
             <a href="https://www.linkedin.com/company/curingwithcare" className="text-gray-600 hover:text-gray-800" target="_blank">LinkedIn</a>
             <a href="https://www.facebook.com/people/curingwithcare/61551833566559/" className="text-gray-600 hover:text-gray-800" target="_blank">Facebook</a>

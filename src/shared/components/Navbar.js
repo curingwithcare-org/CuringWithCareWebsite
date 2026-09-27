@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import './navbar.css';
+import Link from 'next/link';
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -30,6 +30,10 @@ const Navbar = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <nav className={`navbar transition-all duration-300 w-full ${
       scrolled 
@@ -37,9 +41,9 @@ const Navbar = () => {
         : "bg-transparent fixed top-0 left-0"
     } z-50`}>
       <div className="navbar-brand items-center px-4">
-        <a href="/" className='block' style={{ margin: "1rem 0" }}>
+        <Link href="/" className='block' style={{ margin: "1rem 0" }} onClick={closeMobileMenu}>
           <img src="/logo.png" alt="Logo" className="navbar-logo" />
-        </a>
+        </Link>
         <button 
           className="navbar-toggle" 
           onClick={toggleMobileMenu}
@@ -53,11 +57,11 @@ const Navbar = () => {
         </button>
       </div>
       <div className={`navbar-menu pl-0 p-6 md:p-0 mr-6 ${mobileMenuOpen ? 'active' : ''}`}>
-        <a href="/" className="transition-colors duration-300 ease-in-out">Home</a>
-        <a href="/about" className="transition-colors duration-300 ease-in-out">About</a>
-        <a href="/events" className="transition-colors duration-300 ease-in-out min-w-[fit-content]">Past Events</a>
-        <a href="/branches" className="transition-colors duration-300 ease-in-out">Branches</a>
-        <a href="/team" className="transition-colors duration-300 ease-in-out">Team</a>
+        <Link href="/" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Home</Link>
+        <Link href="/about" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>About</Link>
+        <Link href="/events" className="transition-colors duration-300 ease-in-out min-w-[fit-content]" onClick={closeMobileMenu}>Past Events</Link>
+        <Link href="/branches" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Branches</Link>
+        <Link href="/team" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Team</Link>
         <a href="https://blog.curingwithcare.org" className="transition-colors duration-300 ease-in-out">Blog</a>
       </div>
     </nav>

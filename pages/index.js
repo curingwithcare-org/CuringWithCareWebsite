@@ -2,14 +2,14 @@
 
 import { useEffect, useState, useCallback, Suspense } from "react";
 import Image from "next/image";
-import Button from "../src/app/components/Button";
+import Button from "../src/shared/components/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInstagram, faLinkedin, faFacebook } from "@fortawesome/free-brands-svg-icons";
-import { motion, useAnimation, AnimatePresence } from "framer-motion";
+import { motion, useAnimation, AnimatePresence } from "motion/react";
 import { useInView } from "react-intersection-observer";
 import { throttle } from "../src/utils/throttle";
 import Head from "next/head";
-import ErrorBoundary from "../src/app/components/ErrorBoundary";
+import ErrorBoundary from "../src/shared/components/ErrorBoundary";
 import { supabase } from "../src/utils/supabase";
 
 
@@ -103,7 +103,10 @@ export default function Home() {
     const banner = document.getElementById("announcement-banner");
     if (banner) {
       const nav = document.querySelector("nav");
-      if (nav) nav.style.marginTop = "3rem";
+      if (nav) {
+        nav.style.marginTop = "3rem";
+        return () => { nav.style.marginTop = ""; };
+      }
     }
   }, []);
 
@@ -241,7 +244,7 @@ export default function Home() {
                         transition={{ duration: 0.3 }}
                       >
                         <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 leading-relaxed">
-                          CARE's outreach initiatives encompass a wide range of activities from partaking in local events to various fundraising opportunities.
+                          CARE&apos;s outreach initiatives encompass a wide range of activities from partaking in local events to various fundraising opportunities.
                         </p>
 
                         <div className="mx-auto max-w-7xl px-0 md:px-6 mt-10">
