@@ -70,7 +70,8 @@
   position: absolute;
   height: 2px;
   width: 100%;
-  background-color: white;
+  /* Dark on the transparent navbar (light pages), white on the dark scrolled navbar */
+  background-color: var(--foreground);
   border-radius: 3px;
   opacity: 1;
   left: 0;
@@ -142,7 +143,11 @@
   }
   
   .navbar-toggle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
   }
   
   .navbar-menu {
@@ -170,6 +175,21 @@
   .navbar a {
     margin: 0;
   }
+
+  /* Open menu at the top of the page: give it a solid panel so links don't sit on the page content */
+  nav.menu-open:not(.scrolled) {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  nav.menu-open:not(.scrolled) .navbar-menu a {
+    border-top-color: rgba(0, 0, 0, 0.06);
+  }
+
+  /* Touch screens keep :hover after a tap; keep the link readable on the white panel */
+  nav:not(.scrolled) .navbar-menu a:hover {
+    color: var(--color-700);
+  }
 }
 
 /* Add box shadow when scrolled for better visibility */
@@ -180,4 +200,8 @@ nav.bg-color-400 {
 
 nav.scrolled a {
   color: white;
+}
+
+nav.scrolled .hamburger span {
+  background-color: white;
 }

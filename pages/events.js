@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import Navbar from '../src/shared/components/Navbar';
 import { motion, AnimatePresence } from "motion/react";
 import dynamic from 'next/dynamic';
 import Lightbox from "yet-another-react-lightbox";
@@ -211,7 +210,7 @@ export default function Events() {
               <div className="inline-flex bg-white rounded-lg shadow-md p-1">
                 <button
                   onClick={() => handleTabClick(null)}
-                  className={`px-4 py-2 md:px-6 md:py-3 text-sm md:text-base font-medium rounded-md transition-all duration-200 ${
+                  className={`min-h-11 px-4 py-2 md:px-6 md:py-3 text-sm md:text-base font-medium rounded-md transition-all duration-200 ${
                     activeBranchId === null
                       ? 'bg-green-500 text-white'
                       : 'text-gray-700 hover:bg-gray-100'
@@ -459,7 +458,7 @@ function EventCard({ event, branchData, openGlobalLightbox, isPittsburgh }) {
               {images.length > 0 && (
                 <button 
                   onClick={() => openLightbox(0)}
-                  className="w-full mt-3 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium flex items-center justify-center"
+                  className="w-full mt-3 max-md:min-h-11 px-4 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium flex items-center justify-center"
                 >
                   <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8v8a2 2 0 002 2h12a2 2 0 002-2V8m-12 4h.01M8 12h.01M12 12h.01M16 12h.01M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z" />

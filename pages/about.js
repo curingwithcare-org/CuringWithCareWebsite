@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import Navbar from '../src/shared/components/Navbar';
 import Button from '../src/shared/components/Button';
 import { motion } from "motion/react";
 import { useInView } from 'react-intersection-observer';

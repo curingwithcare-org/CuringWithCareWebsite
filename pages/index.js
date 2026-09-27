@@ -136,7 +136,7 @@ export default function Home() {
         >
           <div className="overflow-hidden">
             <motion.div 
-              className="flex flex-wrap w-full text-[3.3rem] md:text-[10rem] mb-0 font-semibold text-color-900 --font-fredoka text-center w-full"
+              className="flex flex-wrap w-full text-[11vw] md:text-[10rem] mb-0 font-semibold text-color-900 --font-fredoka text-center w-full"
               style={{ lineHeight: 0.9, willChange: "transform" }}
             >
               {heroText.split('').map((letter, index) => (
@@ -212,7 +212,7 @@ export default function Home() {
               {features.map((tab, index) => (
                 <motion.button
                   key={tab}
-                  className={`--font-fredoka font-bold text-[1.4rem] md:text-5xl text-color-900 mb-4 w-full py-3 px-4 text-left md:text-right relative overflow-hidden ${
+                  className={`--font-fredoka font-bold text-base sm:text-xl md:text-5xl text-color-900 mb-4 w-full py-3 px-2 md:px-4 text-center md:text-right relative overflow-hidden ${
                     activeTab === tab ? "text-color-600" : ""
                   }`}
                   onClick={() => setActiveTab(tab)}
