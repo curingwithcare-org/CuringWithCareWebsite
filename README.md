@@ -36,7 +36,7 @@ npm run lint
 npm run build
 ```
 
-Requires Node.js 20.9 or newer.
+Requires Node.js 22 or newer.
 
 ## Project Structure
 
