@@ -2,7 +2,7 @@
 
 Source code for the official Curing with Care website.
 
-Built with Next.js, Tailwind CSS, and Supabase, and deployed on Vercel.
+Built with Next.js 16 (Pages Router), Tailwind CSS 4, and Supabase, and deployed on Vercel.
 
 ## Getting Started
 
@@ -29,6 +29,15 @@ npm run dev
 
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
 
+Before opening a pull request, check for lint errors and make sure the production build passes:
+
+```bash
+npm run lint
+npm run build
+```
+
+Requires Node.js 20.9 or newer.
+
 ## Project Structure
 
 ```
@@ -36,7 +45,8 @@ components/   Shared UI components
 images/       Image assets
 pages/        Page routes
 public/       Static files served as-is
-src/          App directory, additional components, and utilities
+src/shared/   Navbar, Button, and other components used across pages, plus global CSS
+src/utils/    Helpers, including the shared Supabase client
 styles/       CSS modules and global stylesheets
 ```
 
