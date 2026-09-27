@@ -49,7 +49,7 @@ export default function ResearchCompetition() {
   const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(true);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
         <title>Research Paper Competition | CARE Nonprofit Organization</title>
         <meta name="description" content="Annual Research Paper Competition on Climate Action and Renewable Energy" />
@@ -66,7 +66,7 @@ export default function ResearchCompetition() {
           className="text-center mb-12"
         >
           <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">CARE Review Paper Competition</h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
         </motion.section>
 
         <motion.section 

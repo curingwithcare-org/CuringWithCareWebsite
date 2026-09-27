@@ -38,8 +38,8 @@ export default function Button({
         style={style}
       >
         {/* Cool spotlight hover effect */}
-        <span className="absolute inset-0 w-full h-full transition-all duration-300 ease-out opacity-0 bg-gradient-to-br from-white via-transparent to-transparent group-hover:opacity-10 blur-sm"></span>
-        <span className="absolute inset-0 w-0 h-full transition-all duration-300 ease-out bg-gradient-to-r from-color-600 to-color-800 group-hover:w-full opacity-0 group-hover:opacity-80"></span>
+        <span className="absolute inset-0 w-full h-full transition-all duration-300 ease-out opacity-0 bg-linear-to-br from-white via-transparent to-transparent group-hover:opacity-10 blur-xs"></span>
+        <span className="absolute inset-0 w-0 h-full transition-all duration-300 ease-out bg-linear-to-r from-color-600 to-color-800 group-hover:w-full opacity-0 group-hover:opacity-80"></span>
         
         {/* Button content */}
         <span className="relative flex items-center gap-2 transition-colors duration-300 ease-in-out group-hover:text-white">

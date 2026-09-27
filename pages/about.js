@@ -26,10 +26,10 @@ const About = () => {
             transition={{ duration: 0.8 }}
             className="w-full"
           >
-            <h1 className="mt-8 text-6xl md:text-7xl w-full md:w-[90%] text-white font-bold text-left sm:mt-0 leading-[1.2]">
+            <h1 className="mt-8 text-6xl md:text-7xl w-full md:w-[90%] text-white font-bold text-left sm:mt-0 max-md:leading-[1.2]">
               Our <span className="text-green-400">Mission</span> to Transform Lives
             </h1>
-            <p className="mt-6 text-xl md:text-2xl w-full md:w-[80%] text-green-400 font-semibold text-left leading-relaxed">
+            <p className="mt-6 text-xl md:text-2xl w-full md:w-[80%] text-green-400 font-semibold text-left max-md:leading-relaxed">
               Rewriting the narrative to foster hope, resilience, and triumph in the face of cancer.
             </p>
           </motion.div>
@@ -44,7 +44,7 @@ const About = () => {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <p className='text-lg md:text-xl text-left w-full font-light leading-relaxed'>
+          <p className='text-lg md:text-xl text-left w-full font-light max-md:leading-relaxed'>
             Cancer is a mutation-driven disease, leading to the possibility of traveling infinite different paths from start to finish. Originated from cells and capable of influencing the entire body, the rapid expansion leads to missed or complicated diagnoses that harm patients. Although cancer is essentially simple, we still misunderstand the true actions that get cancer going. The complexity of each individual tumor, although pushing new forms of treatment, brings about astonishing space to recourse and address. <span className="font-medium">At CARE, we introduce and expand on the questions behind its life and the patients affected by it.</span>
           </p>
         </motion.div>
@@ -86,7 +86,7 @@ const About = () => {
 
         <ImpactStats />
 
-        <div className="w-full mt-16 bg-gray-50 p-8 rounded-lg shadow-sm">
+        <div className="w-full mt-16 bg-gray-50 p-8 rounded-lg shadow-xs">
           <h2 className="text-3xl font-bold mb-6 text-center">Join Our Mission</h2>
           <p className="text-center text-lg mb-8">Together, we can make a difference in the lives of those affected by cancer.</p>
           <div className="flex justify-center">
@@ -125,7 +125,7 @@ const EmpowermentSection = ({ title, content, imageUrl, isReversed }) => {
       <div className="w-full md:w-1/2">
         <h3 className="text-4xl font-bold text-green-500 mb-4 flex items-center">
           {title}
-          <span className="ml-3 h-px bg-green-300 flex-grow"></span>
+          <span className="ml-3 h-px bg-green-300 grow"></span>
         </h3>
         <p className="text-lg text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: content }}></p>
       </div>

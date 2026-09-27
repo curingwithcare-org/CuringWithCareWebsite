@@ -49,7 +49,7 @@ const BranchDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-gray-50 to-gray-100">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600">Loading branch information...</p>
@@ -60,7 +60,7 @@ const BranchDetail = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 px-4 py-20">
+      <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100 px-4 py-20">
         <div className="max-w-4xl mx-auto text-center py-12 bg-red-50 rounded-lg shadow-md">
           <h2 className="text-2xl font-bold text-red-700 mb-4">{error}</h2>
           <p className="text-gray-600 mb-6">We couldn&apos;t find the information you&apos;re looking for.</p>
@@ -77,7 +77,7 @@ const BranchDetail = () => {
   }
 
   return (
-    <div className="min-h-screen mt-16 bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen mt-16 bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
         <title>{branch.city} Branch | CARE Nonprofit Organization</title>
         <meta name="description" content={`Learn about CARE's work in ${branch.city} and how we're making a difference locally.`} />
@@ -100,7 +100,7 @@ const BranchDetail = () => {
                 e.target.src = "/branch-placeholder.png";
               }}
             />
-            <div className={`absolute inset-0 bg-gradient-to-r ${branch.color || "from-green-600 to-emerald-500"} opacity-70`}></div>
+            <div className={`absolute inset-0 bg-linear-to-r ${branch.color || "from-green-600 to-emerald-500"} opacity-70`}></div>
           </div>
           
           <div className="absolute inset-0 flex flex-col justify-center text-white p-12">
@@ -138,7 +138,7 @@ const BranchDetail = () => {
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ delay: 0.1 * index, duration: 0.5 }}
-                      className={`p-4 rounded-lg text-white bg-gradient-to-br ${branch.color || "from-green-600 to-emerald-500"}`}
+                      className={`p-4 rounded-lg text-white bg-linear-to-br ${branch.color || "from-green-600 to-emerald-500"}`}
                     >
                       <div className="font-medium">{chapter}</div>
                     </motion.div>

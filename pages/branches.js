@@ -49,7 +49,7 @@ const Branches = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
         <title>Our Branches | CARE Nonprofit Organization</title>
         <meta name="description" content="Find CARE nonprofit locations across the country" />
@@ -63,7 +63,7 @@ const Branches = () => {
           className="text-center mb-16"
         >
           <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">Our Branches Worldwide</h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
+          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
             CARE has established branches across the world.
             Explore our locations below and discover how we&apos;re making a difference in each region.
@@ -109,7 +109,7 @@ const Branches = () => {
                             e.target.src = "/branch-placeholder.png";
                           }}
                         />
-                        <div className={`absolute inset-0 bg-gradient-to-br ${branch.color} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}></div>
+                        <div className={`absolute inset-0 bg-linear-to-br ${branch.color} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}></div>
                       </div>
                       
                       {/* Content */}
@@ -158,7 +158,7 @@ const Branches = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative bg-gradient-to-r from-green-600 to-emerald-500 p-12 rounded-2xl text-center text-white max-w-5xl mx-auto overflow-hidden"
+          className="relative bg-linear-to-r from-green-600 to-emerald-500 p-12 rounded-2xl text-center text-white max-w-5xl mx-auto overflow-hidden"
         >
           <div className="relative z-10">
             <h2 className="text-3xl font-bold mb-6">Join Our Global Movement</h2>

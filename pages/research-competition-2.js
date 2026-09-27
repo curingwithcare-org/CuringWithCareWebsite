@@ -62,7 +62,7 @@ export default function ResearchCompetitionSecondEdition() {
   const otherPlacements = placements.slice(3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
       <Head>
         <title>CARE Review Paper Competition 2nd Edition | CARE</title>
         <meta
@@ -87,7 +87,7 @@ export default function ResearchCompetitionSecondEdition() {
           <h1 className="text-4xl md:text-5xl font-bold text-green-600 mt-4 mb-6">
             2nd Edition
           </h1>
-          <div className="w-24 h-1 bg-gradient-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded-full" />
+          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded-full" />
           <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
             The second edition expands the review paper challenge with new
             prompts focused on treatment access, ethics, research directions,

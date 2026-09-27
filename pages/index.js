@@ -119,7 +119,7 @@ export default function Home() {
       </Head>
       
       {/* Announcement Banner */}
-      {/* <div id="announcement-banner" className="w-full bg-gradient-to-r from-pink-500 to-red-400 text-white py-3 px-4 text-center font-semibold text-lg shadow-md">
+      {/* <div id="announcement-banner" className="w-full bg-linear-to-r from-pink-500 to-red-400 text-white py-3 px-4 text-center font-semibold text-lg shadow-md">
         🚨 <span className="font-bold">New!</span> Cancer Awareness & Action Challenge is happening now! 
         <a href="/caac" className="underline font-bold ml-2 hover:text-yellow-200 transition-colors">More info here</a>
       </div> */}
@@ -155,7 +155,7 @@ export default function Home() {
           </div>
           
           <motion.p 
-            className="w-full mt-8 md:mt-12 text-2xl md:text-3xl leading-relaxed text-left"
+            className="w-full mt-8 md:mt-12 text-2xl md:text-3xl max-md:leading-relaxed text-left"
             variants={slideUp}
           >
             <i>Dedicated to the advancement of <br className="md:hidden" />
@@ -243,7 +243,7 @@ export default function Home() {
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 leading-relaxed">
+                        <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 max-md:leading-relaxed">
                           CARE&apos;s outreach initiatives encompass a wide range of activities from partaking in local events to various fundraising opportunities.
                         </p>
 
@@ -257,7 +257,7 @@ export default function Home() {
                             ].map((item, index) => (
                               <motion.div 
                                 key={index}
-                                className="bg-white/70 backdrop-blur-sm p-6 rounded-xl shadow-md border border-color-100"
+                                className="bg-white/70 backdrop-blur-xs p-6 rounded-xl shadow-md border border-color-100"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1, duration: 0.5 }}
@@ -278,11 +278,11 @@ export default function Home() {
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 leading-relaxed">
+                        <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 max-md:leading-relaxed">
                           CARE actively engages in impactful service projects aimed at benefiting individuals and communities affected by cancer.
                         </p>
                         <motion.div 
-                          className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between items-center mt-8 bg-gradient-to-r from-color-400 to-color-300 p-6 md:p-10 rounded-lg shadow-xl"
+                          className="flex flex-col md:flex-row gap-6 md:gap-0 justify-between items-center mt-8 bg-linear-to-r from-color-400 to-color-300 p-6 md:p-10 rounded-lg shadow-xl"
                           whileHover={{ scale: 1.02 }}
                           transition={{ type: "spring", stiffness: 300, damping: 15 }}
                         >
@@ -303,7 +303,7 @@ export default function Home() {
                         exit={{ opacity: 0, x: -20 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 leading-relaxed">
+                        <p className="text-gray-600 text-xl md:text-2xl text-center md:text-left mt-2 max-md:leading-relaxed">
                           CARE brings in expert guest speakers who share their knowledge and experiences of cancer research and treatment.
                         </p>
                         <h2 className="text-3xl md:text-4xl font-semibold mt-8 mb-4">Watch the CARE Series</h2>
@@ -333,7 +333,7 @@ export default function Home() {
           {loading ? (
             <LoadingPlaceholder />
           ) : error ? (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-sm">
               <p>There was a problem loading events. Please try again later.</p>
             </div>
           ) : (
@@ -413,7 +413,7 @@ export default function Home() {
                 }}
               >
                 <motion.h2 
-                  className="ml-6 w-full text-4xl md:text-5xl lg:text-6xl leading-none font-bold --font-fredoka text-color-900"
+                  className="ml-6 w-full text-4xl md:text-5xl lg:text-6xl max-md:leading-none font-bold --font-fredoka text-color-900"
                   initial={{ scale: 0.8 }}
                   animate={numbersInView ? { scale: 1 } : { scale: 0.8 }}
                   transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
@@ -434,13 +434,13 @@ export default function Home() {
           variants={fadeIn}
         >
           <motion.div
-            className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 md:p-12 max-w-6xl mx-auto"
+            className="bg-white/80 backdrop-blur-xs rounded-2xl shadow-xl p-8 md:p-12 max-w-6xl mx-auto"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
             }}
           >
-            <h1 className="--font-fredoka font-bold text-4xl md:text-6xl leading-tight w-full text-color-800">Stay Connected</h1>
+            <h1 className="--font-fredoka font-bold text-4xl md:text-6xl max-md:leading-tight w-full text-color-800">Stay Connected</h1>
             <p className="italic col-span-3 text-xl text-gray-600 mb-8 mt-2">Follow @curingwithcare to stay updated on all our initiatives</p>
             
             <div className="flex flex-col md:flex-row justify-center gap-4 md:gap-8">

@@ -59,7 +59,7 @@ const Navbar = () => {
       <div className={`navbar-menu pl-0 p-6 md:p-0 mr-6 ${mobileMenuOpen ? 'active' : ''}`}>
         <Link href="/" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Home</Link>
         <Link href="/about" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>About</Link>
-        <Link href="/events" className="transition-colors duration-300 ease-in-out min-w-[fit-content]" onClick={closeMobileMenu}>Past Events</Link>
+        <Link href="/events" className="transition-colors duration-300 ease-in-out min-w-fit" onClick={closeMobileMenu}>Past Events</Link>
         <Link href="/branches" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Branches</Link>
         <Link href="/team" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Team</Link>
         <a href="https://blog.curingwithcare.org" className="transition-colors duration-300 ease-in-out">Blog</a>
