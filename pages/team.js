@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '../src/shared/components/Navbar';
 import Head from 'next/head';
 import { motion, AnimatePresence } from "motion/react";
 import { supabase } from "../src/utils/supabase";
@@ -177,7 +176,7 @@ const Teams = () => {
                     {member.description && member.description.length > 100 && (
                       <button 
                         onClick={() => toggleExpand(member.id)}
-                        className="text-green-600 hover:text-green-700 font-medium mt-2 focus:outline-hidden group flex items-center"
+                        className="max-md:min-h-11 text-green-600 hover:text-green-700 font-medium mt-2 focus:outline-hidden group flex items-center"
                       >
                         {expandedId === member.id ? 'Read Less' : 'Read More'}
                         <svg 

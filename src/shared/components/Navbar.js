@@ -34,20 +34,30 @@ const Navbar = () => {
     setMobileMenuOpen(false);
   };
 
+  // Close the mobile menu with the Escape key
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const handleKey = (e) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [mobileMenuOpen]);
+
   return (
-    <nav className={`navbar transition-all duration-300 w-full ${
-      scrolled 
-        ? "bg-color-400 sticky top-0 scrolled" 
-        : "bg-transparent fixed top-0 left-0"
-    } z-50`}>
+    <nav className={`navbar transition-all duration-300 w-full fixed top-0 left-0 ${
+      scrolled ? "bg-color-400 scrolled" : "bg-transparent"
+    } ${mobileMenuOpen ? "menu-open" : ""} z-50`}>
       <div className="navbar-brand items-center px-4">
-        <Link href="/" className='block' style={{ margin: "1rem 0" }} onClick={closeMobileMenu}>
+        <Link href="/" className='block max-md:flex max-md:items-center max-md:min-h-11' style={{ margin: "1rem 0" }} onClick={closeMobileMenu}>
           <img src="/logo.png" alt="Logo" className="navbar-logo" />
         </Link>
         <button 
           className="navbar-toggle" 
           onClick={toggleMobileMenu}
           aria-label="Toggle navigation menu"
+          aria-expanded={mobileMenuOpen}
+          aria-controls="site-menu"
         >
           <span className={`hamburger ${mobileMenuOpen ? 'open' : ''}`}>
             <span></span>
@@ -56,7 +66,7 @@ const Navbar = () => {
           </span>
         </button>
       </div>
-      <div className={`navbar-menu pl-0 p-6 md:p-0 mr-6 ${mobileMenuOpen ? 'active' : ''}`}>
+      <div id="site-menu" className={`navbar-menu pl-0 p-6 md:p-0 mr-6 ${mobileMenuOpen ? 'active' : ''}`}>
         <Link href="/" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>Home</Link>
         <Link href="/about" className="transition-colors duration-300 ease-in-out" onClick={closeMobileMenu}>About</Link>
         <Link href="/events" className="transition-colors duration-300 ease-in-out min-w-fit" onClick={closeMobileMenu}>Past Events</Link>

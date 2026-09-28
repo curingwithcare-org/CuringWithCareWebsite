@@ -1,7 +1,6 @@
 "use client";
 
 import Head from "next/head";
-import Navbar from "../src/shared/components/Navbar";
 import { motion } from "motion/react";
 
 const prompts = [
@@ -72,7 +71,6 @@ export default function ResearchCompetitionSecondEdition() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
 
       <main className="container mx-auto px-4 py-12">
         <motion.section
@@ -158,7 +156,7 @@ export default function ResearchCompetitionSecondEdition() {
                 <div className="mt-6 flex flex-wrap gap-3">
                   <button
                     disabled
-                    className="inline-flex items-center bg-gray-100 text-gray-500 py-2 px-4 rounded-md cursor-not-allowed"
+                    className="inline-flex items-center max-md:min-h-11 bg-gray-100 text-gray-500 py-2 px-4 rounded-md cursor-not-allowed"
                   >
                     Download Paper Coming Soon
                   </button>

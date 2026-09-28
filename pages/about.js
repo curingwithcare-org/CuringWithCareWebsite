@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect } from 'react';
-import Navbar from '../src/shared/components/Navbar';
 import Button from '../src/shared/components/Button';
 import { motion } from "motion/react";
 import { useInView } from 'react-intersection-observer';
+import { useChapterCount } from '../src/utils/chapters';
 
 const About = () => {
   return (
@@ -134,10 +134,11 @@ const EmpowermentSection = ({ title, content, imageUrl, isReversed }) => {
 };
 
 const ImpactStats = () => {
+  const chapterCount = useChapterCount();
   const stats = [
     { value: '900+', label: 'Members Worldwide' },
     { value: '$30K', label: 'Raised' },
-    { value: '40+', label: 'Chapters' },
+    { value: chapterCount, label: 'Chapters' },
   ];
 
   return (

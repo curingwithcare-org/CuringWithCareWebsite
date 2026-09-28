@@ -1,51 +1,39 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Navbar from '../src/shared/components/Navbar';
 import Button from '../src/shared/components/Button';
 import Head from 'next/head';
 import Link from 'next/link';
 import { motion } from "motion/react";
-import { supabase } from "../src/utils/supabase";
+import ChapterCard from '../src/shared/components/ChapterCard';
+import { fetchRegions, regionName } from "../src/utils/chapters";
 
+// Each region fades in as it scrolls into view, then its cards follow one by one.
+const regionVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, staggerChildren: 0.1 } },
+};
 
 const Branches = () => {
-  const [hoveredId, setHoveredId] = useState(null);
-  const [branchLocations, setBranchLocations] = useState([]);
+  const [regions, setRegions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch branch data from Supabase
+  // Active regions and their chapters from Supabase
   useEffect(() => {
-    const fetchBranchLocations = async () => {
+    const loadRegions = async () => {
       try {
         setLoading(true);
-        const { data, error } = await supabase
-          .from('branches')
-          .select('*')
-          .order('id', { ascending: true });
-        
-        if (error) {
-          console.error("Error fetching branch data:", error);
-          setError("Failed to load branch locations");
-        } else {
-          // Transform data if needed (e.g., add default colors if they're missing)
-          const formattedBranches = data.map(branch => ({
-            ...branch,
-            // Set default color gradient if not present in database
-            color: branch.color || "from-green-600 to-emerald-500"
-          }));
-          setBranchLocations(formattedBranches);
-        }
+        setRegions(await fetchRegions());
       } catch (e) {
-        console.error("Unexpected error:", e);
-        setError("An unexpected error occurred");
+        console.error("Error fetching branch data:", e);
+        setError("Failed to load branch locations");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBranchLocations();
+    loadRegions();
   }, []);
 
   return (
@@ -87,67 +75,35 @@ const Branches = () => {
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              {branchLocations.map((branch, index) => (
-                <motion.div
-                  key={branch.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  onMouseEnter={() => setHoveredId(branch.id)}
-                  onMouseLeave={() => setHoveredId(null)}
+            <div className="space-y-16">
+              {regions.map((region) => (
+                <motion.section
+                  key={region.id ?? regionName(region)}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.1 }}
+                  variants={regionVariants}
                 >
-                  <Link href={`/branches/${branch.slug}`} className="block h-full">
-                    <div className="relative h-96 rounded-xl overflow-hidden shadow-xl group transform transition-all duration-500 hover:scale-[1.02]">
-                      {/* Background Image with Gradient Overlay */}
-                      <div className="absolute inset-0 w-full h-full">
-                        <img 
-                          src={branch.image} 
-                          alt={`${branch.city} Branch`}
-                          className="w-full h-full object-cover transform scale-100 group-hover:scale-110 transition-transform duration-700"
-                          onError={(e) => {
-                            e.target.src = "/branch-placeholder.png";
-                          }}
-                        />
-                        <div className={`absolute inset-0 bg-linear-to-br ${branch.color} opacity-70 group-hover:opacity-80 transition-opacity duration-500`}></div>
-                      </div>
-                      
-                      {/* Content */}
-                      <div className="absolute inset-0 flex flex-col justify-between p-8 text-white">
-                        {/* Top Section */}
-                        <div className="flex justify-between items-start">
-                          <span className="text-6xl"></span>
-                          {/* Region labels removed as requested */}
-                        </div>
-                        
-                        {/* Bottom Section */}
-                        <div>
-                          <h2 className="text-4xl md:text-5xl font-bold mb-2 drop-shadow-md">{branch.city}</h2>
-                          <p className="text-lg text-white/90 mb-6 max-w-md drop-shadow-md">{branch.description}</p>
-                          
-                          <motion.div
-                            animate={{ 
-                              x: hoveredId === branch.id ? 10 : 0 
-                            }}
-                            transition={{ type: "spring", stiffness: 300 }}
-                            className="flex items-center"
-                          >
-                            <span className="text-lg font-medium mr-2">Visit Branch</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                            </svg>
-                          </motion.div>
-                        </div>
-                      </div>
-                      
-                      {/* Decorative Elements */}
-                      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                        <div className="absolute top-8 right-8 w-20 h-20 border-2 border-white/20 rounded-full"></div>
-                        <div className="absolute bottom-12 left-12 w-16 h-16 border-2 border-white/20 rounded-full"></div>
-                      </div>
-                    </div>
-                  </Link>
-                </motion.div>
+                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-x-6 mb-8 pb-3 border-b-2">
+                    <h2 className="text-3xl font-bold">{regionName(region)}</h2>
+                    {region.slug && (
+                      <Link
+                        href={`/branches/${region.slug}`}
+                        className="group inline-flex items-center min-h-11 text-lg font-medium text-green-600 hover:text-green-700 transition-colors"
+                      >
+                        <span className="mr-2">Visit Branch</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </Link>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {region.chapters.map((chapter) => (
+                      <ChapterCard key={chapter.id} chapter={chapter} region={region} />
+                    ))}
+                  </div>
+                </motion.section>
               ))}
             </div>
           )}

@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 import Image from 'next/image';
-import Navbar from '../src/shared/components/Navbar';
 import { motion } from "motion/react";
 
 export default function ResearchCompetition() {
@@ -56,7 +55,6 @@ export default function ResearchCompetition() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Navbar />
 
       <main className="container mx-auto px-4 py-12">
         <motion.section 
@@ -109,12 +107,20 @@ export default function ResearchCompetition() {
                 </div>
                 
                 <div className="flex flex-wrap gap-3">
+                  <a
+                    href={firstPlace.pdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="md:hidden inline-flex items-center min-h-11 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors duration-300"
+                  >
+                    View Paper
+                  </a>
                   <a 
                     href={firstPlace.pdfUrl} 
                     download="Angela_Choi_Cervical_Cancer_Research.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded-md transition-colors duration-300"
+                    className="inline-flex items-center min-h-11 md:min-h-0 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded-md transition-colors duration-300"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -125,7 +131,7 @@ export default function ResearchCompetition() {
               </div>
               
               {/* Right side with PDF preview - now shown by default */}
-              <div className="relative bg-gray-100 min-h-[300px] md:min-h-[500px]">
+              <div className="hidden md:block relative bg-gray-100 min-h-[500px]">
                 {isPdfViewerOpen ? (
                   <iframe 
                     src={`${firstPlace.pdfUrl}#toolbar=1&navpanes=0`} 

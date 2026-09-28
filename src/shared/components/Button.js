@@ -10,7 +10,7 @@ export default function Button({
   onClick = null
 }) {
   // Define the base button classes - balanced size between too tall and too short
-  const baseClasses = "group relative inline-flex items-center justify-center px-4 py-2.5 overflow-hidden font-medium rounded-md text-sm transition-all duration-300";
+  const baseClasses = "group relative inline-flex items-center justify-center max-md:min-h-11 px-4 py-2.5 overflow-hidden font-medium rounded-md text-sm transition-all duration-300";
   
   // Define variant specific classes
   const variants = {

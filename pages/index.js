@@ -11,6 +11,7 @@ import { throttle } from "../src/utils/throttle";
 import Head from "next/head";
 import ErrorBoundary from "../src/shared/components/ErrorBoundary";
 import { supabase } from "../src/utils/supabase";
+import { useChapterCount } from "../src/utils/chapters";
 
 
 // Animation variants for better performance
@@ -48,6 +49,7 @@ export default function Home() {
   const [featuresRef, featuresInView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [eventsRef, eventsInView] = useInView({ threshold: 0.1, triggerOnce: true });
   const [numbersRef, numbersInView] = useInView({ threshold: 0.1, triggerOnce: true });
+  const chapterCount = useChapterCount();
   const [stayUpToDateRef, stayUpToDateInView] = useInView({ threshold: 0.1, triggerOnce: true });
 
   // Check for mobile device on mount with a more efficient approach
@@ -134,7 +136,7 @@ export default function Home() {
         >
           <div className="overflow-hidden">
             <motion.div 
-              className="flex flex-wrap w-full text-[3.3rem] md:text-[10rem] mb-0 font-semibold text-color-900 --font-fredoka text-center w-full"
+              className="flex flex-wrap w-full text-[11vw] md:text-[10rem] mb-0 font-semibold text-color-900 --font-fredoka text-center w-full"
               style={{ lineHeight: 0.9, willChange: "transform" }}
             >
               {heroText.split('').map((letter, index) => (
@@ -210,7 +212,7 @@ export default function Home() {
               {features.map((tab, index) => (
                 <motion.button
                   key={tab}
-                  className={`--font-fredoka font-bold text-[1.4rem] md:text-5xl text-color-900 mb-4 w-full py-3 px-4 text-left md:text-right relative overflow-hidden ${
+                  className={`--font-fredoka font-bold text-base sm:text-xl md:text-5xl text-color-900 mb-4 w-full py-3 px-2 md:px-4 text-center md:text-right relative overflow-hidden ${
                     activeTab === tab ? "text-color-600" : ""
                   }`}
                   onClick={() => setActiveTab(tab)}
@@ -402,7 +404,7 @@ export default function Home() {
             {[
               { number: "900+", text: "Members worldwide", blob: "blob3.svg" },
               { number: "$30k+", text: "raised", blob: "blob2.svg" },
-              { number: "40+", text: "Chapters", blob: "blob.svg" }
+              { number: chapterCount, text: "Chapters", blob: "blob.svg" }
             ].map((item, index) => (
               <motion.div 
                 key={index}
