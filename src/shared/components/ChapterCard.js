@@ -16,10 +16,22 @@ const NewBadge = () => (
   </span>
 );
 
-// One chapter (school). With `region` it shows the region's photo strip and links
-// to the region's page; without it, it's a plain card for the region page itself.
+// One chapter (school). With `region` it shows the region's photo strip, and links
+// to the region's page if the region has one (a `slug`). Without `region` it's a
+// plain card for the region page itself.
 export default function ChapterCard({ chapter, region }) {
   const heads = chapter.heads || [];
+
+  const photoStrip = region && (
+    <div className="relative h-28">
+      <RegionImage src={region.image} alt={`${regionName(region)} Branch`} hoverZoom={Boolean(region.slug)} />
+      {chapter.is_new && (
+        <div className="absolute top-4 left-4">
+          <NewBadge />
+        </div>
+      )}
+    </div>
+  );
 
   const details = (
     <div className="p-6">
@@ -42,26 +54,22 @@ export default function ChapterCard({ chapter, region }) {
   return (
     <motion.div
       variants={chapterCardVariants}
-      whileHover={{ y: -5, transition: { duration: 0.3 } }}
+      whileHover={region?.slug ? { y: -5, transition: { duration: 0.3 } } : undefined}
       className="h-full"
     >
-      {region ? (
+      {region?.slug ? (
         <Link
           href={`/branches/${region.slug}`}
           className="group block h-full bg-white rounded-xl overflow-hidden shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-400 focus-visible:ring-offset-2"
         >
-          <div className="relative h-28">
-            <RegionImage src={region.image} alt={`${regionName(region)} Branch`} hoverZoom />
-            {chapter.is_new && (
-              <div className="absolute top-4 left-4">
-                <NewBadge />
-              </div>
-            )}
-          </div>
+          {photoStrip}
           {details}
         </Link>
       ) : (
-        <div className="h-full bg-white rounded-xl overflow-hidden shadow-lg">{details}</div>
+        <div className="h-full bg-white rounded-xl overflow-hidden shadow-lg">
+          {photoStrip}
+          {details}
+        </div>
       )}
     </motion.div>
   );

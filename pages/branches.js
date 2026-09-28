@@ -78,7 +78,7 @@ const Branches = () => {
             <div className="space-y-16">
               {regions.map((region) => (
                 <motion.section
-                  key={region.id}
+                  key={region.id ?? regionName(region)}
                   initial="hidden"
                   whileInView="visible"
                   viewport={{ once: true, amount: 0.1 }}
@@ -86,15 +86,17 @@ const Branches = () => {
                 >
                   <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-x-6 mb-8 pb-3 border-b-2">
                     <h2 className="text-3xl font-bold">{regionName(region)}</h2>
-                    <Link
-                      href={`/branches/${region.slug}`}
-                      className="group inline-flex items-center min-h-11 text-lg font-medium text-green-600 hover:text-green-700 transition-colors"
-                    >
-                      <span className="mr-2">Visit Branch</span>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </Link>
+                    {region.slug && (
+                      <Link
+                        href={`/branches/${region.slug}`}
+                        className="group inline-flex items-center min-h-11 text-lg font-medium text-green-600 hover:text-green-700 transition-colors"
+                      >
+                        <span className="mr-2">Visit Branch</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </Link>
+                    )}
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {region.chapters.map((chapter) => (

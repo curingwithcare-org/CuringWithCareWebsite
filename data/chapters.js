@@ -1,6 +1,7 @@
 // Curing with Care chapters, 2026–2027
 // Source: "New All Members List 2026-2027" → Branch & Chapter list tab
 // To update: edit this file only. Do not add emails or phone numbers.
+// The website reads this file directly (see src/utils/chapters.js), so edits here go live on the next deploy.
 // Confirmed with Director of Chapters (Isha V), 9/27/26. Upper St. Clair confirmed as new.
 
 const chapters = [
