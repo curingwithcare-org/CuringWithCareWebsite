@@ -11,6 +11,12 @@ const nextConfig = {
     //     ];
     // },
     images: {
+        // Vercel's free plan includes 5,000 image transformations a month, and every
+        // photo resized to a new width counts as one. A short list of widths and a
+        // long cache keep the event galleries well under that.
+        deviceSizes: [640, 828, 1200, 1920],
+        imageSizes: [128, 256, 384],
+        minimumCacheTTL: 2678400, // 31 days
         remotePatterns: [
             {
                 protocol: "https",

@@ -444,7 +444,8 @@ function EventCard({ event, branchData, openGlobalLightbox, isPittsburgh }) {
                       alt={`Image from ${event.title}`}
                       fill
                       style={{ objectFit: 'cover' }}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      // Thumbnails are small squares, three to a row inside the event card
+                      sizes="(max-width: 767px) 30vw, 120px"
                       className="hover:scale-110 transition-transform duration-300"
                     />
                     {index === 5 && images.length > 6 && (

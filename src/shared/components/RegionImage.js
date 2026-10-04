@@ -25,7 +25,7 @@ export default function RegionImage({ src, alt, hoverZoom = false, logo = "cente
         <div className="absolute inset-0 bg-linear-to-br from-green-600 to-emerald-500">
           <div className={`absolute bg-white rounded-full shadow-md p-1.5 ${logo === "corner" ? "top-8 right-8 w-20 h-20" : "top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16"}`}>
             <div className="relative w-full h-full">
-              <Image src="/logo.png" alt="" fill sizes="80px" className="object-contain rounded-full" />
+              <Image src="/logo.png" alt="" fill sizes="64px" className="object-contain rounded-full" />
             </div>
           </div>
         </div>
