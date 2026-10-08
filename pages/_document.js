@@ -1,19 +1,14 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { Html, Head, Main, NextScript } from "next/document";
+import { fontClassName } from "../src/shared/fonts";
 
-class MyDocument extends Document {
-  render() {
-    return (
-      <Html lang="en">
-        <Head>
-          {/* Add any custom head elements here */}
-        </Head>
-        <body className="--font-hoss-normal">
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    );
-  }
+export default function Document() {
+  return (
+    <Html lang="en" className={fontClassName}>
+      <Head />
+      <body>
+        <Main />
+        <NextScript />
+      </body>
+    </Html>
+  );
 }
-
-export default MyDocument;

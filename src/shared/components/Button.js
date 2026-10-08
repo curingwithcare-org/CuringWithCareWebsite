@@ -1,55 +1,74 @@
 import Link from "next/link";
+import Icon from "./Icon";
 
-export default function Button({ 
-  link, 
-  text, 
-  className = "", 
-  style = {}, 
-  variant = "primary", 
-  icon = null,
-  onClick = null
+const variants = {
+  primary: "bg-care-700 text-white hover:bg-care-800 active:bg-care-900",
+  secondary:
+    "bg-white text-care-800 ring-1 ring-inset ring-care-300 hover:bg-care-50 hover:ring-care-400",
+  ghost: "text-care-800 hover:bg-care-50",
+  // For use on dark green bands.
+  inverse: "bg-white text-care-900 hover:bg-care-50",
+  "inverse-ghost": "text-white ring-1 ring-inset ring-white/50 hover:bg-white/10",
+};
+
+const sizes = {
+  md: "min-h-11 px-5 text-[0.9375rem]",
+  lg: "min-h-12 px-6 text-base",
+};
+
+const isExternal = (href) => /^(https?:|mailto:|tel:)/.test(href || "");
+
+/**
+ * The one button. Renders a real <a>, <Link> or <button> so keyboards and
+ * screen readers get the right thing. `icon` draws an arrow after the label.
+ */
+export default function Button({
+  href: hrefProp,
+  children: childrenProp,
+  variant = "primary",
+  size = "md",
+  icon,
+  className = "",
+  download,
+  // Legacy props from the old pages, removed once every page is rebuilt.
+  text,
+  link,
+  ...rest
 }) {
-  // Define the base button classes - balanced size between too tall and too short
-  const baseClasses = "group relative inline-flex items-center justify-center max-md:min-h-11 px-4 py-2.5 overflow-hidden font-medium rounded-md text-sm transition-all duration-300";
-  
-  // Define variant specific classes
-  const variants = {
-    primary: "text-white bg-color-700 shadow-md hover:shadow-lg",
-    secondary: "text-gray-800 bg-gray-100 border border-gray-300",
-    outline: "text-color-700 bg-transparent border-2 border-color-700",
-    ghost: "text-color-700 bg-transparent hover:bg-color-50"
-  };
-  
-  // Combine all classes
-  const buttonClasses = `${baseClasses} ${variants[variant] || variants.primary} ${className}`;
-  
-  // Handle button click for non-link buttons
-  const handleClick = (e) => {
-    if (!link && onClick) {
-      onClick(e);
-    }
-  };
-  
-  return (
-    <Link href={link || "#"}> 
-      <div 
-        onClick={handleClick}
-        className={buttonClasses}
-        style={style}
+  const href = hrefProp ?? link;
+  const children = childrenProp ?? text;
+  const classes = `inline-flex items-center justify-center gap-2 rounded-full font-semibold leading-none transition-colors duration-150 ${variants[variant] || variants.primary} ${sizes[size] || sizes.md} ${className}`;
+  const external = isExternal(href);
+  const content = (
+    <>
+      <span>{children}</span>
+      {icon && <Icon name={icon} size={18} className="-mr-0.5" />}
+    </>
+  );
+
+  if (!href) {
+    return (
+      <button type="button" className={classes} {...rest}>
+        {content}
+      </button>
+    );
+  }
+  if (external || download) {
+    return (
+      <a
+        href={href}
+        className={classes}
+        download={download}
+        {...(external && !href.startsWith("mailto:") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...rest}
       >
-        {/* Cool spotlight hover effect */}
-        <span className="absolute inset-0 w-full h-full transition-all duration-300 ease-out opacity-0 bg-linear-to-br from-white via-transparent to-transparent group-hover:opacity-10 blur-xs"></span>
-        <span className="absolute inset-0 w-0 h-full transition-all duration-300 ease-out bg-linear-to-r from-color-600 to-color-800 group-hover:w-full opacity-0 group-hover:opacity-80"></span>
-        
-        {/* Button content */}
-        <span className="relative flex items-center gap-2 transition-colors duration-300 ease-in-out group-hover:text-white">
-          {icon && <span className="transition-transform duration-300 ease-in-out group-hover:scale-110">{icon}</span>}
-          {text}
-        </span>
-        
-        {/* Bottom shine effect */}
-        <span className="absolute bottom-0 right-0 h-0.5 w-0 bg-color-500 transition-all duration-500 ease-out group-hover:w-full"></span>
-      </div>
+        {content}
+      </a>
+    );
+  }
+  return (
+    <Link href={href} className={classes} {...rest}>
+      {content}
     </Link>
   );
 }

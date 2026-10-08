@@ -188,3 +188,60 @@ export function useChapterCount() {
 
   return count === null ? "–" : String(count);
 }
+
+// ----------------------------------------------------------------------------
+// Headline numbers, computed from data/chapters.js (no network needed)
+// ----------------------------------------------------------------------------
+
+const countryOf = (regionName) => {
+  if (/\bUAE\b/.test(regionName)) return "United Arab Emirates";
+  if (/\bIndia\b/.test(regionName)) return "India";
+  if (/\bCanada\b/.test(regionName)) return "Canada";
+  return "United States";
+};
+
+export function chapterStats() {
+  const countries = new Set(chapterList.map((region) => countryOf(region.region)));
+  const newChapters = chapterList.reduce(
+    (total, region) => total + region.chapters.filter((chapter) => chapter.isNew).length,
+    0
+  );
+  return {
+    chapters: fileChapterCount,
+    branches: chapterList.length,
+    countries: countries.size,
+    countryNames: [...countries],
+    newChapters,
+  };
+}
+
+// Regions grouped by country, for the Branches overview. Each entry keeps the
+// region name, its chapter count and its page slug (if it has one).
+export function regionsByCountry() {
+  const groups = new Map();
+  for (const region of fileRegions) {
+    const country = countryOf(region.region);
+    if (!groups.has(country)) groups.set(country, []);
+    groups.get(country).push({
+      region: region.region,
+      slug: region.slug,
+      chapterCount: region.chapters.length,
+      isNew: region.chapters.some((chapter) => chapter.is_new),
+    });
+  }
+  const order = ["United States", "Canada", "India", "United Arab Emirates"];
+  return order
+    .filter((country) => groups.has(country))
+    .map((country) => ({ country, regions: groups.get(country).sort((a, b) => byName(a.region, b.region)) }));
+}
+
+// The chapter list straight from the file, in the shape the pages use.
+export function staticRegions() {
+  return fileRegions.map((region) => ({ ...region, image: null, description: null, active: true })).sort((a, b) => byName(a.region, b.region));
+}
+
+export function staticRegion(slug) {
+  return fileRegions.find((region) => region.slug === slug) || null;
+}
+
+export const branchSlugs = Object.values(BRANCH_SLUGS);

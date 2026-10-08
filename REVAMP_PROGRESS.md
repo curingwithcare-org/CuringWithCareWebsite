@@ -7,17 +7,26 @@ If you are a new session: read this file and `git log --oneline` first, then con
 
 | Phase | State |
 |---|---|
-| 1. Audit (read only) | **Done, awaiting approval** (this file, section "Phase 1 audit") |
-| 2. Design system | Not started |
-| 3. Home page | Not started |
+| 1. Audit (read only) | Done (section "Phase 1 audit") |
+| 2. Design system | Done (section "Phase 2 design system") |
+| 3. Home page | In progress |
 | 4. Every other page | Not started |
 | 5. Verify | Not started |
 
-### Next up
-Wait for the Director of Technology to approve the Phase 1 audit and answer the open questions below. Then start Phase 2: propose tokens, fonts, sitemap and page outlines, and build only the shared pieces (tokens, nav, footer, buttons, section containers, cards).
+The Director of Technology approved the audit on 2026-10-07 and asked for Phases 2 to 5 to run without check-ins, with all decisions made by the agent and every question collected for the end.
 
-### Decisions approved so far
-None yet. (Record colors, fonts, outlines and any renames here once approved.)
+### Next up
+Build the home page (`pages/index.js`), screenshot it, commit. Then Phase 4 pages in this order: About, Branches + branch pages, Events, Research hub + both competitions + CAAC, Team, Start a Branch + Contact, 404.
+
+### Decisions made (pre-approved by the Director)
+- **Colors**: the brand greens from the logo and old site, renamed `care-50` to `care-900` (see Phase 2). `care-400` #8ac779 is the identity green (used as accent, tints and highlights); `care-700` #466222 is the action green (buttons, links) because it is the lightest brand green that passes WCAG AA with white text (6.9:1). Neutrals are warm: ink #171a14, paper #fbfbf8.
+- **Fonts**: Fraunces (display, soft serif) and Figtree (text), both via `next/font/google`. Adobe Typekit removed.
+- **Sitemap**: all existing routes kept. Three routes added: `/start-a-branch` (the chapter call to action), `/research` (hub for both competitions and CAAC), `/contact`. Nav: About, Branches, Events, Research, Team + "Start a Branch" button. Blog stays hidden.
+- **Motion**: one scroll reveal (fade up 14px, 0.6s, once), hover color changes only, everything off under `prefers-reduced-motion`. `motion` and `react-intersection-observer` are dropped.
+- **Icons**: one inline Lucide-style stroke set in `src/shared/components/Icon.js`. Font Awesome dropped.
+- **Photos**: 20 real photos picked from the old `images/` folder, resized to at most 1800px and committed under `src/photos/` (4 MB total) as static imports. The 338 MB `images/` folder is removed from the working tree (still in git history). `public/images/people/` is kept because Supabase team rows may point at it.
+- **Numbers**: chapters, branches and countries are computed from `data/chapters.js`. "900+ members" and "$30k+ raised" are kept as the organization's own published figures and flagged `[TODO: confirm]`.
+- **Dead code removed**: `tailwind.config.mjs` (Tailwind 4 is configured in CSS), `typekit.css`, `navbar.css`, `DO_NOT_DELETE.js` (build verified without it), `components/Layout.js`, `styles/`, decorative SVGs, stock photos, unused icons and font file.
 
 ### Open questions for the team
 1. **The live site is down.** `https://curingwithcare.org` returns HTTP 402 from Vercel with `X-Vercel-Error: DEPLOYMENT_DISABLED`, and `https://www.curingwithcare.org` serves an expired TLS certificate. This is a Vercel project or billing state, not something in this repo. Until it is fixed the PR will not get a Vercel preview either.
@@ -28,6 +37,26 @@ None yet. (Record colors, fonts, outlines and any renames here once approved.)
 6. **The `images/` folder (338 MB).** It is committed to git, outside `public/`, and nothing on the site references it. It holds the best real photos we have. Plan: pick the strongest photos, resize/compress them, import them with `next/image`, and propose removing the rest from the working tree (history keeps them). OK?
 7. **The `public/images/people/` folder (86 MB, 24 headshots).** Also unreferenced in code. Team photos come from Supabase `team_members.image`; I need the keys (question 2) to see whether those URLs point here.
 8. **Who should get the "Start a Branch" and "Get Involved" clicks?** Today every CTA (Join Our Cause, Get Involved Today, Start a Branch) goes to the same Google Form (`forms.gle/S2WH6htwdTTHK2gy9`). Is there a separate chapter-application form or a contact email you prefer?
+
+---
+
+## Phase 2 design system
+
+Tokens live in `src/shared/globals.css` (`@theme`). Shared components live in `src/shared/components/`.
+
+| Token | Values |
+|---|---|
+| Greens | care-50 #f3f8ef · care-100 #e0f2de · care-200 #c7edc3 · care-300 #a0da95 · **care-400 #8ac779** (identity) · care-500 #73ac5a · care-600 #5d893c · **care-700 #466222** (actions) · care-800 #35491a · care-900 #2b370e (dark bands, footer) · lime #c8e888 (selection, small highlights) |
+| Neutrals | ink #171a14 · ink-2 #3f453a · muted #656b5e · line #e3e6dc · paper #fbfbf8 · paper-2 #f3f4ee · white |
+| Type | Fraunces (display, `SOFT` 40) for h1/h2 and stats; Figtree for everything else. Fluid steps: display 42→80px, h1 34→56px, h2 28→42px, h3 20→24px, lead 18→21px, body 17px/1.6, eyebrow 13px uppercase tracked |
+| Spacing | Tailwind 4 scale. Sections `py-16 md:py-24` (tight 12/16, loose 20/28/32). Container 72rem, gutters 20px / 32px |
+| Radius | buttons and pills: full · cards: 14px (`rounded-card`) · photo bands: 20px (`rounded-band`) · small: 6px |
+| Shadows | `shadow-card` (1px hairline + soft 30px) and `shadow-card-hover`; nothing else |
+| Motion | `Reveal` component: opacity 0→1 and 14px rise, 0.6s, custom ease, once. Buttons/links: 150ms color. No scale, spring, parallax or looping animation. All off under `prefers-reduced-motion` |
+
+Shared pieces: `Navbar` (sticky white bar, active link state, solid mobile panel that closes on tap, route change and Escape, locks scroll, 44px targets), `Footer` (dark green, four columns, socials), `Button` (real `<a>`/`<Link>`/`<button>`; primary, secondary, ghost, inverse), `Section`/`Container`/`SectionHeading`, `Stat`/`StatRow`, `CtaBand` (the closing section on every page), `Quote`, `Reveal`, `Icon`, `SiteHead` (title, description, canonical, Open Graph with `/og.jpg`).
+
+Screenshots of the shared pieces were reviewed on a temporary `/styleguide` route (removed in Phase 3).
 
 ---
 
