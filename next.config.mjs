@@ -12,7 +12,8 @@ const nextConfig = {
     // },
     images: {
         // 65 is used for full-bleed hero photos, 75 everywhere else.
-        qualities: [65, 75],
+        qualities: [55, 65, 75],
+        formats: ["image/avif", "image/webp"],
         remotePatterns: [
             {
                 protocol: "https",

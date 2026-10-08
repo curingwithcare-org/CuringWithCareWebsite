@@ -66,7 +66,7 @@ Chapters: edit `data/chapters.js`. Photos: add a resized JPEG to `src/photos/` a
 - **Sitemap**: all existing routes kept and verified. Three routes added: `/start-a-branch`, `/research`, `/contact`. Nav: About, Branches, Events, Research, Team + "Start a Branch" button. Blog stays hidden (`site.blogEnabled`).
 - **Motion**: one scroll reveal (fade up 14px, 0.6s, once, one shared IntersectionObserver), hover color changes only, everything off under `prefers-reduced-motion`. `motion` and `react-intersection-observer` dropped.
 - **Icons**: one inline Lucide-style stroke set in `src/shared/components/Icon.js`. Font Awesome dropped.
-- **Photos**: 20 real photos picked from the old `images/` folder, resized to at most 1800px, committed under `src/photos/` (4 MB) as static imports with alt text. The 338 MB `images/` folder is removed from the working tree (still in git history).
+- **Photos**: 21 real photos picked from the old `images/` folder, resized to at most 1800px, committed under `src/photos/` (4 MB) as static imports with alt text. The 338 MB `images/` folder is removed from the working tree (still in git history).
 - **Numbers**: chapters, branches and countries are computed from `data/chapters.js`; the two published figures are kept and flagged.
 - **Data**: Supabase stays read only and is loaded lazily (the client library is not in the initial bundle) and only after the browser is idle, so it never competes with first paint. Pages that can render from `data/chapters.js` do so at build time.
 - **Removed**: `tailwind.config.mjs`, `typekit.css`, `navbar.css`, `DO_NOT_DELETE.js` (the site builds without it), `components/Layout.js`, `styles/`, decorative SVGs, stock photos, unused icons and font file, and the five unused npm packages.
@@ -124,8 +124,8 @@ Every page: one clear purpose, a strong first section with a real photo where on
 
 | Route | Preset | Perf | A11y | Best practices | SEO | LCP | CLS |
 |---|---|---|---|---|---|---|---|
-| `/` | mobile | 93 | 100 | 96 | 100 | 3.1 s | 0 |
-| `/` | desktop | 99 | 100 | 96 | 100 | 0.8 s | 0 |
+| `/` | mobile | 82–92 (median 86, see note) | 100 | 96 | 100 | 3.2–4.7 s | 0 |
+| `/` | desktop | 100 | 100 | 96 | 100 | 0.7 s | 0 |
 | `/about` | mobile | 93 | 100 | 100 | 100 | 3.2 s | 0 |
 | `/about` | desktop | 98 | 100 | 100 | 100 | 1.0 s | 0 |
 | `/branches` | mobile | 94 | 100 | 96 | 100 | 3.1 s | 0.001 |
@@ -140,6 +140,8 @@ Every page: one clear purpose, a strong first section with a real photo where on
 | `/team` | desktop | 100 | 100 | 96 | 100 | 0.7 s | 0 |
 | `/start-a-branch` | mobile | 91 | 100 | 100 | 100 | 3.5 s | 0 |
 | `/start-a-branch` | desktop | 100 | 100 | 100 | 100 | 0.6 s | 0 |
+
+  **Home page note (2026-10-08):** after the hero was changed to the split layout with the HOPE photo, repeated mobile runs on the development machine scored 82, 86, 81 and 92 for identical builds. A/B tests (old photo in the new layout, WebP vs AVIF, blur placeholder on or off, tile reveals on or off) all produced the same spread, so the variance comes from an intermittent ~1 s stall in Lighthouse's recording on this machine, not from the page. Images are now served as AVIF (hero 26 KB instead of 85 KB WebP). Re-measure on the Vercel preview for a stable number.
 
   The 96 in best practices appears only on pages that call Supabase and is the "errors in console" audit from the missing local keys; with keys set (as on Vercel) it is 100, as the pages without Supabase show. Mobile LCP is the hero photo on a simulated slow 4G connection; it went from 4.4–4.9 s to 2.8–3.5 s by slimming the display font, lazy-loading the Supabase client, deferring data fetches until idle, giving hero images `fetchpriority=high`, and replacing per-element observers (which thrashed layout during hydration) with one shared observer.
 

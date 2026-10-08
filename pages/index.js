@@ -62,8 +62,8 @@ export default function Home({ stats, countries }) {
               fill
               priority
               fetchPriority="high"
-              decoding="sync"
-              quality={65}
+              decoding="async"
+              quality={55}
               sizes="(min-width: 1024px) 58vw, 100vw"
               placeholder="blur"
               className="object-cover object-[50%_60%]"
