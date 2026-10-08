@@ -22,6 +22,7 @@ import booth from "../photos/booth.jpg";
 import speakerEvent from "../photos/speaker-event.jpg";
 import pinkOutGreen from "../photos/pink-out-green.jpg";
 import bracelets from "../photos/bracelets.jpg";
+import hopeLetters from "../photos/hope-letters.jpg";
 
 const photos = {
   clubRushTable: {
@@ -103,6 +104,10 @@ const photos = {
   bracelets: {
     src: bracelets,
     alt: "A handmade beaded bracelet that spells #CARE",
+  },
+  hopeLetters: {
+    src: hopeLetters,
+    alt: "Seven students sitting on the grass in front of giant purple letters that spell HOPE at a Relay for Life event",
   },
 };
 

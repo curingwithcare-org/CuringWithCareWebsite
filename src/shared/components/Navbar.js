@@ -70,7 +70,7 @@ export default function Navbar() {
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`rounded-full px-3.5 py-2 text-[0.9375rem] font-medium transition-colors ${
+              className={`whitespace-nowrap rounded-full px-2.5 py-2 text-[0.9375rem] font-medium transition-colors lg:px-3.5 ${
                 isActive(item.href) ? "bg-care-50 text-care-800" : "text-ink-2 hover:bg-paper-2 hover:text-ink"
               }`}
             >
@@ -82,7 +82,7 @@ export default function Navbar() {
               Blog
             </a>
           )}
-          <Button href="/start-a-branch" className="ml-3">
+          <Button href="/start-a-branch" className="ml-3 whitespace-nowrap">
             Start a Branch
           </Button>
         </div>
