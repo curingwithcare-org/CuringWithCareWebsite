@@ -56,7 +56,7 @@ export default function Events() {
         setEvents([...e].sort(byNewest));
         setStatus("ready");
       } catch (err) {
-        console.error("Events unavailable:", err?.message || err);
+        console.warn("Events unavailable:", err?.message || err);
         if (!cancelled) setStatus("error");
       }
     });

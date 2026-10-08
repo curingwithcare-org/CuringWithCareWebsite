@@ -60,10 +60,10 @@ export default function BranchPage({ slug, region: staticData }) {
           const all = await fetchEvents();
           if (!cancelled) setEvents(all.filter((e) => e.branch_id === row.id));
         } catch (e) {
-          console.error("Branch events unavailable:", e?.message || e);
+          console.warn("Branch events unavailable:", e?.message || e);
         }
       } catch (e) {
-        console.error("Branch details unavailable:", e?.message || e);
+        console.warn("Branch details unavailable:", e?.message || e);
         if (!cancelled && !staticData) setStatus("error");
       }
     });

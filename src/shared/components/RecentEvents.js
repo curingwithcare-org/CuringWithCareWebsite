@@ -64,7 +64,7 @@ export default function RecentEvents() {
         );
         if (!cancelled && withImages.length) setEvents(withImages);
       } catch (e) {
-        console.error("Recent events unavailable:", e?.message || e);
+        console.warn("Recent events unavailable:", e?.message || e);
       }
     });
     return () => {

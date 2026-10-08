@@ -92,7 +92,7 @@ export default function Branches({ regions: initialRegions, stats }) {
     const cancelIdle = whenIdle(() => {
       fetchRegions()
         .then((rows) => !cancelled && rows.length && setRegions(rows))
-        .catch((e) => console.error("Branch photos unavailable:", e?.message || e));
+        .catch((e) => console.warn("Branch photos unavailable:", e?.message || e));
     });
     return () => {
       cancelled = true;

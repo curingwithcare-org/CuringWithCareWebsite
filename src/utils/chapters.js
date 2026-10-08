@@ -85,13 +85,15 @@ function withBranchRows(regions, rows) {
 }
 
 async function fetchRegionsFromFile() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.from("branches").select("id, slug, image, description");
   // Without the branches rows there are no photos or links, but the chapter list still shows.
-  if (error) console.error("Error fetching branch photos:", error);
+  if (error) console.warn("Branch photos unavailable:", error);
   return withBranchRows(fileRegions, error ? [] : data).sort((a, b) => byName(a.region, b.region));
 }
 
 async function fetchRegionFromFile(slug) {
+  const supabase = await getSupabase();
   const { data: row, error } = await supabase
     .from("branches")
     .select("id, slug, city, image, description")
@@ -115,6 +117,7 @@ const BRANCH_FIELDS = "id, slug, city, region, image, description, active";
 const CHAPTER_FIELDS = "id, branch_id, school, state, heads, is_new, note";
 
 async function fetchRegionsFromSupabase() {
+  const supabase = await getSupabase();
   const [branchesRes, chaptersRes] = await Promise.all([
     supabase.from("branches").select(BRANCH_FIELDS).eq("active", true),
     supabase.from("chapters").select(CHAPTER_FIELDS),
@@ -133,6 +136,7 @@ async function fetchRegionsFromSupabase() {
 }
 
 async function fetchRegionFromSupabase(slug) {
+  const supabase = await getSupabase();
   const { data: branch, error } = await supabase
     .from("branches")
     .select(BRANCH_FIELDS)
@@ -183,7 +187,7 @@ export function useChapterCount() {
     if (CHAPTER_SOURCE !== "supabase") return;
     fetchChapterCount()
       .then(setCount)
-      .catch((e) => console.error("Error fetching chapter count:", e));
+      .catch((e) => console.warn("Chapter count unavailable:", e));
   }, []);
 
   return count === null ? "–" : String(count);

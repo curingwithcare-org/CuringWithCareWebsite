@@ -99,7 +99,7 @@ export default function Team() {
         });
         setStatus("ready");
       } catch (e) {
-        console.error("Team unavailable:", e?.message || e);
+        console.warn("Team unavailable:", e?.message || e);
         if (!cancelled) setStatus("error");
       }
     });

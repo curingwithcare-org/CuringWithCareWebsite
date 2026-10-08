@@ -12,7 +12,7 @@ export function getSupabase() {
   if (!clientPromise) {
     clientPromise = import("@supabase/supabase-js").then(({ createClient }) => {
       if (!supabaseUrl || !supabaseKey) {
-        console.error(
+        console.warn(
           "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. " +
             "Add them to .env.local (see README). Data-driven sections will fail to load."
         );
