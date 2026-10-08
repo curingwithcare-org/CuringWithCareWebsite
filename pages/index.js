@@ -52,42 +52,39 @@ export default function Home({ stats, countries }) {
     <>
       <SiteHead path="/" />
 
-      {/* 1. Hero: a split band so the photo stays whole. Photo first on phones. */}
-      <section className="bg-care-900 text-white">
-        <div className="mx-auto grid max-w-[96rem] lg:grid-cols-12">
-          <div className="relative order-1 aspect-[4/3] lg:order-2 lg:col-span-7 lg:aspect-auto lg:min-h-[30rem]">
-            <Image
-              src={photos.hopeLetters.src}
-              alt={photos.hopeLetters.alt}
-              fill
-              priority
-              fetchPriority="high"
-              decoding="async"
-              quality={55}
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              placeholder="blur"
-              className="object-cover object-[50%_60%]"
-            />
-          </div>
-          <div className="order-2 flex items-center px-5 py-12 sm:px-8 md:py-16 lg:order-1 lg:col-span-5 lg:py-10 lg:pl-[max(2rem,calc((100vw-72rem)/2+2rem))] lg:pr-12">
-            <div className="max-w-xl">
-              <p className="text-eyebrow text-care-300">A student-run 501(c)(3) nonprofit</p>
-              <h1 className="font-display text-h1 mt-4 font-semibold">Cancer awareness, run by the students next door.</h1>
-              <p className="text-lead mt-5 text-care-100">
-                High schoolers start CARE chapters at their own schools, then raise awareness, support research and look after patients
-                where they live. {stats.chapters} chapters so far, in {stats.countries} countries.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button href="/start-a-branch" variant="inverse" size="lg" icon="arrow-right">
-                  Start a Branch
-                </Button>
-                <Button href="/start-a-branch#join" variant="inverse-ghost" size="lg">
-                  Get involved
-                </Button>
-              </div>
-            </div>
-          </div>
+      {/* 1. Hero: full-bleed photo with the headline over it on large screens;
+          photo on top, text below on phones and tablets so the letters stay whole. */}
+      <section className="relative bg-care-900 text-white lg:flex lg:min-h-[max(46rem,calc(100svh-4.5rem))] lg:max-h-[54rem] lg:items-end">
+        <div className="relative aspect-[4/3] lg:absolute lg:inset-0 lg:aspect-auto">
+          <Image
+            src={photos.hopeLetters.src}
+            alt={photos.hopeLetters.alt}
+            fill
+            priority
+            fetchPriority="high"
+            quality={55}
+            sizes="100vw"
+            placeholder="blur"
+            className="object-cover object-[50%_60%] lg:object-[50%_90%]"
+          />
+          <div className="absolute inset-0 hidden bg-gradient-to-t from-care-900/90 via-care-900/35 via-45% to-transparent to-80% lg:block" aria-hidden="true" />
         </div>
+        <Container className="relative py-12 md:py-16 lg:pb-14 lg:pt-72">
+          <p className="text-eyebrow text-care-300 lg:text-care-200">A student-run 501(c)(3) nonprofit</p>
+          <h1 className="font-display text-h1 mt-4 max-w-2xl font-semibold">Cancer awareness, run by the students next door.</h1>
+          <p className="text-lead mt-4 max-w-lg text-care-100 lg:text-lg">
+            High schoolers start CARE chapters at their own schools, then raise awareness, support research and look after patients
+            where they live. {stats.chapters} chapters so far, in {stats.countries} countries.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3 lg:mt-7">
+            <Button href="/start-a-branch" variant="inverse" size="lg" icon="arrow-right">
+              Start a Branch
+            </Button>
+            <Button href="/start-a-branch#join" variant="inverse-ghost" size="lg">
+              Get involved
+            </Button>
+          </div>
+        </Container>
       </section>
 
       {/* 2. Impact numbers. */}
