@@ -60,7 +60,7 @@ export default function ResearchCompetitionSecondEdition() {
             <ol className="md:col-span-9 space-y-5">
               {prompts.map((p, i) => (
                 <li key={p} className="flex gap-4">
-                  <span className="font-display text-h3 font-semibold text-care-500">{i + 1}</span>
+                  <span className="font-display text-h3 font-semibold text-care-700">{i + 1}</span>
                   <p className="text-lg leading-relaxed text-ink-2">{p}</p>
                 </li>
               ))}

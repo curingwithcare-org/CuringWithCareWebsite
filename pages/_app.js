@@ -1,16 +1,10 @@
 import "../src/shared/globals.css";
-import { useEffect } from "react";
 import Head from "next/head";
 import Navbar from "../src/shared/components/Navbar";
 import Footer from "../src/shared/components/Footer";
 import { fontClassName } from "../src/shared/fonts";
 
 export default function CareApp({ Component, pageProps }) {
-  // Lets CSS know JavaScript is running, so scroll reveals can start hidden.
-  useEffect(() => {
-    document.documentElement.classList.add("js");
-  }, []);
-
   return (
     <div className={`${fontClassName} flex min-h-screen flex-col font-sans`}>
       <Head>

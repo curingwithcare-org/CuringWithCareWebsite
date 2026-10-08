@@ -48,7 +48,7 @@ export default function Research() {
               </p>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
-              <Image src={photos.hillmanTour.src} alt={photos.hillmanTour.alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover object-top" placeholder="blur" />
+              <Image src={photos.hillmanTour.src} alt={photos.hillmanTour.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover object-top" placeholder="blur" />
             </div>
           </div>
         </Container>

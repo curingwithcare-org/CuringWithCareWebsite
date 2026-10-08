@@ -49,7 +49,8 @@ export default function Home({ stats, countries }) {
           src={photos.clubRushTable.src}
           alt={photos.clubRushTable.alt}
           fill
-          priority
+          priority fetchPriority="high" decoding="sync"
+          quality={65}
           sizes="100vw"
           placeholder="blur"
           className="object-cover object-[55%_20%]"
@@ -142,7 +143,7 @@ export default function Home({ stats, countries }) {
           </div>
 
           <div className="mt-10 grid gap-8 lg:grid-cols-12">
-            <div className="grid gap-8 sm:grid-cols-2 lg:col-span-8 lg:grid-cols-4">
+            <div className="grid gap-8 sm:grid-cols-2 lg:col-span-9 lg:grid-cols-4">
               {countries.map((group, gi) => (
                 <Reveal key={group.country} delay={gi * 60} className={group.regions.length > 4 ? "sm:col-span-2 lg:col-span-2" : ""}>
                   <h3 className="flex items-center gap-2 text-eyebrow text-care-700">
@@ -160,7 +161,7 @@ export default function Home({ stats, countries }) {
                           </span>
                         </>
                       );
-                      const rowClass = "flex min-h-11 items-center justify-between gap-x-3 px-2 -mx-2 text-ink";
+                      const rowClass = "flex min-h-11 flex-wrap items-baseline gap-x-2 px-2 -mx-2 text-ink";
                       return (
                         <li key={r.region}>
                           {r.slug ? (
@@ -177,7 +178,7 @@ export default function Home({ stats, countries }) {
                 </Reveal>
               ))}
             </div>
-            <Reveal delay={200} className="relative aspect-[4/5] overflow-hidden rounded-band lg:col-span-4 lg:aspect-auto">
+            <Reveal delay={200} className="relative aspect-[4/5] overflow-hidden rounded-band lg:col-span-3 lg:aspect-auto">
               <Image src={photos.careSign.src} alt={photos.careSign.alt} fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" placeholder="blur" />
             </Reveal>
           </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import chapterList from "../../data/chapters";
 
 // -----------------------------------------------------------------------------

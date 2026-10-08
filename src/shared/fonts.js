@@ -6,7 +6,10 @@ import { Fraunces, Figtree } from "next/font/google";
 export const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
-  axes: ["opsz", "SOFT"],
+  axes: ["opsz"],
+  // Not preloaded: headings can swap in a beat later so the hero photo gets
+  // the bandwidth first on slow connections. The fallback is size-adjusted.
+  preload: false,
   variable: "--font-fraunces",
 });
 

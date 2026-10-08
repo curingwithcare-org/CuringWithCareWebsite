@@ -12,6 +12,7 @@ import { Container, Section, SectionHeading } from "../../src/shared/components/
 import { branchSlugs, fetchRegion, regionName, staticRegion } from "../../src/utils/chapters";
 import { fetchEvents } from "../../src/utils/events";
 import photos from "../../src/shared/photos";
+import { whenIdle } from "../../src/utils/idle";
 
 // Known branches are prerendered from data/chapters.js. Any other slug is
 // looked up in Supabase on the client, so old links behave as before.
@@ -41,7 +42,7 @@ export default function BranchPage({ slug, region: staticData }) {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const cancelIdle = whenIdle(async () => {
       try {
         const row = await fetchRegion(slug);
         if (cancelled) return;
@@ -65,9 +66,10 @@ export default function BranchPage({ slug, region: staticData }) {
         console.error("Branch details unavailable:", e?.message || e);
         if (!cancelled && !staticData) setStatus("error");
       }
-    })();
+    });
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, [slug, staticData]);
 

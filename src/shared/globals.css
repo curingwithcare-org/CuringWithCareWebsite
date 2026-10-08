@@ -98,7 +98,6 @@
   }
 
   .font-display {
-    font-variation-settings: 'SOFT' 40;
     font-optical-sizing: auto;
   }
 
@@ -128,8 +127,9 @@
 }
 
 /* ---------------------------------------------------------------------------
-   Motion. One rule: content fades up 12px once as it enters the viewport.
-   Only applies once JS has run (html.js), so content is never hidden
+   Motion. One rule: content fades up 14px once as it enters the viewport.
+   Elements start hidden only when <html> has the `js` class (set by an inline
+   script in _document before first paint), so content is never hidden
    without JavaScript, and never under prefers-reduced-motion.
    --------------------------------------------------------------------------- */
 html.js .reveal {

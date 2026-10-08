@@ -5,8 +5,9 @@ import Button from "../src/shared/components/Button";
 import Reveal from "../src/shared/components/Reveal";
 import CtaBand from "../src/shared/components/CtaBand";
 import { Container, Section, SectionHeading } from "../src/shared/components/Section";
-import { supabase, supabaseUrl } from "../src/utils/supabase";
+import { getSupabase, supabaseUrl } from "../src/utils/supabase";
 import photos from "../src/shared/photos";
+import { whenIdle } from "../src/utils/idle";
 
 // next/image can optimize our own files and Supabase storage; anything else
 // is shown as-is.
@@ -82,8 +83,9 @@ export default function Team() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const cancelIdle = whenIdle(async () => {
       try {
+        const supabase = await getSupabase();
         const { data, error } = await supabase.from("team_members").select("*").order("order_rank", { ascending: true, nullsFirst: false });
         if (error) throw error;
         if (cancelled) return;
@@ -100,9 +102,10 @@ export default function Team() {
         console.error("Team unavailable:", e?.message || e);
         if (!cancelled) setStatus("error");
       }
-    })();
+    });
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, [attempt]);
 
@@ -131,7 +134,7 @@ export default function Team() {
       </Section>
       <Container size="wide" className="pb-4">
         <div className="relative aspect-[16/9] overflow-hidden rounded-band md:aspect-[21/9]">
-          <Image src={photos.careLetters.src} alt={photos.careLetters.alt} fill priority sizes="100vw" className="object-cover" placeholder="blur" />
+          <Image src={photos.careLetters.src} alt={photos.careLetters.alt} fill priority fetchPriority="high" decoding="sync" sizes="100vw" className="object-cover" placeholder="blur" />
         </div>
       </Container>
 

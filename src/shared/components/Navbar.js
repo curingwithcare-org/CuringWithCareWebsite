@@ -59,7 +59,7 @@ export default function Navbar() {
     >
       <nav aria-label="Main" className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-5 sm:px-8 md:h-[4.5rem]">
         <Link href="/" className="flex min-h-11 items-center gap-3 rounded-md" onClick={() => setOpen(false)}>
-          <Image src="/logo.png" alt="" width={40} height={40} priority className="h-10 w-10 rounded-md" />
+          <Image src="/logo.png" alt="" width={40} height={40} priority fetchPriority="high" decoding="sync" className="h-10 w-10 rounded-md" />
           <span className="font-display text-xl font-semibold tracking-tight text-care-900">{site.wordmark}</span>
           <span className="sr-only">Home</span>
         </Link>

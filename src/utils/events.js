@@ -1,4 +1,4 @@
-import { supabase } from "./supabase";
+import { getSupabase, supabaseUrl } from "./supabase";
 
 // Read-only helpers for the Supabase `events` and `branches` tables and the
 // `images` storage bucket. Nothing here writes.
@@ -6,12 +6,14 @@ import { supabase } from "./supabase";
 const IMAGE_RE = /\.(jpe?g|png|gif|webp)$/i;
 
 export async function fetchBranches() {
+  const supabase = await getSupabase();
   const { data, error } = await supabase.from("branches").select("id, slug, city, region, image, description").order("city");
   if (error) throw error;
   return data || [];
 }
 
 export async function fetchEvents({ limit } = {}) {
+  const supabase = await getSupabase();
   let query = supabase.from("events").select("*").order("id", { ascending: false });
   if (limit) query = query.limit(limit);
   const { data, error } = await query;
@@ -21,6 +23,7 @@ export async function fetchEvents({ limit } = {}) {
 
 export async function listEventImages(folder, { limit } = {}) {
   if (!folder) return [];
+  const supabase = await getSupabase();
   const { data, error } = await supabase.storage
     .from("images")
     .list(`events/${folder}`, { limit: limit || 100, sortBy: { column: "name", order: "asc" } });
@@ -31,8 +34,9 @@ export async function listEventImages(folder, { limit } = {}) {
   }));
 }
 
+// Public URL of one event photo (no client needed: it is a fixed path).
 export function eventImageUrl(folder, name) {
-  return supabase.storage.from("images").getPublicUrl(`events/${folder}/${name}`).data.publicUrl;
+  return `${supabaseUrl}/storage/v1/object/public/images/events/${folder}/${name}`;
 }
 
 // Best-effort date for an event row. The schema is read only and the date

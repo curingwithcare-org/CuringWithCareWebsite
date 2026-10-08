@@ -55,7 +55,7 @@ export default function Contact() {
               </ul>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-6">
-              <Image src={photos.holiday.src} alt={photos.holiday.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" placeholder="blur" />
+              <Image src={photos.holiday.src} alt={photos.holiday.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" placeholder="blur" />
             </div>
           </div>
         </Container>

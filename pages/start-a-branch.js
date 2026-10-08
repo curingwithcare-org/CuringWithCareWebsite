@@ -92,7 +92,7 @@ export default function StartABranch({ stats }) {
             <p className="mt-4 text-sm text-muted">The application is a short Google Form. No commitment yet.</p>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-6">
-            <Image src={photos.clubRushBoard.src} alt={photos.clubRushBoard.alt} fill priority sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" placeholder="blur" />
+            <Image src={photos.clubRushBoard.src} alt={photos.clubRushBoard.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 50vw, 100vw" className="object-cover" placeholder="blur" />
           </div>
         </Container>
       </section>
@@ -108,7 +108,7 @@ export default function StartABranch({ stats }) {
             <ol className="lg:col-span-8 divide-y divide-line">
               {steps.map((s, i) => (
                 <Reveal as="li" key={s.title} delay={i * 60} className="grid gap-4 py-7 first:pt-0 last:pb-0 sm:grid-cols-[3.5rem_1fr]">
-                  <span className="font-display text-stat font-semibold leading-none text-care-300">{i + 1}</span>
+                  <span className="font-display text-stat font-semibold leading-none text-care-600" aria-hidden="true">{i + 1}</span>
                   <div>
                     <h3 className="font-display text-h3 font-semibold text-ink">{s.title}</h3>
                     <p className="mt-2 text-ink-2">{s.text}</p>

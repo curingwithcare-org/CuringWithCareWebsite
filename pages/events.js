@@ -10,6 +10,7 @@ import { Container, Section, SectionHeading } from "../src/shared/components/Sec
 import { regionName } from "../src/utils/chapters";
 import { eventDate, fetchBranches, fetchEvents } from "../src/utils/events";
 import photos from "../src/shared/photos";
+import { whenIdle } from "../src/utils/idle";
 
 const byNewest = (a, b) => {
   const da = eventDate(a);
@@ -47,7 +48,7 @@ export default function Events() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const cancelIdle = whenIdle(async () => {
       try {
         const [b, e] = await Promise.all([fetchBranches(), fetchEvents()]);
         if (cancelled) return;
@@ -58,9 +59,10 @@ export default function Events() {
         console.error("Events unavailable:", err?.message || err);
         if (!cancelled) setStatus("error");
       }
-    })();
+    });
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, [attempt]);
 
@@ -114,7 +116,7 @@ export default function Events() {
               </p>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
-              <Image src={photos.relaySelfie.src} alt={photos.relaySelfie.alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
+              <Image src={photos.relaySelfie.src} alt={photos.relaySelfie.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
             </div>
           </div>
         </Container>

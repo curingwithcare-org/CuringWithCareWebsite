@@ -9,6 +9,7 @@ import CtaBand from "../src/shared/components/CtaBand";
 import { Container, Section, SectionHeading } from "../src/shared/components/Section";
 import { chapterStats, regionName, fetchRegions, staticRegions } from "../src/utils/chapters";
 import photos from "../src/shared/photos";
+import { whenIdle } from "../src/utils/idle";
 
 const countryOf = (name) =>
   /\bUAE\b/.test(name) ? "United Arab Emirates" : /\bIndia\b/.test(name) ? "India" : /\bCanada\b/.test(name) ? "Canada" : "United States";
@@ -88,11 +89,14 @@ export default function Branches({ regions: initialRegions, stats }) {
 
   useEffect(() => {
     let cancelled = false;
-    fetchRegions()
-      .then((rows) => !cancelled && rows.length && setRegions(rows))
-      .catch((e) => console.error("Branch photos unavailable:", e?.message || e));
+    const cancelIdle = whenIdle(() => {
+      fetchRegions()
+        .then((rows) => !cancelled && rows.length && setRegions(rows))
+        .catch((e) => console.error("Branch photos unavailable:", e?.message || e));
+    });
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, []);
 
@@ -130,7 +134,7 @@ export default function Branches({ regions: initialRegions, stats }) {
               </div>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
-              <Image src={photos.booth.src} alt={photos.booth.alt} fill priority sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
+              <Image src={photos.booth.src} alt={photos.booth.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
             </div>
           </div>
 

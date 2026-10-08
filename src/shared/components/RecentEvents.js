@@ -7,6 +7,7 @@ import { Container, Section, SectionHeading } from "./Section";
 import { fetchBranches, fetchEvents, listEventImages } from "../../utils/events";
 import { regionName } from "../../utils/chapters";
 import photos from "../photos";
+import { whenIdle } from "../../utils/idle";
 
 // Shown while Supabase answers, and if it never does. These are real CARE
 // events from the photo library, so the section is never empty.
@@ -45,7 +46,7 @@ export default function RecentEvents() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    const cancelIdle = whenIdle(async () => {
       try {
         const [rows, branches] = await Promise.all([fetchEvents({ limit: 3 }), fetchBranches()]);
         const byId = new Map(branches.map((b) => [b.id, b]));
@@ -65,9 +66,10 @@ export default function RecentEvents() {
       } catch (e) {
         console.error("Recent events unavailable:", e?.message || e);
       }
-    })();
+    });
     return () => {
       cancelled = true;
+      cancelIdle();
     };
   }, []);
 

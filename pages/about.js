@@ -82,7 +82,7 @@ export default function About({ stats }) {
       <Container size="wide" className="pb-6 md:pb-10">
         <figure>
           <div className="relative aspect-[16/9] overflow-hidden rounded-band md:aspect-[21/9]">
-            <Image src={photos.hillmanGroup.src} alt={photos.hillmanGroup.alt} fill priority sizes="100vw" className="object-cover" placeholder="blur" />
+            <Image src={photos.hillmanGroup.src} alt={photos.hillmanGroup.alt} fill priority fetchPriority="high" decoding="sync" sizes="100vw" className="object-cover" placeholder="blur" />
           </div>
           <figcaption className="mt-3 text-sm text-muted">Members on a visit to the UPMC Hillman Cancer Center in Pittsburgh.</figcaption>
         </figure>
@@ -163,7 +163,7 @@ export default function About({ stats }) {
                   <Icon name={s.icon} size={22} />
                 </span>
                 <h3 className="font-display text-h3 mt-5 font-semibold">
-                  <span className="mr-2 text-care-500">{i + 1}.</span>
+                  <span className="mr-2 text-care-700">{i + 1}.</span>
                   {s.title}
                 </h3>
                 <p className="mt-2 flex-1 text-ink-2">{s.text}</p>
