@@ -102,7 +102,7 @@ export default function ResearchCompetition() {
       <Section tone="paper">
         <Container>
           <SectionHeading eyebrow="Honorable mentions" title="Every other paper that placed." />
-          <div className="mt-8 overflow-x-auto">
+          <div className="mt-8 overflow-x-auto rounded-sm" tabIndex={0} role="region" aria-label="Honorable mentions, scrollable table">
             <table className="w-full min-w-[32rem] border-collapse text-left">
               <thead>
                 <tr className="border-b-2 border-care-200 text-eyebrow text-care-700">

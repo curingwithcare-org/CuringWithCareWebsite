@@ -22,21 +22,7 @@ const isExternal = (href) => /^(https?:|mailto:|tel:)/.test(href || "");
  * The one button. Renders a real <a>, <Link> or <button> so keyboards and
  * screen readers get the right thing. `icon` draws an arrow after the label.
  */
-export default function Button({
-  href: hrefProp,
-  children: childrenProp,
-  variant = "primary",
-  size = "md",
-  icon,
-  className = "",
-  download,
-  // Legacy props from the old pages, removed once every page is rebuilt.
-  text,
-  link,
-  ...rest
-}) {
-  const href = hrefProp ?? link;
-  const children = childrenProp ?? text;
+export default function Button({ href, children, variant = "primary", size = "md", icon, className = "", download, ...rest }) {
   const classes = `inline-flex items-center justify-center gap-2 rounded-full font-semibold leading-none transition-colors duration-150 ${variants[variant] || variants.primary} ${sizes[size] || sizes.md} ${className}`;
   const external = isExternal(href);
   const content = (

@@ -78,29 +78,38 @@ export default function Team() {
   const [groups, setGroups] = useState(null); // { board, research, journalism, intern }
   const [status, setStatus] = useState("loading");
 
-  const load = async () => {
-    setStatus("loading");
-    try {
-      const { data, error } = await supabase.from("team_members").select("*").order("order_rank", { ascending: true, nullsFirst: false });
-      if (error) throw error;
-      const byName = (a, b) => (a.name || "").localeCompare(b.name || "");
-      const pick = (category, sort) => (data || []).filter((m) => m.category === category).sort(sort || (() => 0));
-      setGroups({
-        board: pick("board"),
-        research: pick("research", byName),
-        journalism: pick("journalism", byName),
-        intern: pick("intern", byName),
-      });
-      setStatus("ready");
-    } catch (e) {
-      console.error("Team unavailable:", e?.message || e);
-      setStatus("error");
-    }
-  };
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    load();
-  }, []);
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.from("team_members").select("*").order("order_rank", { ascending: true, nullsFirst: false });
+        if (error) throw error;
+        if (cancelled) return;
+        const byName = (a, b) => (a.name || "").localeCompare(b.name || "");
+        const pick = (category, sort) => (data || []).filter((m) => m.category === category).sort(sort || (() => 0));
+        setGroups({
+          board: pick("board"),
+          research: pick("research", byName),
+          journalism: pick("journalism", byName),
+          intern: pick("intern", byName),
+        });
+        setStatus("ready");
+      } catch (e) {
+        console.error("Team unavailable:", e?.message || e);
+        if (!cancelled) setStatus("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [attempt]);
+
+  const retry = () => {
+    setStatus("loading");
+    setAttempt((n) => n + 1);
+  };
 
   return (
     <>
@@ -149,7 +158,7 @@ export default function Team() {
               <h3 className="font-display text-h3 font-semibold">The team list is not loading right now</h3>
               <p className="mt-2 text-ink-2">Please try again in a moment, or email us and we will point you to the right person.</p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <Button onClick={load}>Try again</Button>
+                <Button onClick={retry}>Try again</Button>
                 <Button href="/contact" variant="secondary">Contact</Button>
               </div>
             </div>

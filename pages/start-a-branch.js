@@ -186,14 +186,14 @@ export default function StartABranch({ stats }) {
       <Section tone="white">
         <Container size="narrow">
           <SectionHeading eyebrow="Questions" title="Things people ask before they start." />
-          <dl className="mt-8 divide-y divide-line border-y border-line">
+          <div className="mt-8 divide-y divide-line border-y border-line">
             {faqs.map((f) => (
               <details key={f.q} className="group py-2">
                 <summary className="flex min-h-12 cursor-pointer list-none items-center justify-between gap-4 py-2 font-semibold text-ink [&::-webkit-details-marker]:hidden">
-                  <dt>{f.q}</dt>
+                  <h3 className="text-base font-semibold">{f.q}</h3>
                   <Icon name="chevron-down" size={20} className="shrink-0 text-care-700 transition-transform group-open:rotate-180" />
                 </summary>
-                <dd className="pb-4 text-ink-2">
+                <div className="pb-4 text-ink-2">
                   {f.a}
                   {f.link && (
                     <>
@@ -204,10 +204,10 @@ export default function StartABranch({ stats }) {
                       .
                     </>
                   )}
-                </dd>
+                </div>
               </details>
             ))}
-          </dl>
+          </div>
         </Container>
       </Section>
 

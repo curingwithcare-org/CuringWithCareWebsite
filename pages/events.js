@@ -40,34 +40,38 @@ export default function Events() {
   const [branches, setBranches] = useState([]);
   const [events, setEvents] = useState([]);
   const [status, setStatus] = useState("loading"); // loading | ready | error
-  const [active, setActive] = useState("all");
   const lightbox = useLightbox();
 
-  const load = async () => {
+  const [attempt, setAttempt] = useState(0);
+  const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [b, e] = await Promise.all([fetchBranches(), fetchEvents()]);
+        if (cancelled) return;
+        setBranches(b);
+        setEvents([...e].sort(byNewest));
+        setStatus("ready");
+      } catch (err) {
+        console.error("Events unavailable:", err?.message || err);
+        if (!cancelled) setStatus("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [attempt]);
+
+  const retry = () => {
     setStatus("loading");
-    try {
-      const [b, e] = await Promise.all([fetchBranches(), fetchEvents()]);
-      setBranches(b);
-      setEvents([...e].sort(byNewest));
-      setStatus("ready");
-    } catch (err) {
-      console.error("Events unavailable:", err?.message || err);
-      setStatus("error");
-    }
+    setAttempt((n) => n + 1);
   };
 
-  useEffect(() => {
-    load();
-  }, []);
-
-  // Allow /events?branch=<slug> to preselect a branch.
-  useEffect(() => {
-    const wanted = router.query.branch;
-    if (typeof wanted === "string" && branches.length) {
-      const match = branches.find((b) => b.slug === wanted);
-      if (match) setActive(match.id);
-    }
-  }, [router.query.branch, branches]);
+  // /events?branch=<slug> preselects a branch until the visitor picks another.
+  const queryBranch = typeof router.query.branch === "string" ? branches.find((b) => b.slug === router.query.branch) : null;
+  const active = selected ?? queryBranch?.id ?? "all";
 
   const eventsByBranch = useMemo(() => {
     const map = new Map();
@@ -85,7 +89,7 @@ export default function Events() {
   }));
 
   const select = (id) => {
-    setActive(id);
+    setSelected(id);
     const branch = branches.find((b) => b.id === id);
     router.replace({ pathname: "/events", query: branch ? { branch: branch.slug } : {} }, undefined, { shallow: true, scroll: false });
   };
@@ -150,7 +154,7 @@ export default function Events() {
               <h2 className="font-display text-h3 font-semibold">Events are not loading right now</h2>
               <p className="mt-2 text-ink-2">Please try again in a moment. In the meantime, our Instagram has photos from recent events.</p>
               <div className="mt-5 flex flex-wrap gap-3">
-                <Button onClick={load}>Try again</Button>
+                <Button onClick={retry}>Try again</Button>
                 <Button href="https://www.instagram.com/curingwithcare/" variant="secondary" icon="arrow-up-right">
                   Instagram
                 </Button>
