@@ -12,20 +12,26 @@ export default function Reveal({ children, as = "div", delay = 0, className = ""
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    const show = () => el.classList.add("is-visible");
+
     if (typeof IntersectionObserver === "undefined") {
-      el.classList.add("is-visible");
+      show();
+      return;
+    }
+    // Already on screen (or above it) when mounted: show at once.
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      show();
       return;
     }
     const io = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            el.classList.add("is-visible");
-            io.disconnect();
-          }
+        if (entries.some((entry) => entry.isIntersecting)) {
+          show();
+          io.disconnect();
         }
       },
-      { rootMargin: "0px 0px -8% 0px", threshold: 0.05 }
+      { rootMargin: "0px 0px -6% 0px", threshold: 0 }
     );
     io.observe(el);
     return () => io.disconnect();
