@@ -45,8 +45,8 @@ export default function Footer() {
   return (
     <footer className="bg-care-900 text-care-100">
       <Container className="py-14 md:py-20">
-        <div className="grid gap-10 md:grid-cols-12">
-          <div className="md:col-span-5">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-12">
+          <div className="col-span-2 md:col-span-5">
             <Link href="/" className="inline-flex items-center gap-3 rounded-md">
               <Image src="/logo.png" alt="" width={44} height={44} className="h-11 w-11 rounded-md" />
               <span className="font-display text-xl font-semibold text-white">{site.wordmark}</span>
@@ -92,7 +92,7 @@ export default function Footer() {
             </ul>
           </nav>
 
-          <div className="md:col-span-2">
+          <div className="col-span-2 md:col-span-2">
             <h2 className="text-eyebrow text-care-300">Follow</h2>
             <ul className="mt-3 flex gap-2">
               {socials.map((s) => (

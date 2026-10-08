@@ -8,7 +8,7 @@ export default function CareApp({ Component, pageProps }) {
   return (
     <div className={`${fontClassName} flex min-h-screen flex-col font-sans`}>
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="theme-color" content="#466222" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

@@ -107,7 +107,7 @@ export default function StartABranch({ stats }) {
             </div>
             <ol className="lg:col-span-8 divide-y divide-line">
               {steps.map((s, i) => (
-                <Reveal as="li" key={s.title} delay={i * 60} className="grid gap-4 py-7 first:pt-0 last:pb-0 sm:grid-cols-[3.5rem_1fr]">
+                <Reveal as="li" key={s.title} delay={i * 60} className="grid grid-cols-[3rem_1fr] gap-3 py-7 first:pt-0 last:pb-0 sm:grid-cols-[3.5rem_1fr] sm:gap-4">
                   <span className="font-display text-stat font-semibold leading-none text-care-600" aria-hidden="true">{i + 1}</span>
                   <div>
                     <h3 className="font-display text-h3 font-semibold text-ink">{s.title}</h3>
@@ -123,13 +123,13 @@ export default function StartABranch({ stats }) {
       <Section tone="tint">
         <Container>
           <SectionHeading eyebrow="What you'd actually do" title="A year in a chapter looks like this." lead="Real events chapters have run. Pick two or three for your first year." />
-          <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             {ideas.map((idea, i) => (
-              <Reveal as="li" key={idea.title} delay={i * 60} className="overflow-hidden rounded-card bg-white shadow-card">
-                <div className="relative aspect-[4/3]">
-                  <Image src={idea.photo.src} alt={idea.photo.alt} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" className="object-cover" placeholder="blur" />
+              <Reveal as="li" key={idea.title} delay={i * 60} className="grid grid-cols-[7rem_1fr] overflow-hidden rounded-card bg-white shadow-card sm:grid-cols-1">
+                <div className="relative min-h-28 sm:aspect-[4/3]">
+                  <Image src={idea.photo.src} alt={idea.photo.alt} fill sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 30vw" className="object-cover" placeholder="blur" />
                 </div>
-                <div className="p-5">
+                <div className="p-4 sm:p-5">
                   <h3 className="font-display text-h3 font-semibold text-ink">{idea.title}</h3>
                   <p className="mt-2 text-[0.9375rem] text-ink-2">{idea.text}</p>
                 </div>

@@ -128,7 +128,7 @@ export default function Research() {
               </h2>
               <p className="mt-2 text-ink-2">A solutions challenge for high schoolers on cancer prevention, access to care, education and policy.</p>
             </div>
-            <Icon name="arrow-right" size={24} className="shrink-0 text-care-700 transition-transform group-hover:translate-x-1" />
+            <Icon name="arrow-right" size={24} className="hidden shrink-0 text-care-700 transition-transform group-hover:translate-x-1 sm:block" />
           </Link>
         </Container>
       </Section>

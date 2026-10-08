@@ -44,7 +44,7 @@ export default function Home({ stats, countries }) {
       <SiteHead path="/" />
 
       {/* 1. Hero: one real photo, one headline, one primary action. */}
-      <section className="relative isolate flex min-h-[84svh] items-end overflow-hidden bg-care-900 text-white">
+      <section className="relative isolate flex min-h-[72svh] items-end overflow-hidden bg-care-900 text-white md:min-h-[84svh]">
         <Image
           src={photos.clubRushTable.src}
           alt={photos.clubRushTable.alt}
@@ -56,7 +56,7 @@ export default function Home({ stats, countries }) {
           className="object-cover object-[55%_20%]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-care-900/95 via-care-900/55 via-35% to-transparent to-70%" aria-hidden="true" />
-        <Container className="relative pb-14 pt-40 md:pb-20 md:pt-56">
+        <Container className="relative pb-12 pt-32 md:pb-20 md:pt-56">
           <p className="text-eyebrow text-care-200">A student-run 501(c)(3) nonprofit</p>
           <h1 className="font-display text-h1 mt-4 max-w-2xl font-semibold">
             Cancer awareness, run by the students next door.
@@ -110,8 +110,8 @@ export default function Home({ stats, countries }) {
             </div>
             <ul className="divide-y divide-line lg:col-span-7">
               {pillars.map((p, i) => (
-                <Reveal as="li" key={p.title} delay={i * 60} className="grid gap-5 py-8 first:pt-0 last:pb-0 sm:grid-cols-[7rem_1fr] sm:gap-7">
-                  <div className="relative aspect-square w-28 overflow-hidden rounded-card">
+                <Reveal as="li" key={p.title} delay={i * 60} className="grid grid-cols-[5.5rem_1fr] gap-4 py-7 first:pt-0 last:pb-0 sm:grid-cols-[7rem_1fr] sm:gap-7 sm:py-8">
+                  <div className="relative aspect-square w-22 overflow-hidden rounded-card sm:w-28">
                     <Image src={p.photo.src} alt={p.photo.alt} fill sizes="112px" className="object-cover" placeholder="blur" />
                   </div>
                   <div>

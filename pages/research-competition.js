@@ -102,24 +102,14 @@ export default function ResearchCompetition() {
       <Section tone="paper">
         <Container>
           <SectionHeading eyebrow="Honorable mentions" title="Every other paper that placed." />
-          <div className="mt-8 overflow-x-auto rounded-sm" tabIndex={0} role="region" aria-label="Honorable mentions, scrollable table">
-            <table className="w-full min-w-[32rem] border-collapse text-left">
-              <thead>
-                <tr className="border-b-2 border-care-200 text-eyebrow text-care-700">
-                  <th scope="col" className="py-3 pr-4 font-semibold">Paper</th>
-                  <th scope="col" className="py-3 font-semibold">Authors</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-line">
-                {honorableMentions.map((p) => (
-                  <tr key={p.title}>
-                    <td className="py-4 pr-4 font-medium text-ink">{p.title}</td>
-                    <td className="py-4 text-ink-2">{p.author}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ul className="mt-8 divide-y divide-line border-y border-line">
+            {honorableMentions.map((p) => (
+              <li key={p.title} className="grid gap-1 py-4 md:grid-cols-12 md:gap-6">
+                <p className="font-medium text-ink md:col-span-8">{p.title}</p>
+                <p className="text-ink-2 md:col-span-4">{p.author}</p>
+              </li>
+            ))}
+          </ul>
         </Container>
       </Section>
 
