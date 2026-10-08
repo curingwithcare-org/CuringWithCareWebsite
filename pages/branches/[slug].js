@@ -169,7 +169,7 @@ export default function BranchPage({ slug, region: staticData }) {
             <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {events.map((event) => (
                 <li key={event.id}>
-                  <EventCard event={event} onOpen={lightbox.open} />
+                  <EventCard event={event} onOpen={lightbox.show} />
                 </li>
               ))}
             </ul>

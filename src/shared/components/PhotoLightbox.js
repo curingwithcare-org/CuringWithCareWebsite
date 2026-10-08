@@ -21,9 +21,9 @@ import { useEffect, useState } from "react";
 
 export function useLightbox() {
   const [state, setState] = useState({ open: false, index: 0, slides: [] });
-  const open = (slides, index = 0) => setState({ open: true, index, slides });
+  const show = (slides, index = 0) => setState({ open: true, index, slides });
   const close = () => setState((s) => ({ ...s, open: false }));
-  return { ...state, open, close };
+  return { ...state, show, close };
 }
 
 export default function PhotoLightbox({ open, close, index, slides }) {
