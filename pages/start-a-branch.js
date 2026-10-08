@@ -101,7 +101,7 @@ export default function StartABranch({ stats }) {
         <Container>
           <div className="grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-4">
-              <div className="lg:sticky lg:top-28">
+              <div>
                 <SectionHeading eyebrow="How it works" title="Four steps, usually a few weeks." />
               </div>
             </div>

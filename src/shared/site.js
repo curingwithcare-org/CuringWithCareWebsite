@@ -11,7 +11,6 @@ export const site = {
   email: "curingwithcare@gmail.com",
   domain: "https://curingwithcare.org",
   donateUrl: "https://www.zeffy.com/en-US/donation-form/donate-to-curingwithcare",
-  // [TODO: separate chapter-application form if the team has one]
   joinFormUrl: "https://forms.gle/S2WH6htwdTTHK2gy9",
   startBranchFormUrl: "https://forms.gle/S2WH6htwdTTHK2gy9",
   instagram: "https://www.instagram.com/curingwithcare/",

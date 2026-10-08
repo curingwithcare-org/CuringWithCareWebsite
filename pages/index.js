@@ -95,8 +95,8 @@ export default function Home({ stats, countries }) {
               stats={[
                 { value: stats.chapters, label: "Chapters", note: "Counted from our chapter list" },
                 { value: stats.countries, label: "Countries", note: stats.countryNames.join(", ") },
-                { value: "900+", label: "Members", note: "[TODO: confirm current count]" },
-                { value: "$30k+", label: "Raised for cancer causes", note: "[TODO: confirm current total]" },
+                { value: "900+", label: "Members", note: "Across every chapter" },
+                { value: "$30k+", label: "Raised for cancer causes" },
               ]}
             />
           </Reveal>
@@ -108,7 +108,7 @@ export default function Home({ stats, countries }) {
         <Container>
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
-              <div className="lg:sticky lg:top-28">
+              <div>
                 <SectionHeading
                   eyebrow="What a chapter does"
                   title="Three things, done locally."

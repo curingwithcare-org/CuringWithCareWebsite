@@ -21,7 +21,8 @@ import chapterList from "../../data/chapters";
 const CHAPTER_SOURCE = "file";
 
 // Region name in data/chapters.js -> slug of its existing row in `branches`.
-// Regions not listed here (e.g. Hyderabad) have no page yet.
+// A region listed here gets a page even before it has a `branches` row in
+// Supabase; the row only adds the photo and description.
 const BRANCH_SLUGS = {
   "Altoona, PA": "altoona",
   "Atlanta, GA": "atlanta",
@@ -31,6 +32,7 @@ const BRANCH_SLUGS = {
   "Germantown, MD": "maryland",
   "Greater Philadelphia Region": "philadelphia",
   "Houston, TX": "houston",
+  "Hyderabad, India": "hyderabad",
   "Irvine, CA": "irvine",
   "Milwaukee, WI": "milwaukee",
   "New Jersey": "robbinsville",
@@ -67,8 +69,8 @@ const fileRegions = chapterList.map((region) => ({
     .sort((a, b) => byName(a.school, b.school)),
 }));
 
-// Adds each region's photo and description from its `branches` row. A region
-// keeps its slug (and so its link) only if that row really exists.
+// Adds each region's photo and description from its `branches` row, when
+// there is one. The slug (and so the link) comes from BRANCH_SLUGS.
 function withBranchRows(regions, rows) {
   const bySlug = new Map(rows.map((row) => [row.slug, row]));
   return regions.map((region) => {
@@ -76,7 +78,7 @@ function withBranchRows(regions, rows) {
     return {
       ...region,
       id: row ? row.id : region.region,
-      slug: row ? row.slug : null,
+      slug: region.slug,
       image: row ? row.image : null,
       description: row ? row.description : null,
       active: true,
@@ -100,11 +102,12 @@ async function fetchRegionFromFile(slug) {
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
-  if (!row) return null;
 
+  const region = fileRegions.find((r) => r.slug === slug);
+  // A region in the file without a Supabase row yet: page, no photo.
+  if (!row) return region ? { id: region.region, slug, region: region.region, image: null, description: null, active: true, chapters: region.chapters } : null;
   // A branches row that no current region maps to is a retired region. Its old
   // `chapters` column is never shown, so removed chapters can't appear.
-  const region = fileRegions.find((r) => r.slug === slug);
   if (!region) return { ...row, active: false, chapters: [] };
   return { ...row, region: region.region, active: true, chapters: region.chapters };
 }

@@ -117,19 +117,25 @@ export default function Research() {
 
       <Section tone="paper" size="tight">
         <Container>
-          <Link
-            href="/caac"
-            className="group flex flex-col gap-4 rounded-card bg-white p-6 shadow-card transition-shadow hover:shadow-card-hover sm:flex-row sm:items-center sm:justify-between md:p-8"
-          >
-            <div>
-              <p className="text-eyebrow text-care-700">Archive · 2025</p>
-              <h2 className="font-display text-h3 mt-2 font-semibold text-ink group-hover:underline underline-offset-4">
-                Cancer Awareness &amp; Action Challenge, with the High School Health Research Forum
-              </h2>
-              <p className="mt-2 text-ink-2">A solutions challenge for high schoolers on cancer prevention, access to care, education and policy.</p>
-            </div>
-            <Icon name="arrow-right" size={24} className="hidden shrink-0 text-care-700 transition-transform group-hover:translate-x-1 sm:block" />
-          </Link>
+          <div className="rounded-card bg-white p-6 shadow-card md:p-8">
+            <p className="text-eyebrow text-care-700">Also in 2025</p>
+            <h2 className="font-display text-h3 mt-2 font-semibold text-ink">Cancer Awareness &amp; Action Challenge</h2>
+            <p className="mt-2 text-ink-2">
+              Hosted with the High School Health Research Forum: high schoolers proposed one practical, evidence-based solution to a
+              problem in cancer prevention, access to care, education or policy. Semifinalists were recognized and the winner received
+              a cash award. Submissions are closed. [TODO: whether the challenge runs in 2026, and the 2025 results if they may be
+              published.]
+            </p>
+            <a
+              href="https://hshrf.org/caac"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 inline-flex min-h-11 items-center gap-1.5 font-semibold text-care-700 hover:underline underline-offset-4"
+            >
+              Challenge guidelines at hshrf.org
+              <Icon name="arrow-up-right" size={18} />
+            </a>
+          </div>
         </Container>
       </Section>
 

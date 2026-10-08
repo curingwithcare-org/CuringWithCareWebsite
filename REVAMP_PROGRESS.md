@@ -33,27 +33,23 @@ Chapters: edit `data/chapters.js`. Photos: add a resized JPEG to `src/photos/` a
 
 ## Open questions for the team
 
-1. **The live site is down.** `https://curingwithcare.org` returns HTTP 402 from Vercel with `X-Vercel-Error: DEPLOYMENT_DISABLED`, and `https://www.curingwithcare.org` serves an expired TLS certificate. This is a Vercel project or billing state, not something in this repo. Until it is fixed the PR gets no preview and the public site stays offline.
-2. **Supabase keys for local work.** Please create `.env.local` with the two `NEXT_PUBLIC_SUPABASE_*` values. Without them I could not see the Team cards, event photos or branch photos rendered with real data; those sections were built against the column names the old code used (`team_members`: name, position, description, image, category, order_rank, university, social; `events`: title, description, images_folder, branch_id; `branches`: id, slug, city, region, image, description, active). If any column differs, say so.
-3. **Confirm the two published numbers**: "900+ members" and "$30k+ raised". They are shown on Home and About with a small "[TODO: confirm]" note until confirmed.
-4. **Event dates.** The old site never showed dates. If the `events` table has a date column, tell me its name; the Events page already looks for `date`, `event_date`, `held_on` or `starts_at` and sorts newest first when one exists.
-5. **Chapter application form.** Every "Start a Branch" and "Join" action still points at the one Google Form the old site used. If there is a separate chapter-application form or a chapters-team email, it goes in `src/shared/site.js` (`startBranchFormUrl`).
-6. **Hyderabad has no branch page** because there is no `branches` row for it in Supabase. Adding a row (slug, city, image, description) and mapping it in `BRANCH_SLUGS` in `src/utils/chapters.js` makes it clickable.
-7. **`public/images/people/` (86 MB, 24 headshots)** is still in the repo. Nothing in the code references it; if Supabase `team_members.image` does not point there either, it can be deleted.
-8. **`/caac`** is kept as a closed 2025 archive page linked from `/research`. Keep it, update it for 2026, or redirect it?
-9. **Nav label**: "Branches" (as before). "Chapters" would match how students talk; say the word and it is a one-line change.
-10. **Content for the `[TODO]` placeholders** (list below).
+Answered on 2026-10-08: members (900+) and raised ($30k+) confirmed; the events table has no date column; the single Google Form stays for Start a Branch and Join; `/caac` now redirects to `/research` (its summary lives on the Research hub); the nav label stays "Branches"; `public/images/people/` deleted; Hyderabad has a page at `/branches/hyderabad` built from `data/chapters.js` (a Supabase `branches` row with slug `hyderabad` will add its photo and description later).
+
+Still open:
+
+1. **The live site is down.** `https://curingwithcare.org` returns HTTP 402 from Vercel with `X-Vercel-Error: DEPLOYMENT_DISABLED`, and `https://www.curingwithcare.org` serves an expired TLS certificate. Until it is fixed the PR gets no preview and the public site stays offline.
+2. **Supabase keys for local work.** Create `.env.local` with the two `NEXT_PUBLIC_SUPABASE_*` values (never commit it) and restart `npm run dev`. Team, Events and branch photos show their "not loading" state until then. If team photos used to live in the deleted `public/images/people/` folder, restore it from git history (`git checkout f87633d -- public/images/people`).
+3. **Content for the `[TODO]` placeholders** (list below).
 
 ### `[TODO]` placeholders that need real content
 
 | Page | Placeholder |
 |---|---|
 | Home | A real quote from a chapter head, with name and school (the pull-quote section) |
-| Home, About | Confirm "900+ members" and "$30k+ raised" |
 | About | Two or three sentences on how CARE began (year, first school, who started it, why) |
 | Research | Dates, prompts and submission link for the third edition of the review paper competition |
+| Research | Whether the Cancer Awareness & Action Challenge runs in 2026; the 2025 semifinalists and winner if they may be published |
 | Research competition, 2nd edition | Paper titles for places 1 to 10 and the first-place PDF |
-| CAAC | Whether the challenge runs in 2026; the 2025 semifinalists and winner if they may be published |
 | Team | When board, team and intern applications open and where to apply |
 | Start a Branch | What CARE provides to a new chapter (starter kit, templates, constitution); whether there are any dues or costs; typical reply time |
 | Contact | Mailing address and EIN, if the board wants them published |
@@ -100,12 +96,12 @@ Every page: one clear purpose, a strong first section with a real photo where on
 | `/` | Full-screen photo hero (students under giant HOPE letters at Relay for Life) with one headline and Start a Branch, photo on top and text below on phones and tablets; four computed/flagged numbers; "Three things, done locally" split list with photo thumbnails; chapters grouped by country with links to branch pages; latest three events from Supabase (real-photo fallback); student-voice pull quote (placeholder); CTA band with the CARE-letters photo |
 | `/about` | Text-led opener; full-width Hillman Cancer Center photo with caption; "Where it started" (placeholder) with computed counts; awareness/research/care as alternating photo rows; numbers; board → branches → chapters explainer; CTA |
 | `/branches` | Headline from the computed counts, photo, country jump links; per-country sections of branch cards (schools, chapter heads, New badges) in a column layout, built from `data/chapters.js` at build time with Supabase photos filled in after load; CTA |
-| `/branches/[slug]` | Prerendered for the 16 known slugs (fallback through Supabase for others); region name, chapter count, Supabase photo and description; school cards; that branch's past events with lightbox; CTA. Retired or unknown slugs get a clear message and a way back |
+| `/branches/[slug]` | Prerendered for the 17 known slugs (fallback through Supabase for others); region name, chapter count, Supabase photo and description; school cards; that branch's past events with lightbox; CTA. Retired or unknown slugs get a clear message and a way back |
 | `/events` | Opener with photo; branch pill filters (scroll on phones, synced to `?branch=slug`); events grouped by branch, newest first, with photo grids and a lazy lightbox; skeleton, retry and empty states; CTA |
 | `/research` (new) | Opener; the two editions as split cards; "how it works" steps; next-edition placeholder; link to the CAAC archive; CTA |
 | `/research-competition` | Prompt as a pull quote; first-place paper with Read and Download (no embedded PDF); runners-up; honorable mentions as a real table; CTA to the second edition |
 | `/research-competition-2` | Four prompts; first place with title/PDF placeholders; placements 2 to 10; CTA to the first edition |
-| `/caac` | Closed 2025 archive: prompt, eligibility, guidelines link, results placeholder; CTA to research |
+| `/caac` | Permanent redirect to `/research`, where the 2025 challenge is summarized |
 | `/team` | Opener with the CARE-letters photo; board cards (native details/summary bios, LinkedIn/Instagram if present); research & design and journalism as name columns; interns with round avatars; loading, empty and retry states; CTA |
 | `/start-a-branch` (new) | Split hero with the application button; four steps; "a year in a chapter" photo cards; join / start / support options (`#join`); FAQ; "Be chapter number 29" closer |
 | `/contact` (new) | Email and social buttons; "where to go for what" grid; CTA |
