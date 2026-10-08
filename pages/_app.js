@@ -2,6 +2,7 @@ import "../src/shared/globals.css";
 import Head from "next/head";
 import Navbar from "../src/shared/components/Navbar";
 import Footer from "../src/shared/components/Footer";
+import BackToTop from "../src/shared/components/BackToTop";
 import { fontClassName } from "../src/shared/fonts";
 
 export default function CareApp({ Component, pageProps }) {
@@ -19,10 +20,11 @@ export default function CareApp({ Component, pageProps }) {
         Skip to content
       </a>
       <Navbar />
-      <main id="main" className="flex-1">
+      <main id="main" tabIndex={-1} className="flex-1 outline-none">
         <Component {...pageProps} />
       </main>
       <Footer />
+      <BackToTop />
     </div>
   );
 }

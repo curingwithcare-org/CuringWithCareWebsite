@@ -1,3 +1,5 @@
+import CountUp from "./CountUp";
+
 /**
  * Big honest numbers with room around them. `note` is small print under the
  * label, for sources or "[TODO: confirm]" flags.
@@ -5,7 +7,9 @@
 export function Stat({ value, label, note, dark = false, className = "" }) {
   return (
     <div className={className}>
-      <p className={`font-display font-semibold text-stat ${dark ? "text-white" : "text-care-800"}`}>{value}</p>
+      <p className={`font-display font-semibold text-stat ${dark ? "text-white" : "text-care-800"}`}>
+        <CountUp value={value} />
+      </p>
       <p className={`mt-2 text-base font-medium sm:mt-3 sm:text-lg ${dark ? "text-care-100" : "text-ink"}`}>{label}</p>
       {note && <p className={`mt-1 text-xs sm:text-sm ${dark ? "text-care-300" : "text-muted"}`}>{note}</p>}
     </div>

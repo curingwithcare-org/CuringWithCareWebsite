@@ -5,6 +5,7 @@ const paths = {
   "arrow-right": <path d="M5 12h14M12 5l7 7-7 7" />,
   "arrow-up-right": <path d="M7 7h10v10M7 17 17 7" />,
   "arrow-left": <path d="M19 12H5M12 19l-7-7 7-7" />,
+  "arrow-up": <path d="M12 19V5M5 12l7-7 7 7" />,
   "chevron-down": <path d="m6 9 6 6 6-6" />,
   check: <path d="M20 6 9 17l-5-5" />,
   menu: <path d="M4 7h16M4 12h16M4 17h16" />,
