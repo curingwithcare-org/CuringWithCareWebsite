@@ -1,107 +1,84 @@
-import Head from "next/head";
+import Link from "next/link";
+import SiteHead from "../src/shared/components/SiteHead";
+import Button from "../src/shared/components/Button";
+import Icon from "../src/shared/components/Icon";
+import CtaBand from "../src/shared/components/CtaBand";
+import { Container, Section, SectionHeading } from "../src/shared/components/Section";
+import photos from "../src/shared/photos";
+
+const eligibility = [
+  "Full-time high school students (grades 9 to 12) at a public, private or home school at the time of application.",
+  "U.S. citizenship is not required.",
+  "International students, and students living outside the U.S., may submit.",
+];
 
 export default function CAAC() {
   return (
     <>
-      <Head>
-        <title>Cancer Awareness & Action Challenge | CARE</title>
-        <meta name="description" content="Join the Cancer Awareness & Action Challenge and make a difference!" />
-      </Head>
-      <div className="p-6 md:p-12 pt-24 md:pt-36 min-h-screen bg-linear-to-b from-gray-50 to-gray-100 flex flex-col items-center justify-center py-12 px-4">
-        <main className="w-full flex flex-col items-center justify-center">
-          {/* Info Section */}
-          <div className="w-full max-w-4xl mb-12">
-            <div className="text-center mb-6">
-              <span className="text-base md:text-lg font-semibold text-green-700">
-                Hosted by <span className="font-bold">curingwithCARE</span> &{" "}
-                <span className="font-bold">HSHRF</span>
-              </span>
+      <SiteHead
+        title="2025 Cancer Awareness & Action Challenge"
+        path="/caac"
+        description="The 2025 Cancer Awareness & Action Challenge, hosted by Curing with Care and the High School Health Research Forum: a solutions challenge for high school students on cancer prevention, access to care, education and policy."
+      />
+
+      <Section tone="paper" size="tight" className="pt-10 md:pt-16">
+        <Container>
+          <Link href="/research" className="inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-care-700 hover:underline underline-offset-4">
+            <Icon name="arrow-left" size={16} />
+            Research
+          </Link>
+          <p className="text-eyebrow mt-4 text-care-700">Archive · 2025 · Hosted with the High School Health Research Forum</p>
+          <h1 className="font-display text-display mt-3 max-w-4xl font-semibold text-ink">Cancer Awareness &amp; Action Challenge</h1>
+          <p className="text-lead mt-6 max-w-2xl text-ink-2">
+            A challenge for high school students to propose one creative, evidence-based, workable solution to a problem in cancer prevention,
+            access to care, public education or health policy. Semifinalists were recognized and the winner received a cash award.
+          </p>
+          <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-care-100 px-4 py-2 text-sm font-semibold text-care-800">
+            <Icon name="calendar" size={16} />
+            Submissions for 2025 are closed. [TODO: 2026 dates, if the challenge runs again]
+          </p>
+        </Container>
+      </Section>
+
+      <Section tone="white">
+        <Container>
+          <div className="grid gap-12 md:grid-cols-2">
+            <div>
+              <SectionHeading eyebrow="The 2025 prompt" title="Pick one pressing problem. Propose what teenagers could actually do about it." />
+              <p className="mt-5 text-ink-2">
+                Select a specific, pressing problem of cancer prevention, access to treatment, awareness, or policy and propose an innovative,
+                practical solution that can be created, campaigned for, and enacted by adolescents to address the issue. No research experience
+                is needed; the submission is judged on passion, feasibility and impact.
+              </p>
+              <Button href="https://hshrf.org/caac" variant="secondary" className="mt-6" icon="arrow-up-right">
+                Full guidelines at hshrf.org
+              </Button>
             </div>
-            <h1 className="--font-fredoka font-bold text-4xl md:text-5xl text-green-600 mb-4 text-center">
-              2025 Cancer Awareness & Action Challenge
-            </h1>
-            <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded-sm"></div>
-            <p className="text-lg md:text-xl text-gray-700 mb-6 text-center">
-              Cancer is among the globe&apos;s most crucial global health issues. This
-              disease affects hundreds of thousands of individuals each year.{" "}
-              <span className="font-semibold text-green-700">curingwithCARE</span>{" "}
-              and the{" "}
-              <span className="font-semibold text-green-700">
-                High School Health Research Forum
-              </span>{" "}
-              are thrilled to host and introduce the 2025 Cancer Awareness & Action
-              Challenge.
-            </p>
-            <p className="text-base md:text-lg text-gray-700 mb-6 text-center">
-              This is a challenge for high school students designed to cultivate
-              and gather creative, evidence-driven, and implementable solutions in
-              addressing cancer prevention, access to care, public education, and
-              healthcare policy problems. Semifinalists will receive recognition
-              and the winner, in addition, will receive a cash award.
-            </p>
-            <p className="text-base md:text-lg text-gray-700 mb-6 text-center">
-              This challenge is designed to allow high school students to develop
-              their own creative and critical thinking skills as well as offer an
-              opportunity for students with an interest in health advocacy,
-              research, and community outreach to put their skillsets in action.{" "}
-              <span className="font-semibold">
-                No research experience is needed whatsoever.
-              </span>{" "}
-              This challenge only requires your ability to include passion,
-              feasibility, and impact in one submission!
-            </p>
-            <div className="bg-white/70 rounded-xl shadow-sm p-4 mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-green-700 mb-2 text-center">
-                Eligibility
-              </h2>
-              <ul className="list-disc list-inside text-gray-700 text-left mx-auto max-w-md">
-                <li>
-                  The competition is only open to full-time high school students
-                  (grades 9-12) attending a public school, private school, or home
-                  school at the time of application.
-                </li>
-                <li>U.S. citizenship is not required</li>
-                <li>International students may submit</li>
-                <li>
-                  Students living outside of the U.S. are eligible to submit
-                </li>
+            <div>
+              <h2 className="text-eyebrow text-care-700">Who could enter</h2>
+              <ul className="mt-4 space-y-3">
+                {eligibility.map((item) => (
+                  <li key={item} className="flex gap-3 text-ink-2">
+                    <Icon name="check" size={20} className="mt-0.5 text-care-600" />
+                    {item}
+                  </li>
+                ))}
               </ul>
-            </div>
-            <div className="bg-white/70 rounded-xl shadow-sm p-4 mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-green-700 mb-2 text-center">
-                2025 Prompt
-              </h2>
-              <p className="text-gray-700 mb-2 text-center">
-                Select a specific, pressing problem of cancer prevention, access to
-                treatment, awareness, or policy and propose an innovative,
-                practical solution that can be created, campaigned for, and enacted
-                by adolescents to address the issue.
-              </p>
-              <p className="text-gray-700 text-center">
-                Access the full guidelines document to ensure a quality
-                submission!
-              </p>
-            </div>
-            <div className="flex flex-col md:flex-row gap-4 justify-center mt-4">
-              <a
-                href="https://hshrf.org/caac"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-linear-to-r from-green-500 to-emerald-400 text-white font-bold px-6 py-3 rounded-lg shadow-sm hover:scale-105 transition-transform text-center"
-              >
-                Full Guidelines Document
-              </a>
-              <button
-                disabled
-                className="bg-white border border-green-400 text-green-700 font-bold px-6 py-3 rounded-lg shadow-sm cursor-not-allowed opacity-70"
-                title="Opens Aug 1st"
-              >
-                Submission (Opens Aug 1st)
-              </button>
+              <h2 className="text-eyebrow mt-10 text-care-700">Results</h2>
+              <p className="mt-3 text-ink-2">[TODO: 2025 semifinalists and winner, once the team confirms they may be published.]</p>
             </div>
           </div>
-        </main>
-      </div>
+        </Container>
+      </Section>
+
+      <CtaBand
+        photo={photos.speakerEvent}
+        eyebrow="Still open"
+        title="The review paper competition runs every year."
+        text="If you missed the challenge, the research competition is the other way to write about cancer with CARE."
+        primary={{ label: "Research competition", href: "/research" }}
+        secondary={{ label: "Contact us", href: "/contact" }}
+      />
     </>
   );
 }
