@@ -35,11 +35,12 @@ Chapters: edit `data/chapters.js`. Photos: add a resized JPEG to `src/photos/` a
 
 Answered on 2026-10-08: members (900+) and raised ($30k+) confirmed; the events table has no date column; the single Google Form stays for Start a Branch and Join; `/caac` now redirects to `/research` (its summary lives on the Research hub); the nav label stays "Branches"; `public/images/people/` deleted; Hyderabad has a page at `/branches/hyderabad` built from `data/chapters.js` (a Supabase `branches` row with slug `hyderabad` will add its photo and description later).
 
+On 2026-10-08 the Director chose to drop Supabase entirely so nothing depends on anyone else's account. Events, team members and photos now live in the repo (`data/events.js`, `data/team.js`, `public/events/`, `public/team/`), imported from the original photo library in git history by `scripts/import-photos.mjs`. The site is fully static and needs no environment variables. Event titles were inferred from folder names; descriptions, branches and years marked `[TODO]` need confirming, and team entries need last names, positions and bios.
+
 Still open:
 
 1. **The live site is down.** `https://curingwithcare.org` returns HTTP 402 from Vercel with `X-Vercel-Error: DEPLOYMENT_DISABLED`, and `https://www.curingwithcare.org` serves an expired TLS certificate. Until it is fixed the PR gets no preview and the public site stays offline.
-2. **Supabase keys for local work.** Create `.env.local` with the two `NEXT_PUBLIC_SUPABASE_*` values (never commit it) and restart `npm run dev`. Team, Events and branch photos show their "not loading" state until then. If team photos used to live in the deleted `public/images/people/` folder, restore it from git history (`git checkout f87633d -- public/images/people`).
-3. **Content for the `[TODO]` placeholders** (list below).
+2. **Content for the `[TODO]` placeholders** (list below).
 
 ### `[TODO]` placeholders that need real content
 
@@ -50,7 +51,8 @@ Still open:
 | Research | Dates, prompts and submission link for the third edition of the review paper competition |
 | Research | Whether the Cancer Awareness & Action Challenge runs in 2026; the 2025 semifinalists and winner if they may be published |
 | Research competition, 2nd edition | Paper titles for places 1 to 10 and the first-place PDF |
-| Team | When board, team and intern applications open and where to apply |
+| Team | Every board member's last name, position and bio (data/team.js); any research, journalism or intern members to add; when applications open |
+| Events | For each event marked [TODO] in data/events.js: which branch, which year, and a one-line description |
 | Start a Branch | What CARE provides to a new chapter (starter kit, templates, constitution); whether there are any dues or costs; typical reply time |
 | Contact | Mailing address and EIN, if the board wants them published |
 
@@ -64,7 +66,7 @@ Still open:
 - **Icons**: one inline Lucide-style stroke set in `src/shared/components/Icon.js`. Font Awesome dropped.
 - **Photos**: 21 real photos picked from the old `images/` folder, resized to at most 1800px, committed under `src/photos/` (4 MB) as static imports with alt text. The 338 MB `images/` folder is removed from the working tree (still in git history).
 - **Numbers**: chapters, branches and countries are computed from `data/chapters.js`; the two published figures are kept and flagged.
-- **Data**: Supabase stays read only and is loaded lazily (the client library is not in the initial bundle) and only after the browser is idle, so it never competes with first paint. Pages that can render from `data/chapters.js` do so at build time.
+- **Data**: everything is in the repo and rendered at build time. Supabase was removed on 2026-10-08.
 - **Removed**: `tailwind.config.mjs`, `typekit.css`, `navbar.css`, `DO_NOT_DELETE.js` (the site builds without it), `components/Layout.js`, `styles/`, decorative SVGs, stock photos, unused icons and font file, and the five unused npm packages.
 
 ---

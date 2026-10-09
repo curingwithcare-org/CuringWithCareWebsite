@@ -2,7 +2,7 @@
 
 Source for [curingwithcare.org](https://curingwithcare.org), the site of Curing with Care (CARE), a student-run 501(c)(3) nonprofit with high school chapters across the US, Canada, India and the UAE.
 
-Built with Next.js 16 (Pages Router), React 19 and Tailwind CSS 4. Chapter data lives in this repo; events, team members and branch photos come from a Supabase project, read only. Hosted on Vercel.
+Built with Next.js 16 (Pages Router), React 19 and Tailwind CSS 4. All content (chapters, events, team, photos) lives in this repo, so the site is fully static with no database or API keys. Hosted on Vercel.
 
 ## Running it locally
 
@@ -14,15 +14,6 @@ npm run dev
 ```
 
 Open http://localhost:3000.
-
-Pages that read from Supabase (Events, Team, branch photos and the recent-events strip on the home page) need two values in a file named `.env.local` in the project root:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
-
-Both are under Project Settings → API in the Supabase dashboard. Without them those sections show a "not loading right now" message and everything else works. Never commit `.env.local`.
 
 Before opening a pull request:
 
@@ -37,18 +28,24 @@ Both must pass with no errors.
 
 ```
 data/chapters.js      The chapter list: every branch, school and chapter head
+data/events.js        Past events, newest first, with their photos
+data/team.js          Board, research, journalism and intern members
 pages/                One file per route
-public/               Logo, favicon, social preview image, the research PDF
+public/               Logo, favicon, social preview, research PDF, event photos (events/), headshots (team/)
 src/photos/           Photos used on the site, resized to at most 1800px
 src/shared/           Design tokens (globals.css), fonts, site links, shared components
-src/utils/            Supabase client, chapter helpers, event helpers
+src/utils/            Chapter and event helpers
 docs/revamp/          Screenshots from before and after the 2026 redesign
 REVAMP_PROGRESS.md    Design decisions, verification results and open items from the redesign
 ```
 
 ## Updating content
 
-**Chapters.** Edit `data/chapters.js`. Each entry is a branch (a city or region) with its schools and chapter heads. Mark a new chapter with `isNew: true`. The chapter, branch and country counts on the home and about pages are computed from this file, and every branch gets a page at `/branches/<slug>`. To add a branch page for a new region, add its slug to `BRANCH_SLUGS` in `src/utils/chapters.js`.
+**Chapters.** Edit `data/chapters.js`. Each entry is a branch (a city or region) with its schools and chapter heads. Mark a new chapter with `isNew: true`. The chapter, branch and country counts on the home and about pages are computed from this file. To give a new region a page at `/branches/<slug>`, add its slug to `BRANCH_SLUGS` in `src/utils/chapters.js`.
+
+**Events.** Put the photos in a new folder under `public/events/<slug>/` as JPEGs no wider than 1400px, named `1.jpg`, `2.jpg` and so on. Then add an entry at the top of `data/events.js` with the title, the branch name exactly as it appears in `data/chapters.js` (or `null`), the year, a sentence of description, and a `photos` list with each file's width and height. Events appear on the Events page, on their branch's page, and the three newest on the home page.
+
+**Team.** Edit `data/team.js`. Headshots go in `public/team/`. Each person has a `category`: `board` shows a photo card with position and bio, `research` and `journalism` show name lists, and `intern` shows a round photo with a school. Board members appear in file order; the others alphabetically.
 
 **Photos.** Add a JPEG no wider than 1800px to `src/photos/`, then add an entry with a short, specific alt text to `src/shared/photos.js`. Use it from a page with `photos.yourName`.
 
@@ -58,22 +55,9 @@ REVAMP_PROGRESS.md    Design decisions, verification results and open items from
 
 **Placeholders.** Text in square brackets starting with `TODO` is a placeholder waiting on real content. Search the `pages/` folder for `[TODO` to find them all.
 
-## Data in Supabase
-
-The site only reads. It never writes to Supabase or changes the schema.
-
-| Table or bucket | Used by | Columns read |
-|---|---|---|
-| `branches` | Branches, branch pages, Events | `id`, `slug`, `city`, `region`, `image`, `description`, `active` |
-| `events` | Events, branch pages, home page | `id`, `title`, `description`, `images_folder`, `branch_id` |
-| `team_members` | Team | `name`, `position`, `description`, `image`, `category`, `order_rank`, `university`, `social` |
-| storage bucket `images` | Events, home page | photos under `events/<images_folder>/` |
-
-If a branch has no row in `branches`, its page still renders from `data/chapters.js`, just without a photo or description.
-
 ## Deployment
 
-Vercel builds the site. Every push to `main` deploys production, and every other branch gets a preview URL on its pull request. The two Supabase values above must be set as environment variables in the Vercel project for Production and Preview.
+Vercel builds the site from GitHub. Every push to `main` deploys production, and every other branch gets a preview URL on its pull request. No environment variables are needed.
 
 ## Contributing
 

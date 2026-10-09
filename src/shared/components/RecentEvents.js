@@ -1,80 +1,12 @@
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "./Button";
 import Reveal from "./Reveal";
 import { Container, Section, SectionHeading } from "./Section";
-import { fetchBranches, fetchEvents, listEventImages } from "../../utils/events";
-import { regionName } from "../../utils/chapters";
-import photos from "../photos";
-import { whenIdle } from "../../utils/idle";
 
-// Shown while Supabase answers, and if it never does. These are real CARE
-// events from the photo library, so the section is never empty.
-const fallback = [
-  { title: "Pink Out game", place: "Pittsburgh, PA", photo: photos.pinkOut },
-  { title: "Cards for patients", place: "Pittsburgh, PA", photo: photos.cardMaking },
-  { title: "Relay for Life", place: "Pittsburgh, PA", photo: photos.relayCouch },
-];
-
-function EventCard({ title, place, photo, image, delay }) {
-  return (
-    <Reveal as="li" delay={delay} className="group overflow-hidden rounded-card bg-white shadow-card transition-shadow hover:shadow-card-hover">
-      <Link href="/events" className="block">
-        <div className="relative aspect-[4/3] bg-care-100">
-          {photo ? (
-            <Image src={photo.src} alt={photo.alt} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" placeholder="blur" />
-          ) : image ? (
-            <Image src={image} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
-          ) : null}
-        </div>
-        <div className="p-5">
-          {place && <p className="text-eyebrow text-care-700">{place}</p>}
-          <h3 className="font-display text-h3 mt-2 font-semibold text-ink group-hover:underline underline-offset-4">{title}</h3>
-        </div>
-      </Link>
-    </Reveal>
-  );
-}
-
-/**
- * The latest three events from Supabase (newest rows first), each with its
- * first photo. Falls back to three real events from the photo library.
- */
-export default function RecentEvents() {
-  const [events, setEvents] = useState(null);
-
-  useEffect(() => {
-    let cancelled = false;
-    const cancelIdle = whenIdle(async () => {
-      try {
-        const [rows, branches] = await Promise.all([fetchEvents({ limit: 3 }), fetchBranches()]);
-        const byId = new Map(branches.map((b) => [b.id, b]));
-        const withImages = await Promise.all(
-          rows.map(async (row) => {
-            let image = null;
-            try {
-              image = (await listEventImages(row.images_folder, { limit: 1 }))[0]?.url || null;
-            } catch {
-              image = null;
-            }
-            const branch = byId.get(row.branch_id);
-            return { id: row.id, title: row.title, place: branch ? regionName(branch) : null, image };
-          })
-        );
-        if (!cancelled && withImages.length) setEvents(withImages);
-      } catch (e) {
-        console.warn("Recent events unavailable:", e?.message || e);
-      }
-    });
-    return () => {
-      cancelled = true;
-      cancelIdle();
-    };
-  }, []);
-
-  const items = events || fallback;
-
+/** The latest events from data/events.js, passed in from getStaticProps. */
+export default function RecentEvents({ events }) {
+  if (!events?.length) return null;
   return (
     <Section tone="paper">
       <Container>
@@ -85,9 +17,23 @@ export default function RecentEvents() {
           </Button>
         </div>
         <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {items.map((item, i) => (
-            <EventCard key={item.id || item.title} {...item} delay={i * 80} />
-          ))}
+          {events.map((event, i) => {
+            const photo = event.photos[0];
+            const meta = [event.branch, event.year].filter(Boolean).join(" · ");
+            return (
+              <Reveal as="li" key={event.slug} delay={i * 80} className="group overflow-hidden rounded-card bg-white shadow-card transition-shadow hover:shadow-card-hover">
+                <Link href={`/events?branch=${encodeURIComponent(event.branchSlug || "all-chapters")}#${event.slug}`} className="block">
+                  <div className="relative aspect-[4/3] bg-care-100">
+                    {photo && <Image src={photo.src} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />}
+                  </div>
+                  <div className="p-5">
+                    {meta && <p className="text-eyebrow text-care-700">{meta}</p>}
+                    <h3 className="font-display text-h3 mt-2 font-semibold text-ink group-hover:underline underline-offset-4">{event.title}</h3>
+                  </div>
+                </Link>
+              </Reveal>
+            );
+          })}
         </ul>
       </Container>
     </Section>

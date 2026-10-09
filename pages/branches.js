@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import SiteHead from "../src/shared/components/SiteHead";
@@ -7,19 +6,17 @@ import Icon from "../src/shared/components/Icon";
 import Reveal from "../src/shared/components/Reveal";
 import CtaBand from "../src/shared/components/CtaBand";
 import { Container, Section, SectionHeading } from "../src/shared/components/Section";
-import { chapterStats, regionName, fetchRegions, staticRegions } from "../src/utils/chapters";
+import { allRegions, chapterStats } from "../src/utils/chapters";
+import { eventsForBranch } from "../src/utils/events";
 import photos from "../src/shared/photos";
-import { whenIdle } from "../src/utils/idle";
 
-const countryOf = (name) =>
-  /\bUAE\b/.test(name) ? "United Arab Emirates" : /\bIndia\b/.test(name) ? "India" : /\bCanada\b/.test(name) ? "Canada" : "United States";
 const countryOrder = ["United States", "Canada", "India", "United Arab Emirates"];
 const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-// The chapter list is in the repo, so the page is static. Branch photos come
-// from Supabase after load and fill in when they arrive.
 export async function getStaticProps() {
-  return { props: { regions: staticRegions(), stats: chapterStats() } };
+  // Each region gets the first photo of its latest event, if it has one.
+  const regions = allRegions().map((r) => ({ ...r, photo: eventsForBranch(r.region)[0]?.photos[0] || null }));
+  return { props: { regions, stats: chapterStats() } };
 }
 
 function NewBadge() {
@@ -27,17 +24,12 @@ function NewBadge() {
 }
 
 function RegionCard({ region, delay }) {
-  const name = regionName(region);
-  const heading = (
-    <h3 className="font-display text-h3 font-semibold text-ink">
-      {name}
-    </h3>
-  );
+  const heading = <h3 className="font-display text-h3 font-semibold text-ink">{region.region}</h3>;
   return (
     <Reveal as="li" delay={delay} className="mb-6 flex break-inside-avoid flex-col overflow-hidden rounded-card bg-white shadow-card">
-      {region.image && (
+      {region.photo && (
         <div className="relative aspect-[5/2] bg-care-100">
-          <Image src={region.image} alt="" fill unoptimized sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+          <Image src={region.photo.src} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
         </div>
       )}
       <div className="flex flex-1 flex-col p-5 md:p-6">
@@ -62,7 +54,7 @@ function RegionCard({ region, delay }) {
               </p>
               <p className="text-sm text-muted">
                 {chapter.state}
-                {chapter.heads?.length > 0 && (
+                {chapter.heads.length > 0 && (
                   <>
                     <span aria-hidden="true"> · </span>
                     {chapter.heads.length === 1 ? "Chapter head" : "Chapter heads"}: {chapter.heads.join(", ")}
@@ -84,25 +76,8 @@ function RegionCard({ region, delay }) {
   );
 }
 
-export default function Branches({ regions: initialRegions, stats }) {
-  const [regions, setRegions] = useState(initialRegions);
-
-  useEffect(() => {
-    let cancelled = false;
-    const cancelIdle = whenIdle(() => {
-      fetchRegions()
-        .then((rows) => !cancelled && rows.length && setRegions(rows))
-        .catch((e) => console.warn("Branch photos unavailable:", e?.message || e));
-    });
-    return () => {
-      cancelled = true;
-      cancelIdle();
-    };
-  }, []);
-
-  const groups = countryOrder
-    .map((country) => ({ country, regions: regions.filter((r) => countryOf(regionName(r)) === country) }))
-    .filter((g) => g.regions.length);
+export default function Branches({ regions, stats }) {
+  const groups = countryOrder.map((country) => ({ country, regions: regions.filter((r) => r.country === country) })).filter((g) => g.regions.length);
 
   return (
     <>
@@ -134,7 +109,7 @@ export default function Branches({ regions: initialRegions, stats }) {
               </div>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
-              <Image src={photos.booth.src} alt={photos.booth.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
+              <Image src={photos.booth.src} alt={photos.booth.alt} fill priority fetchPriority="high" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
             </div>
           </div>
 
@@ -156,13 +131,10 @@ export default function Branches({ regions: initialRegions, stats }) {
       {groups.map((g, gi) => (
         <Section key={g.country} tone={gi % 2 ? "white" : "paper"} id={slugify(g.country)} size={g.regions.length > 3 ? "default" : "tight"} className="scroll-mt-20">
           <Container>
-            <SectionHeading
-              eyebrow={`${g.regions.length} ${g.regions.length === 1 ? "branch" : "branches"}`}
-              title={g.country}
-            />
+            <SectionHeading eyebrow={`${g.regions.length} ${g.regions.length === 1 ? "branch" : "branches"}`} title={g.country} />
             <ul className="mt-8 gap-6 sm:columns-2 lg:columns-3">
               {g.regions.map((region, i) => (
-                <RegionCard key={region.id ?? regionName(region)} region={region} delay={(i % 3) * 60} />
+                <RegionCard key={region.id} region={region} delay={(i % 3) * 60} />
               ))}
             </ul>
           </Container>

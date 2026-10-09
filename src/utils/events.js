@@ -1,53 +1,37 @@
-import { getSupabase, supabaseUrl } from "./supabase";
+import events from "../../data/events";
+import { regionName, regionSlug } from "./chapters";
 
-// Read-only helpers for the Supabase `events` and `branches` tables and the
-// `images` storage bucket. Nothing here writes.
+// Helpers over data/events.js. Events are listed newest first in the file.
 
-const IMAGE_RE = /\.(jpe?g|png|gif|webp)$/i;
+export const allEvents = () => events;
 
-export async function fetchBranches() {
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.from("branches").select("id, slug, city, region, image, description").order("city");
-  if (error) throw error;
-  return data || [];
+export const latestEvents = (count) => events.slice(0, count);
+
+export const eventsForBranch = (branch) => events.filter((e) => e.branch === branch);
+
+export const eventBySlug = (slug) => events.find((e) => e.slug === slug) || null;
+
+// Branch names that have at least one event, in the order they first appear,
+// plus `null` at the end if some events have no branch yet.
+export function eventBranches() {
+  const names = [];
+  let unassigned = false;
+  for (const e of events) {
+    if (e.branch === null) unassigned = true;
+    else if (!names.includes(e.branch)) names.push(e.branch);
+  }
+  names.sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" }));
+  return { names, unassigned };
 }
 
-export async function fetchEvents({ limit } = {}) {
-  const supabase = await getSupabase();
-  let query = supabase.from("events").select("*").order("id", { ascending: false });
-  if (limit) query = query.limit(limit);
-  const { data, error } = await query;
-  if (error) throw error;
-  return data || [];
+// Serializable list of branch filters for the Events page: label, slug (for
+// ?branch=) and the branch name used in the data.
+export function eventFilters() {
+  const { names, unassigned } = eventBranches();
+  const filters = names.map((name) => ({ name, label: regionName({ region: name }), slug: regionSlug(name) || name.toLowerCase().replace(/[^a-z0-9]+/g, "-") }));
+  if (unassigned) filters.push({ name: null, label: "Across CARE", slug: "all-chapters" });
+  return filters;
 }
 
-export async function listEventImages(folder, { limit } = {}) {
-  if (!folder) return [];
-  const supabase = await getSupabase();
-  const { data, error } = await supabase.storage
-    .from("images")
-    .list(`events/${folder}`, { limit: limit || 100, sortBy: { column: "name", order: "asc" } });
-  if (error) throw error;
-  return (data || []).filter((item) => IMAGE_RE.test(item.name)).map((item) => ({
-    name: item.name,
-    url: eventImageUrl(folder, item.name),
-  }));
-}
-
-// Public URL of one event photo (no client needed: it is a fixed path).
-export function eventImageUrl(folder, name) {
-  return `${supabaseUrl}/storage/v1/object/public/images/events/${folder}/${name}`;
-}
-
-// Best-effort date for an event row. The schema is read only and the date
-// column (if any) is not documented, so accept the common names.
-export function eventDate(event) {
-  const raw = event.date || event.event_date || event.held_on || event.starts_at || null;
-  if (!raw) return null;
-  const d = new Date(raw);
-  return Number.isNaN(d.getTime()) ? null : d;
-}
-
-export function formatEventDate(date) {
-  return date.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-}
+// Lightbox slides for one event.
+export const eventSlides = (event) => event.photos.map((p, i) => ({ src: p.src, width: p.width, height: p.height, alt: `${event.title}, photo ${i + 1} of ${event.photos.length}` }));

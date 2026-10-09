@@ -1,99 +1,41 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import SiteHead from "../src/shared/components/SiteHead";
-import Button from "../src/shared/components/Button";
 import CtaBand from "../src/shared/components/CtaBand";
 import EventCard from "../src/shared/components/EventCard";
 import PhotoLightbox, { useLightbox } from "../src/shared/components/PhotoLightbox";
-import { Container, Section, SectionHeading } from "../src/shared/components/Section";
-import { regionName } from "../src/utils/chapters";
-import { eventDate, fetchBranches, fetchEvents } from "../src/utils/events";
+import { Container, Section } from "../src/shared/components/Section";
+import { allEvents, eventFilters } from "../src/utils/events";
 import photos from "../src/shared/photos";
-import { whenIdle } from "../src/utils/idle";
 
-const byNewest = (a, b) => {
-  const da = eventDate(a);
-  const db = eventDate(b);
-  if (da && db) return db - da;
-  if (da || db) return da ? -1 : 1;
-  return (b.id || 0) - (a.id || 0);
-};
-
-function Skeleton() {
-  return (
-    <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
-      {[0, 1, 2].map((i) => (
-        <li key={i} className="overflow-hidden rounded-card bg-white shadow-card">
-          <div className="aspect-[3/2] animate-pulse bg-care-100" />
-          <div className="space-y-3 p-5">
-            <div className="h-3 w-1/3 animate-pulse rounded bg-care-100" />
-            <div className="h-5 w-2/3 animate-pulse rounded bg-care-100" />
-          </div>
-        </li>
-      ))}
-    </ul>
-  );
+export async function getStaticProps() {
+  return { props: { events: allEvents(), filters: eventFilters() } };
 }
 
-export default function Events() {
+export default function Events({ events, filters }) {
   const router = useRouter();
-  const [branches, setBranches] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [status, setStatus] = useState("loading"); // loading | ready | error
+  const [selected, setSelected] = useState(null);
   const lightbox = useLightbox();
 
-  const [attempt, setAttempt] = useState(0);
-  const [selected, setSelected] = useState(null);
+  // /events?branch=<slug> preselects a filter until the visitor picks another.
+  const fromQuery = typeof router.query.branch === "string" ? filters.find((f) => f.slug === router.query.branch) : null;
+  const active = selected ?? fromQuery?.slug ?? "all";
 
+  // Jump to a specific event when the URL has its slug as the hash.
   useEffect(() => {
-    let cancelled = false;
-    const cancelIdle = whenIdle(async () => {
-      try {
-        const [b, e] = await Promise.all([fetchBranches(), fetchEvents()]);
-        if (cancelled) return;
-        setBranches(b);
-        setEvents([...e].sort(byNewest));
-        setStatus("ready");
-      } catch (err) {
-        console.warn("Events unavailable:", err?.message || err);
-        if (!cancelled) setStatus("error");
-      }
-    });
-    return () => {
-      cancelled = true;
-      cancelIdle();
-    };
-  }, [attempt]);
+    if (!router.isReady || !window.location.hash) return;
+    document.getElementById(window.location.hash.slice(1))?.scrollIntoView({ block: "start" });
+  }, [router.isReady, active]);
 
-  const retry = () => {
-    setStatus("loading");
-    setAttempt((n) => n + 1);
-  };
+  const groups = filters
+    .filter((f) => active === "all" || f.slug === active)
+    .map((f) => ({ filter: f, events: events.filter((e) => e.branch === f.name) }))
+    .filter((g) => g.events.length);
 
-  // /events?branch=<slug> preselects a branch until the visitor picks another.
-  const queryBranch = typeof router.query.branch === "string" ? branches.find((b) => b.slug === router.query.branch) : null;
-  const active = selected ?? queryBranch?.id ?? "all";
-
-  const eventsByBranch = useMemo(() => {
-    const map = new Map();
-    for (const event of events) {
-      if (!map.has(event.branch_id)) map.set(event.branch_id, []);
-      map.get(event.branch_id).push(event);
-    }
-    return map;
-  }, [events]);
-
-  const branchesWithEvents = branches.filter((b) => eventsByBranch.has(b.id)).sort((a, b) => regionName(a).localeCompare(regionName(b)));
-  const groups = (active === "all" ? branchesWithEvents : branchesWithEvents.filter((b) => b.id === active)).map((b) => ({
-    branch: b,
-    events: eventsByBranch.get(b.id) || [],
-  }));
-
-  const select = (id) => {
-    setSelected(id);
-    const branch = branches.find((b) => b.id === id);
-    router.replace({ pathname: "/events", query: branch ? { branch: branch.slug } : {} }, undefined, { shallow: true, scroll: false });
+  const select = (slug) => {
+    setSelected(slug);
+    router.replace({ pathname: "/events", query: slug === "all" ? {} : { branch: slug } }, undefined, { shallow: true, scroll: false });
   };
 
   return (
@@ -116,7 +58,7 @@ export default function Events() {
               </p>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
-              <Image src={photos.relaySelfie.src} alt={photos.relaySelfie.alt} fill priority fetchPriority="high" decoding="sync" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
+              <Image src={photos.relaySelfie.src} alt={photos.relaySelfie.alt} fill priority fetchPriority="high" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
             </div>
           </div>
         </Container>
@@ -124,70 +66,45 @@ export default function Events() {
 
       <Section tone="white" className="pt-8 md:pt-10">
         <Container>
-          {status === "ready" && branchesWithEvents.length > 0 && (
-            <div className="-mx-5 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8" role="group" aria-label="Filter by branch">
-              <div className="flex w-max gap-2">
-                {[{ id: "all", label: "All branches" }, ...branchesWithEvents.map((b) => ({ id: b.id, label: regionName(b) }))].map((tab) => (
-                  <button
-                    key={tab.id}
-                    type="button"
-                    aria-pressed={active === tab.id}
-                    onClick={() => select(tab.id)}
-                    className={`min-h-11 whitespace-nowrap rounded-full px-4 text-[0.9375rem] font-medium transition-colors ${
-                      active === tab.id ? "bg-care-700 text-white" : "bg-paper text-ink ring-1 ring-inset ring-line hover:bg-care-50 hover:text-care-800"
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
+          <div className="-mx-5 overflow-x-auto px-5 pb-2 sm:-mx-8 sm:px-8" role="group" aria-label="Filter by branch">
+            <div className="flex w-max gap-2">
+              {[{ slug: "all", label: "All branches" }, ...filters].map((tab) => (
+                <button
+                  key={tab.slug}
+                  type="button"
+                  aria-pressed={active === tab.slug}
+                  onClick={() => select(tab.slug)}
+                  className={`min-h-11 whitespace-nowrap rounded-full px-4 text-[0.9375rem] font-medium transition-colors ${
+                    active === tab.slug ? "bg-care-700 text-white" : "bg-paper text-ink ring-1 ring-inset ring-line hover:bg-care-50 hover:text-care-800"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {groups.length === 0 && <p className="mt-10 text-lead text-ink-2">No events have been posted for this branch yet.</p>}
+
+          {groups.map(({ filter, events: list }, gi) => (
+            <section key={filter.slug} className={gi === 0 ? "mt-10" : "mt-16"} aria-labelledby={`branch-${filter.slug}`}>
+              <div className="flex items-baseline justify-between gap-4 border-b border-line pb-3">
+                <h2 id={`branch-${filter.slug}`} className="font-display text-h2 font-semibold text-ink">
+                  {filter.label}
+                </h2>
+                <p className="shrink-0 text-sm text-muted">
+                  {list.length} {list.length === 1 ? "event" : "events"}
+                </p>
+              </div>
+              <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {list.map((event) => (
+                  <li key={event.slug} id={event.slug} className="scroll-mt-24">
+                    <EventCard event={event} onOpen={lightbox.show} />
+                  </li>
                 ))}
-              </div>
-            </div>
-          )}
-
-          {status === "loading" && (
-            <>
-              <p className="sr-only" aria-live="polite">Loading events</p>
-              <Skeleton />
-            </>
-          )}
-
-          {status === "error" && (
-            <div className="rounded-card bg-paper p-8 ring-1 ring-inset ring-line">
-              <h2 className="font-display text-h3 font-semibold">Events are not loading right now</h2>
-              <p className="mt-2 text-ink-2">Please try again in a moment. In the meantime, our Instagram has photos from recent events.</p>
-              <div className="mt-5 flex flex-wrap gap-3">
-                <Button onClick={retry}>Try again</Button>
-                <Button href="https://www.instagram.com/curingwithcare/" variant="secondary" icon="arrow-up-right">
-                  Instagram
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {status === "ready" && groups.length === 0 && (
-            <p className="text-lead text-ink-2">No events have been posted yet.</p>
-          )}
-
-          {status === "ready" &&
-            groups.map(({ branch, events: list }, gi) => (
-              <section key={branch.id} className={gi === 0 ? "mt-10" : "mt-16"} aria-labelledby={`branch-${branch.id}`}>
-                <div className="flex items-baseline justify-between gap-4 border-b border-line pb-3">
-                  <h2 id={`branch-${branch.id}`} className="font-display text-h2 font-semibold text-ink">
-                    {regionName(branch)}
-                  </h2>
-                  <p className="shrink-0 text-sm text-muted">
-                    {list.length} {list.length === 1 ? "event" : "events"}
-                  </p>
-                </div>
-                <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {list.map((event) => (
-                    <li key={event.id}>
-                      <EventCard event={event} onOpen={lightbox.show} />
-                    </li>
-                  ))}
-                </ul>
-              </section>
-            ))}
+              </ul>
+            </section>
+          ))}
         </Container>
         <PhotoLightbox {...lightbox} />
       </Section>

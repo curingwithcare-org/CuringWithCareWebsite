@@ -9,12 +9,14 @@ import CtaBand from "../src/shared/components/CtaBand";
 import RecentEvents from "../src/shared/components/RecentEvents";
 import { StatRow } from "../src/shared/components/Stat";
 import { Container, Section, SectionHeading } from "../src/shared/components/Section";
-import { chapterStats, regionsByCountry } from "../src/utils/chapters";
+import { chapterStats, regionSlug, regionsByCountry } from "../src/utils/chapters";
+import { latestEvents } from "../src/utils/events";
 import photos from "../src/shared/photos";
 import { site } from "../src/shared/site";
 
 export async function getStaticProps() {
-  return { props: { stats: chapterStats(), countries: regionsByCountry() } };
+  const recent = latestEvents(3).map((e) => ({ slug: e.slug, title: e.title, branch: e.branch, branchSlug: e.branch ? regionSlug(e.branch) : null, year: e.year, photos: e.photos.slice(0, 1) }));
+  return { props: { stats: chapterStats(), countries: regionsByCountry(), recent } };
 }
 
 const pillars = [
@@ -45,7 +47,7 @@ const countryShort = {
   "United Arab Emirates": "UAE",
 };
 
-export default function Home({ stats, countries }) {
+export default function Home({ stats, countries, recent }) {
   const branches = countries.flatMap((group) => group.regions.map((r) => ({ ...r, country: group.country })));
 
   return (
@@ -192,7 +194,7 @@ export default function Home({ stats, countries }) {
       </Section>
 
       {/* 5. Recent events, from Supabase. */}
-      <RecentEvents />
+      <RecentEvents events={recent} />
 
       {/* 6. A student voice. */}
       <Section tone="white">
