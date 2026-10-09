@@ -1,145 +1,151 @@
-"use client";
+import Image from "next/image";
+import Link from "next/link";
+import SiteHead from "../src/shared/components/SiteHead";
+import Button from "../src/shared/components/Button";
+import Icon from "../src/shared/components/Icon";
+import Reveal from "../src/shared/components/Reveal";
+import CtaBand from "../src/shared/components/CtaBand";
+import { Container, Section, SectionHeading } from "../src/shared/components/Section";
+import { allRegions, chapterStats } from "../src/utils/chapters";
+import { eventsForBranch } from "../src/utils/events";
+import photos from "../src/shared/photos";
 
-import React, { useState, useEffect } from 'react';
-import Button from '../src/shared/components/Button';
-import Head from 'next/head';
-import Link from 'next/link';
-import { motion } from "motion/react";
-import ChapterCard from '../src/shared/components/ChapterCard';
-import { fetchRegions, regionName } from "../src/utils/chapters";
+const countryOrder = ["United States", "Canada", "India", "United Arab Emirates"];
+const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
-// Each region fades in as it scrolls into view, then its cards follow one by one.
-const regionVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, staggerChildren: 0.1 } },
-};
+export async function getStaticProps() {
+  // Each region gets the first photo of its latest event, if it has one.
+  const regions = allRegions().map((r) => ({ ...r, photo: eventsForBranch(r.region)[0]?.photos[0] || null }));
+  return { props: { regions, stats: chapterStats() } };
+}
 
-const Branches = () => {
-  const [regions, setRegions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+function NewBadge() {
+  return <span className="rounded-full bg-care-200 px-2 py-0.5 text-xs font-semibold text-care-800">New</span>;
+}
 
-  // Active regions and their chapters from Supabase
-  useEffect(() => {
-    const loadRegions = async () => {
-      try {
-        setLoading(true);
-        setRegions(await fetchRegions());
-      } catch (e) {
-        console.error("Error fetching branch data:", e);
-        setError("Failed to load branch locations");
-      } finally {
-        setLoading(false);
-      }
-    };
+function RegionCard({ region, delay }) {
+  const heading = <h3 className="font-display text-h3 font-semibold text-ink">{region.region}</h3>;
+  return (
+    <Reveal as="li" delay={delay} className="mb-6 flex break-inside-avoid flex-col overflow-hidden rounded-card bg-white shadow-card">
+      {region.photo && (
+        <div className="relative aspect-[5/2] bg-care-100">
+          <Image src={region.photo.src} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+        </div>
+      )}
+      <div className="flex flex-1 flex-col p-5 md:p-6">
+        <div className="flex items-start justify-between gap-3">
+          {region.slug ? (
+            <Link href={`/branches/${region.slug}`} className="rounded-sm hover:text-care-800 hover:underline underline-offset-4">
+              {heading}
+            </Link>
+          ) : (
+            heading
+          )}
+          <span className="shrink-0 rounded-full bg-care-50 px-2.5 py-1 text-xs font-semibold text-care-800">
+            {region.chapters.length} {region.chapters.length === 1 ? "chapter" : "chapters"}
+          </span>
+        </div>
+        <ul className="mt-4 flex flex-1 flex-col divide-y divide-line">
+          {region.chapters.map((chapter) => (
+            <li key={chapter.id} className="py-3 first:pt-0 last:pb-0">
+              <p className="flex flex-wrap items-center gap-x-2 gap-y-1 font-medium text-ink">
+                {chapter.school}
+                {chapter.is_new && <NewBadge />}
+              </p>
+              <p className="text-sm text-muted">
+                {chapter.state}
+                {chapter.heads.length > 0 && (
+                  <>
+                    <span aria-hidden="true"> · </span>
+                    {chapter.heads.length === 1 ? "Chapter head" : "Chapter heads"}: {chapter.heads.join(", ")}
+                  </>
+                )}
+                {chapter.note && <span className="block">{chapter.note}</span>}
+              </p>
+            </li>
+          ))}
+        </ul>
+        {region.slug && (
+          <Link href={`/branches/${region.slug}`} className="mt-5 inline-flex min-h-11 items-center gap-1.5 self-start text-[0.9375rem] font-semibold text-care-700 hover:underline underline-offset-4">
+            Branch page
+            <Icon name="arrow-right" size={16} />
+          </Link>
+        )}
+      </div>
+    </Reveal>
+  );
+}
 
-    loadRegions();
-  }, []);
+export default function Branches({ regions, stats }) {
+  const groups = countryOrder.map((country) => ({ country, regions: regions.filter((r) => r.country === country) })).filter((g) => g.regions.length);
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
-      <Head>
-        <title>Our Branches | CARE Nonprofit Organization</title>
-        <meta name="description" content="Find CARE nonprofit locations across the country" />
-      </Head>
-      
-      <main className="container mx-auto px-4 py-12">
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">Our Branches Worldwide</h1>
-          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            CARE has established branches across the world.
-            Explore our locations below and discover how we&apos;re making a difference in each region.
-          </p>
-        </motion.section>
-        
-        <section className="mb-20">
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading branch locations...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center py-12 bg-red-50 rounded-lg">
-              <p className="text-red-500">{error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
-                className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
-              >
-                Try Again
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-16">
-              {regions.map((region) => (
-                <motion.section
-                  key={region.id ?? regionName(region)}
-                  initial="hidden"
-                  whileInView="visible"
-                  viewport={{ once: true, amount: 0.1 }}
-                  variants={regionVariants}
-                >
-                  <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-x-6 mb-8 pb-3 border-b-2">
-                    <h2 className="text-3xl font-bold">{regionName(region)}</h2>
-                    {region.slug && (
-                      <Link
-                        href={`/branches/${region.slug}`}
-                        className="group inline-flex items-center min-h-11 text-lg font-medium text-green-600 hover:text-green-700 transition-colors"
-                      >
-                        <span className="mr-2">Visit Branch</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                      </Link>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                    {region.chapters.map((chapter) => (
-                      <ChapterCard key={chapter.id} chapter={chapter} region={region} />
-                    ))}
-                  </div>
-                </motion.section>
-              ))}
-            </div>
-          )}
-        </section>
-        
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="relative bg-linear-to-r from-green-600 to-emerald-500 p-12 rounded-2xl text-center text-white max-w-5xl mx-auto overflow-hidden"
-        >
-          <div className="relative z-10">
-            <h2 className="text-3xl font-bold mb-6">Join Our Global Movement</h2>
-            <p className="mb-8 text-lg max-w-2xl mx-auto">
-              Each CARE branch focuses on serving local community needs while supporting our broader mission.
-              No branch near you? Start your own and make a difference in your community.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button 
-                text="Start a Branch" 
-                link="https://forms.gle/S2WH6htwdTTHK2gy9"
-              />
-            </div>
-          </div>
-          
-          {/* Decorative Background Elements */}
-          <div className="absolute top-0 left-0 w-full h-full opacity-10">
-            <div className="absolute top-10 left-10 w-40 h-40 rounded-full bg-white"></div>
-            <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-white"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-white"></div>
-          </div>
-        </motion.section>
-      </main>
-    </div>
-  );
-};
+    <>
+      <SiteHead
+        title="Branches"
+        path="/branches"
+        description={`Every Curing with Care branch and school chapter: ${stats.chapters} chapters in ${stats.branches} branches across ${stats.countries} countries, with chapter heads for each school.`}
+      />
 
-export default Branches;
+      <Section tone="paper" size="tight" className="pt-12 md:pt-20">
+        <Container>
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <p className="text-eyebrow text-care-700">Branches</p>
+              <h1 className="font-display text-display mt-4 font-semibold text-ink">
+                {stats.chapters} chapters. {stats.branches} branches. {stats.countries} countries.
+              </h1>
+              <p className="text-lead mt-6 max-w-2xl text-ink-2">
+                A branch is a city or region. Each one has one or more school chapters, run by the chapter heads listed below. If
+                your school is not here yet, you can start it.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Button href="/start-a-branch" icon="arrow-right">
+                  Start a Branch
+                </Button>
+                <Button href="/start-a-branch#join" variant="secondary">
+                  Join a chapter
+                </Button>
+              </div>
+            </div>
+            <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
+              <Image src={photos.booth.src} alt={photos.booth.alt} fill priority fetchPriority="high" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" placeholder="blur" />
+            </div>
+          </div>
+
+          <nav aria-label="Countries" className="mt-12 flex flex-wrap gap-2 border-t border-line pt-6">
+            {groups.map((g) => (
+              <a
+                key={g.country}
+                href={`#${slugify(g.country)}`}
+                className="inline-flex min-h-11 items-center gap-2 rounded-full bg-white px-4 text-[0.9375rem] font-medium text-ink ring-1 ring-inset ring-line hover:bg-care-50 hover:text-care-800"
+              >
+                {g.country}
+                <span className="text-sm text-muted">{g.regions.length}</span>
+              </a>
+            ))}
+          </nav>
+        </Container>
+      </Section>
+
+      {groups.map((g, gi) => (
+        <Section key={g.country} tone={gi % 2 ? "white" : "paper"} id={slugify(g.country)} size={g.regions.length > 3 ? "default" : "tight"} className="scroll-mt-20">
+          <Container>
+            <SectionHeading eyebrow={`${g.regions.length} ${g.regions.length === 1 ? "branch" : "branches"}`} title={g.country} />
+            <ul className="mt-8 gap-6 sm:columns-2 lg:columns-3">
+              {g.regions.map((region, i) => (
+                <RegionCard key={region.id} region={region} delay={(i % 3) * 60} />
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      ))}
+
+      <CtaBand
+        photo={photos.careSign}
+        title="No branch near you? Start one."
+        text="Most branches began with one student and one school. We will help you find a faculty advisor, set up the club and plan your first event."
+      />
+    </>
+  );
+}

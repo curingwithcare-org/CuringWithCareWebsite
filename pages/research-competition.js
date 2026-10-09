@@ -1,229 +1,126 @@
-"use client";
+import Link from "next/link";
+import SiteHead from "../src/shared/components/SiteHead";
+import Button from "../src/shared/components/Button";
+import Icon from "../src/shared/components/Icon";
+import Reveal from "../src/shared/components/Reveal";
+import CtaBand from "../src/shared/components/CtaBand";
+import { Container, Section, SectionHeading } from "../src/shared/components/Section";
+import photos from "../src/shared/photos";
 
-import React, { useState } from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
-import Image from 'next/image';
-import { motion } from "motion/react";
+const prompt =
+  "Cervical cancer remains a major public health problem in the world despite the increase in prevention and management methods. The introduction of HPV vaccination and improvement of screening methods have reduced its incidence in many regions, though accessibility and awareness remain problems in most underprivileged areas. Discuss the current obstacles to the eradication of cervical cancer, the ethical considerations in the improvement of access to prevention and care, and new research directions that will contribute to the early detection, prevention, and treatment of cervical cancer.";
+
+const firstPlace = {
+  title: "The Global Burden of Cervical Cancer: A Systematic Review of Social Implications, Ethical Considerations, and Scientific Challenges",
+  author: "Angela Choi",
+  pdfUrl: "/research/angela-choi-cervical-cancer-research.pdf",
+};
+
+const runnersUp = [
+  {
+    place: "Second place",
+    title: "From Prevention to Cure: Ethical, Social, and Scientific Perspectives on Cervical Cancer Management and Innovations in Treatment",
+    author: "Sanvi Jain and Sophie Hesseling",
+  },
+  { place: "Third place", title: "Cervical Cancer: A Needed Urgent Reform", author: "Medhansh Garadala and Junseo Lee" },
+];
+
+const honorableMentions = [
+  { title: "Cervical Cancer: Knowledge is the Cure", author: "Neerajana Chatterjee and Harshini Rajmohan" },
+  { title: "Towards the Elimination of Cervical Cancer: Challenges, Ethics, and Directions for the Future", author: "Vaanya Agarwal" },
+  { title: "Breaking the Silence: A Global Fight Against Cervical Cancer", author: "Riya Amara and Diya Kumar" },
+  { title: "Cervical Cancer: A Newfound Hope", author: "Shruthi Karri and Ananti Burman" },
+  { title: "Cervical Cancer: Global Challenges and a Path to Eradication", author: "Angela Zeng" },
+  { title: "An Analysis Of Cervical Cancer: Overcoming a Bridge in Women's Health", author: "Obuthanusre Obulisundar and Anvi Mathur" },
+  { title: "An Overview of Cervical Cancer", author: "Nikhil Amalraj and Rohan Paranjpe" },
+];
 
 export default function ResearchCompetition() {
-  // Example data for winners and submissions
-  const firstPlace = { 
-    id: 1, 
-    title: "The Global Burden of Cervical Cancer: A Systematic Review of Social Implications, Ethical Considerations, and Scientific Challenges ", 
-    author: "Angela Choi", 
-    award: "First Place", 
-    abstract: "",
-    pdfUrl: "/research/angela-choi-cervical-cancer-research.pdf",
-  };
-
-  const runnerUps = [
-    { 
-      id: 2, 
-      title: "From Prevention to Cure: Ethical, Social, and Scientific Perspectives on Cervical Cancer Management and Innovations in Treatment", 
-      author: "Sanvi Jain and Sophie Hesseling", 
-      award: "Second Place", 
-      abstract: "" 
-    },
-    { 
-      id: 3, 
-      title: "CERVICAL CANCER: A NEEDED URGENT REFORM", 
-      author: "Medhansh Garadala and Junseo Lee", 
-      award: "Third Place", 
-      abstract: "" 
-    }
-  ];
-
-  const otherSubmissions = [
-    { id: 4, title: "Cervical Cancer: Knowledge is the Cure", author: "Neerajana Chatterjee and Harshini Rajmohan" },
-    { id: 5, title: "Towards the Elimination of Cervical Cancer: Challenges, Ethics, and Directions for the Future", author: "Vaanya Agarwal" },
-    { id: 6, title: "Breaking the Silence: A Global Fight Against Cervical Cancer", author: "Riya Amara and Diya Kumar" },
-    { id: 7, title: "Cervical Cancer: A Newfound Hope", author: "Shruthi Karri and Ananti Burman" },
-    { id: 8, title: "Cervical Cancer: Global Challenges and a Path to Eradication", author: "Angela Zeng" },
-    { id: 9, title: "An Analysis Of Cervical Cancer: Overcoming a Bridge in Women's Health", author: "Obuthanusre Obulisundar and Anvi Mathur" },
-    { id: 10, title: "An Overview of Cervical Cancer", author: "Nikhil Amalraj and Rohan Paranjpe" },
-  ];
-
-  // State to manage PDF viewer visibility - now true by default
-  const [isPdfViewerOpen, setIsPdfViewerOpen] = useState(true);
-
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
-      <Head>
-        <title>Research Paper Competition | CARE Nonprofit Organization</title>
-        <meta name="description" content="Annual Research Paper Competition on Climate Action and Renewable Energy" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <>
+      <SiteHead
+        title="Review Paper Competition, first edition"
+        path="/research-competition"
+        description="The first CARE Review Paper Competition asked high school students about the obstacles, ethics and research directions in eliminating cervical cancer. Read the winning paper and see every placement."
+      />
 
-
-      <main className="container mx-auto px-4 py-12">
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">CARE Review Paper Competition</h1>
-          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
-        </motion.section>
-
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="bg-white rounded-xl shadow-lg p-8 mb-16"
-        >
-          <h2 className="text-2xl font-bold text-green-600 mb-6">Prompt</h2>
-          <p className="text-gray-700 mb-6">
-          Cervical cancer remains a major public health problem in the world despite the increase in prevention and management methods. The introduction of HPV vaccination and improvement of screening methods have reduced its incidence in many regions, though accessibility and awareness remain problems in most underprivileged areas. Discuss the current obstacles to the eradication of cervical cancer, the ethical considerations in the improvement of access to prevention and care, and new research directions that will contribute to the early detection, prevention, and treatment of cervical cancer. 
+      <Section tone="paper" size="tight" className="pt-10 md:pt-16">
+        <Container>
+          <Link href="/research" className="inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-care-700 hover:underline underline-offset-4">
+            <Icon name="arrow-left" size={16} />
+            Research
+          </Link>
+          <p className="text-eyebrow mt-4 text-care-700">Review paper competition · First edition</p>
+          <h1 className="font-display text-display mt-3 max-w-4xl font-semibold text-ink">Cervical cancer: obstacles, ethics and new research.</h1>
+          <p className="text-lead mt-6 max-w-2xl text-ink-2">
+            Ten papers from high school students across CARE chapters. The first-place paper is published in full below.
           </p>
-        </motion.section>
+        </Container>
+      </Section>
 
-        {/* First Place Feature Section */}
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-12 h-1 bg-green-300"></div>
-            <h2 className="text-3xl font-bold text-center text-green-600 mx-4">First Place Winner</h2>
-            <div className="w-12 h-1 bg-green-300"></div>
-          </div>
-          
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              {/* Left side with image and basic info */}
-              <div className="p-8 flex flex-col justify-between">
-                <div>
-                  <div className="inline-block bg-yellow-400 text-gray-800 px-4 py-1 rounded-full font-bold shadow-md mb-4">
-                    First Place
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3">{firstPlace.title}</h3>
-                  <p className="text-green-600 font-medium mb-1">{firstPlace.author}</p>
-                  <p className="text-gray-600 mb-6">{firstPlace.abstract}</p>
-                </div>
-                
-                <div className="flex flex-wrap gap-3">
-                  <a
-                    href={firstPlace.pdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="md:hidden inline-flex items-center min-h-11 bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-md transition-colors duration-300"
-                  >
-                    View Paper
-                  </a>
-                  <a 
-                    href={firstPlace.pdfUrl} 
-                    download="Angela_Choi_Cervical_Cancer_Research.pdf"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center min-h-11 md:min-h-0 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 px-4 rounded-md transition-colors duration-300"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                    </svg>
-                    Download Paper
-                  </a>
-                </div>
-              </div>
-              
-              {/* Right side with PDF preview - now shown by default */}
-              <div className="hidden md:block relative bg-gray-100 min-h-[500px]">
-                {isPdfViewerOpen ? (
-                  <iframe 
-                    src={`${firstPlace.pdfUrl}#toolbar=1&navpanes=0`} 
-                    className="absolute inset-0 w-full h-full"
-                    title={`${firstPlace.title} by ${firstPlace.author}`}
-                    loading="lazy"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full p-8">
-                    <div className="text-center">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                      </svg>
-                      <p className="text-gray-600 mb-4">Click &quot;View Paper&quot; to read the full research paper</p>
-                      <p className="text-gray-500 text-sm">PDF preview will be displayed here</p>
-                    </div>
-                  </div>
-                )}
-              </div>
+      <Section tone="white" size="tight">
+        <Container>
+          <div className="grid gap-8 md:grid-cols-12">
+            <div className="md:col-span-3">
+              <h2 className="text-eyebrow text-care-700">The prompt</h2>
             </div>
+            <blockquote className="md:col-span-9 border-l-4 border-care-300 pl-5 text-lg leading-relaxed text-ink-2 md:pl-7">{prompt}</blockquote>
           </div>
-        </motion.section>
-        
-        {/* Second and Third Place Section */}
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-12 h-1 bg-green-300"></div>
-            <h2 className="text-3xl font-bold text-center text-green-600 mx-4">Runners-Up</h2>
-            <div className="w-12 h-1 bg-green-300"></div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {runnerUps.map((paper) => (
-              <motion.div 
-                key={paper.id} 
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white rounded-xl overflow-hidden shadow-lg"
-              >
-                <div className="p-6">
-                  <div className="inline-block bg-yellow-400 text-gray-800 px-4 py-1 rounded-full font-bold shadow-md mb-4">
-                    {paper.award}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{paper.title}</h3>
-                  <p className="text-green-600 font-medium mb-1">{paper.author}</p>
-                  <p className="text-gray-600 mb-6">{paper.abstract}</p>
-                </div>
-              </motion.div>
+        </Container>
+      </Section>
+
+      <Section tone="tint">
+        <Container>
+          <Reveal className="rounded-band bg-white p-6 shadow-card md:p-10">
+            <p className="text-eyebrow text-care-700">First place</p>
+            <h2 className="font-display text-h1 mt-3 max-w-3xl font-semibold text-ink">{firstPlace.title}</h2>
+            <p className="mt-4 text-lg text-ink-2">
+              by <span className="font-semibold text-ink">{firstPlace.author}</span>
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button href={firstPlace.pdfUrl} icon="arrow-up-right">
+                Read the paper (PDF)
+              </Button>
+              <Button href={firstPlace.pdfUrl} download="Angela_Choi_Cervical_Cancer_Research.pdf" variant="secondary" icon="download">
+                Download
+              </Button>
+            </div>
+          </Reveal>
+
+          <div className="mt-8 grid gap-6 md:grid-cols-2">
+            {runnersUp.map((p, i) => (
+              <Reveal key={p.place} delay={i * 80} className="rounded-card bg-white p-6 ring-1 ring-inset ring-line md:p-8">
+                <p className="text-eyebrow text-care-700">{p.place}</p>
+                <h3 className="font-display text-h3 mt-3 font-semibold text-ink">{p.title}</h3>
+                <p className="mt-3 text-ink-2">{p.author}</p>
+              </Reveal>
             ))}
           </div>
-        </motion.section>
-        
-        {/* Other Submissions Section */}
-        <motion.section 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-12 h-1 bg-green-300"></div>
-            <h2 className="text-3xl font-bold text-center text-green-600 mx-4">Honorable Mentions</h2>
-            <div className="w-12 h-1 bg-green-300"></div>
-          </div>
+        </Container>
+      </Section>
 
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="grid grid-cols-12 bg-green-600 text-white font-semibold py-4 px-6">
-              <div className="col-span-6 md:col-span-7">Paper Title</div>
-              <div className="col-span-4 md:col-span-3">Author</div>
-            </div>
-            
-            {otherSubmissions.map((paper, index) => (
-              <div 
-                key={paper.id} 
-                className={`grid grid-cols-12 py-4 px-6 items-center ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                }`}
-              >
-                <div className="col-span-6 md:col-span-7 font-medium text-gray-800">{paper.title}</div>
-                <div className="col-span-4 md:col-span-3 text-gray-600">{paper.author}</div>
-              </div>
+      <Section tone="paper">
+        <Container>
+          <SectionHeading eyebrow="Honorable mentions" title="Every other paper that placed." />
+          <ul className="mt-8 divide-y divide-line border-y border-line">
+            {honorableMentions.map((p) => (
+              <li key={p.title} className="grid gap-1 py-4 md:grid-cols-12 md:gap-6">
+                <p className="font-medium text-ink md:col-span-8">{p.title}</p>
+                <p className="text-ink-2 md:col-span-4">{p.author}</p>
+              </li>
             ))}
-          </div>
-        </motion.section>
-      </main>
-    </div>
+          </ul>
+        </Container>
+      </Section>
+
+      <CtaBand
+        photo={photos.letters}
+        eyebrow="Keep reading"
+        title="The second edition added four new prompts."
+        text="Treatment ethics, current modalities, future research and risk disparities. See who placed."
+        primary={{ label: "Second edition", href: "/research-competition-2" }}
+        secondary={{ label: "All research", href: "/research" }}
+      />
+    </>
   );
 }

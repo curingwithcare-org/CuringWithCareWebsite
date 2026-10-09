@@ -1,369 +1,173 @@
-"use client";
+import Image from "next/image";
+import SiteHead from "../src/shared/components/SiteHead";
+import Reveal from "../src/shared/components/Reveal";
+import CtaBand from "../src/shared/components/CtaBand";
+import { Container, Section, SectionHeading } from "../src/shared/components/Section";
+import team from "../data/team";
+import photos from "../src/shared/photos";
 
-import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
-import { motion, AnimatePresence } from "motion/react";
-import { supabase } from "../src/utils/supabase";
-
-
-const Teams = () => {
-  const [boardMembers, setBoardMembers] = useState([]);
-  const [researchMembers, setResearchMembers] = useState([]);
-  const [interns, setInterns] = useState([]);
-  const [journalismMembers, setJournalismMembers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [expandedId, setExpandedId] = useState(null);
-  
-  // Fetch team members from Supabase
-  useEffect(() => {
-    const fetchTeamMembers = async () => {
-      try {
-        setLoading(true);
-        // Fetch board members
-        const { data: boardData, error: boardError } = await supabase
-          .from('team_members')
-          .select('*')
-          .eq('category', 'board')
-          .order('order_rank', { ascending: true });
-        
-        // Fetch research & design members
-        const { data: researchData, error: researchError } = await supabase
-          .from('team_members')
-          .select('*')
-          .eq('category', 'research')
-          .order('name', { ascending: true });
-          
-        // Fetch interns
-        const { data: internsData, error: internsError } = await supabase
-          .from('team_members')
-          .select('*')
-          .eq('category', 'intern')
-          .order('name', { ascending: true });
-
-        const { data: journalismData, error: journalismError } = await supabase
-          .from('team_members')
-          .select('*')
-          .eq('category', 'journalism')
-          .order('name', { ascending: true });
-
-        if (boardError) {
-          setError("Failed to load board members");
-        } else if (researchError) {
-          setError("Failed to load research members");
-        } else if (internsError) {
-          setError("Failed to load interns");
-        } else if (journalismError) {
-          setError("Failed to load journalism team");
-        } else {
-          setBoardMembers(boardData || []);
-          setResearchMembers(researchData || []);
-          setInterns(internsData || []);
-          setJournalismMembers(journalismData || []);
-        }
-      } catch (e) {
-        console.error("Unexpected error:", e);
-        setError("An unexpected error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchTeamMembers();
-  }, []);
-
-  // Function to handle expanding/collapsing description
-  const toggleExpand = (id) => {
-    setExpandedId(expandedId === id ? null : id);
+export async function getStaticProps() {
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  const pick = (category, sort) => team.filter((m) => m.category === category).sort(sort || (() => 0));
+  return {
+    props: {
+      board: pick("board"),
+      research: pick("research", byName),
+      journalism: pick("journalism", byName),
+      interns: pick("intern", byName),
+    },
   };
+}
 
-  // Function to truncate text
-  const truncateText = (text, maxLength = 100) => {
-    if (!text || text.length <= maxLength) return text;
-    return text.slice(0, maxLength) + '...';
-  };
+function Portrait({ member, sizes, className = "" }) {
+  if (!member.photo) {
+    return (
+      <div className={`flex items-center justify-center bg-care-100 ${className}`} aria-hidden="true">
+        <Image src="/logo.png" alt="" width={48} height={48} className="h-12 w-12 rounded-full opacity-70" />
+      </div>
+    );
+  }
+  return <Image src={member.photo} alt={member.name} fill sizes={sizes} className={`object-cover ${className}`} />;
+}
 
-  // Function to get random color
-  const getRandomColor = (index) => {
-    const colors = ['green', 'emerald', 'teal', 'sky', 'blue', 'indigo'];
-    return colors[index % colors.length];
-  };
-
+function BoardCard({ member, delay }) {
+  const first = member.name.split(" ")[0];
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
-      <Head>
-        <title>Our Team | CARE Nonprofit Organization</title>
-        <meta name="description" content="Meet the dedicated board members behind CARE nonprofit organization" />
-      </Head>
-      
-      <main className="container mx-auto px-4 py-12">
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h1 className="text-5xl font-bold text-green-500 mb-6 mt-24">Our Board</h1>
-          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            Meet the dedicated individuals who guide our mission and work tirelessly 
-            to ensure CARE makes a meaningful difference around the world.
+    <Reveal as="li" delay={delay} className="flex flex-col overflow-hidden rounded-card bg-white shadow-card">
+      <div className="relative aspect-[4/3] bg-care-100">
+        <Portrait member={member} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" />
+      </div>
+      <div className="flex flex-1 flex-col p-5 md:p-6">
+        <h3 className="font-display text-h3 font-semibold text-ink">{member.name}</h3>
+        {member.position && <p className="mt-1 text-eyebrow text-care-700">{member.position}</p>}
+        {member.bio && (
+          <details className="group mt-4 text-[0.9375rem] text-ink-2">
+            <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-1.5 font-semibold text-care-700 hover:underline underline-offset-4 [&::-webkit-details-marker]:hidden">
+              <span className="group-open:hidden">About {first}</span>
+              <span className="hidden group-open:inline">Show less</span>
+            </summary>
+            <p className="mt-2">{member.bio}</p>
+          </details>
+        )}
+        {(member.linkedin || member.instagram) && (
+          <p className="mt-auto flex gap-4 pt-4 text-sm">
+            {member.linkedin && (
+              <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="font-medium text-care-700 hover:underline underline-offset-4">
+                LinkedIn
+              </a>
+            )}
+            {member.instagram && (
+              <a href={member.instagram} target="_blank" rel="noopener noreferrer" className="font-medium text-care-700 hover:underline underline-offset-4">
+                Instagram
+              </a>
+            )}
           </p>
-        </motion.section>
-        
-        <section className="mb-20">
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-600">Loading team members...</p>
-            </div>
-          ) : error ? (
-            <div className="text-center py-12 bg-red-50 rounded-lg">
-              <p className="text-red-500">{error}</p>
-              <button 
-                onClick={() => window.location.reload()} 
-                className="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors"
-              >
-                Try Again
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
-              {boardMembers.map((member, index) => (
-                <motion.div
-                  key={member.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col h-full"
-                >
-                  <div className="relative h-64">
-                    <img 
-                      src={member.image} 
-                      alt={member.name}
-                      className="w-full h-full object-cover"
-                      onError={(e) => {
-                        e.target.src = "/team-placeholder.png";
-                      }}
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6">
-                      <h2 className="text-2xl font-bold text-white">{member.name}</h2>
-                      <p className="text-green-300 font-medium">{member.position}</p>
-                    </div>
-                  </div>
-                  
-                  <div className="p-5 grow flex flex-col">
-                    <div className="grow">
-                      {expandedId === member.id ? (
-                        <AnimatePresence>
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="text-gray-700 leading-relaxed"
-                          >
-                            <p>{member.description}</p>
-                          </motion.div>
-                        </AnimatePresence>
-                      ) : (
-                        <p className="text-gray-700 leading-relaxed">
-                          {truncateText(member.description)}
-                        </p>
-                      )}
-                    </div>
-                    
-                    {/* Show read more/less button only if description is long enough */}
-                    {member.description && member.description.length > 100 && (
-                      <button 
-                        onClick={() => toggleExpand(member.id)}
-                        className="max-md:min-h-11 text-green-600 hover:text-green-700 font-medium mt-2 focus:outline-hidden group flex items-center"
-                      >
-                        {expandedId === member.id ? 'Read Less' : 'Read More'}
-                        <svg 
-                          xmlns="http://www.w3.org/2000/svg" 
-                          className={`h-4 w-4 ml-1 transform transition-transform ${expandedId === member.id ? 'rotate-180' : ''}`}
-                          fill="none" 
-                          viewBox="0 0 24 24" 
-                          stroke="currentColor"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                    )}
-                    
-                    {/* Optional social links */}
-                    {member.social && (
-                      <div className="mt-4 pt-3 border-t border-gray-100 flex gap-3">
-                        {member.social.linkedin && (
-                          <a href={member.social.linkedin} target="_blank" rel="noopener noreferrer" 
-                             className="text-gray-400 hover:text-green-600 transition-colors">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                            </svg>
-                          </a>
-                        )}
-                        {member.social.twitter && (
-                          <a href={member.social.twitter} target="_blank" rel="noopener noreferrer" 
-                             className="text-gray-400 hover:text-green-600 transition-colors">
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                            </svg>
-                          </a>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          )}
-        </section>
-        
-        {/* Research & Design Team Section */}
-        {!loading && !error && researchMembers.length > 0 && (
-          <motion.section 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-32 mb-20"
-          >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-green-500 mb-6">Research & Design Team</h2>
-              <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
-            </div>
-            
-            <div className="max-w-5xl mx-auto">
-              <motion.div 
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-center"
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: {
-                    opacity: 1,
-                    transition: {
-                      staggerChildren: 0.1
-                    }
-                  }
-                }}
-                initial="hidden"
-                animate="show"
-              >
-                {researchMembers.map((member, index) => (
-                  <motion.div
-                    key={member.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      show: { opacity: 1, y: 0 }
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    className={`py-6 px-3 rounded-lg shadow-xs
-                               bg-linear-to-br from-${getRandomColor(index)}-50 to-${getRandomColor(index)}-100
-                               border border-${getRandomColor(index)}-200`}
-                  >
-                    <span className="font-medium text-gray-800 block">
-                      {member.name}
-                    </span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
         )}
-        
-        {/* Journalism Team Section */}
-        {!loading && !error && journalismMembers.length > 0 && (
-          <motion.section 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35 }}
-            className="mt-20 mb-20"
-          >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-green-500 mb-6">Journalism Team</h2>
-              <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
-            </div>
-
-            <div className="max-w-5xl mx-auto">
-              <motion.div 
-                className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-center"
-                variants={{
-                  hidden: { opacity: 0 },
-                  show: {
-                    opacity: 1,
-                    transition: { staggerChildren: 0.1 }
-                  }
-                }}
-                initial="hidden"
-                animate="show"
-              >
-                {journalismMembers.map((member, index) => (
-                  <motion.div
-                    key={member.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 20 },
-                      show: { opacity: 1, y: 0 }
-                    }}
-                    whileHover={{ scale: 1.05 }}
-                    className={`py-6 px-3 rounded-lg shadow-xs
-                               bg-linear-to-br from-${getRandomColor(index)}-50 to-${getRandomColor(index)}-100
-                               border border-${getRandomColor(index)}-200`}
-                  >
-                    <span className="font-medium text-gray-800 block">
-                      {member.name}
-                    </span>
-                  </motion.div>
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
-        )}
-        
-        {/* Interns Section */}
-        {!loading && !error && interns.length > 0 && (
-          <motion.section 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="mt-32 mb-20"
-          >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-green-500 mb-6">Our Interns</h2>
-              <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6"></div>
-            </div>
-            
-            <div className="max-w-6xl mx-auto">
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                {interns.map((intern, index) => (
-                  <motion.div
-                    key={intern.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.08 }}
-                    whileHover={{ y: -10 }}
-                    className="flex flex-col items-center"
-                  >
-                    <div className="w-32 h-32 rounded-full overflow-hidden shadow-md mb-4 bg-gray-100 border-4 border-white">
-                      <img 
-                        src={intern.image || "/team-placeholder.png"} 
-                        alt={intern.name}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.src = "/team-placeholder.png";
-                        }}
-                      />
-                    </div>
-                    <h3 className="text-center font-medium text-lg text-gray-800">{intern.name}</h3>
-                    {intern.university && (
-                      <p className="text-sm text-gray-500 text-center mt-1">{intern.university}</p>
-                    )}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.section>
-        )}
-      </main>
-    </div>
+      </div>
+    </Reveal>
   );
-};
+}
 
-export default Teams;
+function NameList({ members }) {
+  return (
+    <ul className="mt-6 columns-2 gap-x-8 sm:columns-3 lg:columns-4">
+      {members.map((m) => (
+        <li key={m.name} className="break-inside-avoid py-1.5 text-ink">
+          {m.name}
+          {m.school && <span className="block text-sm text-muted">{m.school}</span>}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export default function Team({ board, research, journalism, interns }) {
+  return (
+    <>
+      <SiteHead
+        title="Team"
+        path="/team"
+        description="The students on Curing with Care's national board, research and design team, journalism team and intern program."
+      />
+
+      <Section tone="paper" size="tight" className="pt-12 md:pt-20">
+        <Container>
+          <p className="text-eyebrow text-care-700">Team</p>
+          <h1 className="font-display text-display mt-4 max-w-4xl font-semibold text-ink">The students who run it.</h1>
+          <p className="text-lead mt-6 max-w-2xl text-ink-2">
+            CARE has no paid staff. A national board of high school and college students runs chapters, events, research, finance,
+            technology and outreach, with research, design and journalism teams and an intern program behind them.
+          </p>
+        </Container>
+      </Section>
+      <Container size="wide" className="pb-4">
+        <div className="relative aspect-[16/9] overflow-hidden rounded-band md:aspect-[21/9]">
+          <Image src={photos.careLetters.src} alt={photos.careLetters.alt} fill priority fetchPriority="high" sizes="100vw" className="object-cover" placeholder="blur" />
+        </div>
+      </Container>
+
+      <Section tone="paper">
+        <Container>
+          <SectionHeading eyebrow="National board" title="The board" lead="Each board member owns one part of the organization." />
+          {board.length === 0 ? (
+            <p className="mt-10 text-lead text-ink-2">Board members will be listed here soon.</p>
+          ) : (
+            <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {board.map((m, i) => (
+                <BoardCard key={m.name} member={m} delay={(i % 3) * 60} />
+              ))}
+            </ul>
+          )}
+        </Container>
+      </Section>
+
+      {(research.length > 0 || journalism.length > 0) && (
+        <Section tone="white">
+          <Container>
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+              {research.length > 0 && (
+                <div>
+                  <SectionHeading eyebrow={`${research.length} members`} title="Research and design" />
+                  <NameList members={research} />
+                </div>
+              )}
+              {journalism.length > 0 && (
+                <div>
+                  <SectionHeading eyebrow={`${journalism.length} members`} title="Journalism" />
+                  <NameList members={journalism} />
+                </div>
+              )}
+            </div>
+          </Container>
+        </Section>
+      )}
+
+      {interns.length > 0 && (
+        <Section tone="tint">
+          <Container>
+            <SectionHeading eyebrow={`${interns.length} interns`} title="Interns" lead="Students working with a board member on one project for a term." />
+            <ul className="mt-10 grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+              {interns.map((m, i) => (
+                <Reveal as="li" key={m.name} delay={(i % 5) * 40} className="text-center">
+                  <div className="relative mx-auto aspect-square w-28 overflow-hidden rounded-full bg-care-100 ring-4 ring-white">
+                    <Portrait member={m} sizes="112px" className="rounded-full" />
+                  </div>
+                  <p className="mt-3 font-medium text-ink">{m.name}</p>
+                  {m.school && <p className="text-sm text-muted">{m.school}</p>}
+                </Reveal>
+              ))}
+            </ul>
+          </Container>
+        </Section>
+      )}
+
+      <CtaBand
+        photo={photos.hillmanTour}
+        eyebrow="Join the team"
+        title="Board, team and intern spots open every year."
+        text="[TODO: when applications open and where to apply.] Until then, the fastest way in is through your school's chapter."
+        secondary={{ label: "Contact us", href: "/contact" }}
+      />
+    </>
+  );
+}

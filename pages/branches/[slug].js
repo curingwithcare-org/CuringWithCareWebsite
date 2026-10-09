@@ -1,151 +1,120 @@
-"use client";
+import Image from "next/image";
+import Link from "next/link";
+import SiteHead from "../../src/shared/components/SiteHead";
+import Button from "../../src/shared/components/Button";
+import Icon from "../../src/shared/components/Icon";
+import Reveal from "../../src/shared/components/Reveal";
+import CtaBand from "../../src/shared/components/CtaBand";
+import EventCard from "../../src/shared/components/EventCard";
+import PhotoLightbox, { useLightbox } from "../../src/shared/components/PhotoLightbox";
+import { Container, Section, SectionHeading } from "../../src/shared/components/Section";
+import { branchSlugs, regionBySlug } from "../../src/utils/chapters";
+import { eventsForBranch } from "../../src/utils/events";
+import photos from "../../src/shared/photos";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
-import Link from 'next/link';
-import { motion } from "motion/react";
-import ChapterCard from "../../src/shared/components/ChapterCard";
-import RegionImage from "../../src/shared/components/RegionImage";
-import { fetchRegion, regionName } from "../../src/utils/chapters";
+export async function getStaticPaths() {
+  return { paths: branchSlugs.map((slug) => ({ params: { slug } })), fallback: false };
+}
 
+export async function getStaticProps({ params }) {
+  const region = regionBySlug(params.slug);
+  if (!region) return { notFound: true };
+  return { props: { region, events: eventsForBranch(region.region) } };
+}
 
-const BranchDetail = () => {
-  const router = useRouter();
-  const { slug } = router.query;
-  
-  const [branch, setBranch] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+function NewBadge() {
+  return <span className="rounded-full bg-care-200 px-2 py-0.5 text-xs font-semibold text-care-800">New</span>;
+}
 
-  useEffect(() => {
-    const fetchBranchData = async () => {
-      if (!slug) return;
-
-      try {
-        setLoading(true);
-        const data = await fetchRegion(slug);
-        if (!data) {
-          setError("Branch not found");
-        } else if (!data.active) {
-          setError("This branch is no longer active");
-        } else {
-          setBranch(data);
-        }
-      } catch (e) {
-        console.error("Error fetching branch data:", e);
-        setError("Failed to load branch information");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBranchData();
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-linear-to-b from-gray-50 to-gray-100">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading branch information...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100 px-4 py-20">
-        <div className="max-w-4xl mx-auto text-center py-12 bg-red-50 rounded-lg shadow-md">
-          <h2 className="text-2xl font-bold text-red-700 mb-4">{error}</h2>
-          <p className="text-gray-600 mb-6">We couldn&apos;t find the information you&apos;re looking for.</p>
-          <Link href="/branches" className="inline-block px-6 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors">
-            Return to All Branches
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  if (!branch) {
-    return null;
-  }
-
-  const name = regionName(branch);
+export default function BranchPage({ region, events }) {
+  const lightbox = useLightbox();
+  const name = region.region;
+  const states = [...new Set(region.chapters.map((c) => c.state))];
+  const headerPhoto = events[0]?.photos[0] || null;
 
   return (
-    <div className="min-h-screen mt-16 bg-linear-to-b from-gray-50 to-gray-100">
-      <Head>
-        <title>{`${name} Branch | CARE Nonprofit Organization`}</title>
-        <meta name="description" content={`Learn about CARE's work in ${name} and how we're making a difference locally.`} />
-      </Head>
-      
-      <main className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <motion.section 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="relative h-96 rounded-2xl overflow-hidden mb-12"
-        >
-          <RegionImage src={branch.image} alt={`${name} Branch`} logo="corner" />
-          
-          <div className="absolute inset-0 flex flex-col justify-center text-white p-12">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            >
-              <h1 className="text-5xl md:text-6xl font-bold mb-4 drop-shadow-md">{name}</h1>
-              <div className="w-20 h-1 bg-white mb-6"></div>
-              {branch.description && <p className="text-xl max-w-2xl">{branch.description}</p>}
-            </motion.div>
-          </div>
-        </motion.section>
-        
-        {/* About (only when the branch has a description) */}
-        {branch.description && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="bg-white rounded-xl p-8 shadow-md mb-12"
-          >
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">About Our {name} Branch</h2>
-            <p className="text-gray-700 leading-relaxed text-lg">{branch.description}</p>
-          </motion.div>
-        )}
+    <>
+      <SiteHead
+        title={`${name} branch`}
+        path={`/branches/${region.slug}`}
+        description={`Curing with Care in ${name}: ${region.chapters.length} school ${region.chapters.length === 1 ? "chapter" : "chapters"}, their chapter heads, and past events.`}
+      />
 
-        {/* Chapters */}
-        {branch.chapters.length > 0 && (
-          <motion.section
-            initial="hidden"
-            animate="visible"
-            variants={{ visible: { transition: { delayChildren: 0.3, staggerChildren: 0.1 } } }}
-            className="mb-16"
-          >
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">Our Local Chapters</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {branch.chapters.map((chapter) => (
-                <ChapterCard key={chapter.id} chapter={chapter} />
-              ))}
-            </div>
-          </motion.section>
-        )}
-
-        {/* Back to All Branches */}
-        <div className="text-center mt-12">
-          <Link href="/branches" className="inline-flex items-center min-h-11 text-green-600 hover:text-green-700 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-            Back to All Branches
+      <Section tone="paper" size="tight" className="pt-10 md:pt-16">
+        <Container>
+          <Link href="/branches" className="inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-care-700 hover:underline underline-offset-4">
+            <Icon name="arrow-left" size={16} />
+            All branches
           </Link>
-        </div>
-      </main>
-    </div>
-  );
-};
+          <div className="mt-4 grid gap-10 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <p className="text-eyebrow text-care-700">Branch</p>
+              <h1 className="font-display text-display mt-3 font-semibold text-ink">{name}</h1>
+              <p className="text-lead mt-5 max-w-2xl text-ink-2">
+                {region.chapters.length} school {region.chapters.length === 1 ? "chapter" : "chapters"}
+                {states.length ? ` in ${states.join(", ")}` : ""}.{region.description ? ` ${region.description}` : ""}
+              </p>
+            </div>
+            {headerPhoto && (
+              <div className="relative aspect-[4/3] overflow-hidden rounded-band lg:col-span-5">
+                <Image src={headerPhoto.src} alt={`${events[0].title}, ${name}`} fill priority fetchPriority="high" sizes="(min-width: 1024px) 40vw, 100vw" className="object-cover" />
+              </div>
+            )}
+          </div>
+        </Container>
+      </Section>
 
-export default BranchDetail;
+      <Section tone="white">
+        <Container>
+          <SectionHeading eyebrow="Chapters" title={`Schools in ${name}`} lead="Each chapter is a club at one school, led by its chapter heads." />
+          <ul className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {region.chapters.map((chapter, i) => (
+              <Reveal as="li" key={chapter.id} delay={(i % 3) * 60} className="rounded-card bg-paper p-5 ring-1 ring-inset ring-line">
+                <h3 className="flex flex-wrap items-center gap-2 font-display text-h3 font-semibold text-ink">
+                  {chapter.school}
+                  {chapter.is_new && <NewBadge />}
+                </h3>
+                <p className="mt-1 text-sm text-muted">{chapter.state}</p>
+                {chapter.heads.length > 0 && (
+                  <p className="mt-3 text-ink-2">
+                    <span className="font-medium text-ink">{chapter.heads.length === 1 ? "Chapter head" : "Chapter heads"}:</span> {chapter.heads.join(", ")}
+                  </p>
+                )}
+                {chapter.note && <p className="mt-2 text-sm text-muted">{chapter.note}</p>}
+              </Reveal>
+            ))}
+          </ul>
+        </Container>
+      </Section>
+
+      {events.length > 0 && (
+        <Section tone="paper">
+          <Container>
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+              <SectionHeading eyebrow="Past events" title={`What ${name} has done`} />
+              <Button href="/events" variant="secondary" icon="arrow-right">
+                All past events
+              </Button>
+            </div>
+            <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {events.map((event) => (
+                <li key={event.slug}>
+                  <EventCard event={event} onOpen={lightbox.show} />
+                </li>
+              ))}
+            </ul>
+          </Container>
+          <PhotoLightbox {...lightbox} />
+        </Section>
+      )}
+
+      <CtaBand
+        photo={photos.fairTable}
+        eyebrow="Join in"
+        title={`At a school in ${name}?`}
+        text="Join the chapter at your school, or start one if it does not exist yet. The branch will help with your first event."
+        secondary={{ label: "Contact us", href: "/contact" }}
+      />
+    </>
+  );
+}

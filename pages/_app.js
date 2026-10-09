@@ -1,47 +1,30 @@
 import "../src/shared/globals.css";
-import "../src/shared/typekit.css";
-import "../src/shared/components/navbar.css";
-import Link from "next/link";
+import Head from "next/head";
 import Navbar from "../src/shared/components/Navbar";
+import Footer from "../src/shared/components/Footer";
+import BackToTop from "../src/shared/components/BackToTop";
+import { fontClassName } from "../src/shared/fonts";
 
-import '@fortawesome/fontawesome-svg-core/styles.css';
-import { config } from '@fortawesome/fontawesome-svg-core';
-config.autoAddCss = false;
-
-const metadata = {
-  title: "curingwithCARE",
-  description: "Dedicated to Cancer Awareness, Research and Education",
-};
-
-function CareApp({ Component, pageProps }) {
+export default function CareApp({ Component, pageProps }) {
   return (
-    <>
+    <div className={`${fontClassName} flex min-h-screen flex-col font-sans`}>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="theme-color" content="#466222" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-care-700 focus:px-5 focus:py-3 focus:font-semibold focus:text-white"
+      >
+        Skip to content
+      </a>
       <Navbar />
-      <Component {...pageProps} />
-      <footer className="bg-white text-center flex flex-col md:flex-row justify-between px-6 py-10 md:px-12 md:py-8 gap-y-8 md:gap-y-12">
-        <p className="text-gray-600 italic">
-          © {new Date().getFullYear()} curingwithCARE - A 501(c)(3) Nonprofit
-        </p>
-
-        <div className="flex justify-center gap-10 md:gap-12">
-          <div className="flex flex-col text-center md:text-right">
-            <a href="https://www.zeffy.com/en-US/donation-form/donate-to-curingwithcare" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0">Donate</a>
-            <Link href="/events" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0">Past Events</Link>
-            <Link href="/branches" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0">Branches</Link>
-            <Link href="/team" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0">Team</Link>
-          </div>
-
-          <div className="flex flex-col text-center md:text-right">
-            <Link href="/about" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0">About</Link>
-            <a href="https://www.instagram.com/curingwithcare/" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0" target="_blank">Instagram</a>
-            <a href="https://www.linkedin.com/company/curingwithcare" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0" target="_blank">LinkedIn</a>
-            <a href="https://www.facebook.com/people/curingwithcare/61551833566559/" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0" target="_blank">Facebook</a>
-            <a href="mailto:curingwithcare@gmail.com" className="text-gray-600 hover:text-gray-800 py-2.5 md:py-0">curingwithcare@gmail.com</a>
-          </div>
-        </div>
-      </footer>
-    </>
+      <main id="main" tabIndex={-1} className="flex-1 outline-none">
+        <Component {...pageProps} />
+      </main>
+      <Footer />
+      <BackToTop />
+    </div>
   );
 }
-
-export default CareApp;

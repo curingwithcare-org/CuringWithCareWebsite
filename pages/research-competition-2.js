@@ -1,7 +1,10 @@
-"use client";
-
-import Head from "next/head";
-import { motion } from "motion/react";
+import Link from "next/link";
+import SiteHead from "../src/shared/components/SiteHead";
+import Icon from "../src/shared/components/Icon";
+import Reveal from "../src/shared/components/Reveal";
+import CtaBand from "../src/shared/components/CtaBand";
+import { Container, Section, SectionHeading } from "../src/shared/components/Section";
+import photos from "../src/shared/photos";
 
 const prompts = [
   "The moral issues surrounding the availability of treatment and the new technologies developed.",
@@ -11,252 +14,98 @@ const prompts = [
 ];
 
 const placements = [
-  {
-    place: "1st Place",
-    authors: "Anna Chen and Sanai Purkait",
-    paperTitle: "Paper title coming soon",
-    note: "First-place PDF link will be added once available.",
-  },
-  {
-    place: "2nd Place",
-    authors: "Rishabh Patel, Akshajan Nadanasaran, Prithvi Damodhar",
-  },
-  {
-    place: "3rd Place",
-    authors: "Jimin Yoo and Hyowon Jo",
-  },
-  {
-    place: "4th Place",
-    authors: "Nirmal Vasanth, Rithvik Chintakuntla, Naomika Reddy",
-  },
-  {
-    place: "5th Place",
-    authors: "Grace Yang, Riya Piwar, Srinika Dasari",
-  },
-  {
-    place: "6th Place",
-    authors: "Clarissa Gunawan, Puja Raut, Lily Fabella",
-  },
-  {
-    place: "7th Place",
-    authors: "Dharshenee Kasiviswanathan",
-  },
-  {
-    place: "8th Place",
-    authors: "Vivian Zheng",
-  },
-  {
-    place: "9th Place",
-    authors: "Emy Reetoo and Khloe Martinez",
-  },
-  {
-    place: "10th Place",
-    authors: "Sophia Hesseling and Sanvi Jain",
-  },
+  { place: "1st", authors: "Anna Chen and Sanai Purkait" },
+  { place: "2nd", authors: "Rishabh Patel, Akshajan Nadanasaran, Prithvi Damodhar" },
+  { place: "3rd", authors: "Jimin Yoo and Hyowon Jo" },
+  { place: "4th", authors: "Nirmal Vasanth, Rithvik Chintakuntla, Naomika Reddy" },
+  { place: "5th", authors: "Grace Yang, Riya Piwar, Srinika Dasari" },
+  { place: "6th", authors: "Clarissa Gunawan, Puja Raut, Lily Fabella" },
+  { place: "7th", authors: "Dharshenee Kasiviswanathan" },
+  { place: "8th", authors: "Vivian Zheng" },
+  { place: "9th", authors: "Emy Reetoo and Khloe Martinez" },
+  { place: "10th", authors: "Sophia Hesseling and Sanvi Jain" },
 ];
 
 export default function ResearchCompetitionSecondEdition() {
-  const firstPlace = placements[0];
-  const runnerUps = placements.slice(1, 3);
-  const otherPlacements = placements.slice(3);
-
+  const [first, ...rest] = placements;
   return (
-    <div className="min-h-screen bg-linear-to-b from-gray-50 to-gray-100">
-      <Head>
-        <title>CARE Review Paper Competition 2nd Edition | CARE</title>
-        <meta
-          name="description"
-          content="CARE Review Paper Competition 2nd Edition, prompts, and winners"
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <>
+      <SiteHead
+        title="Review Paper Competition, second edition"
+        path="/research-competition-2"
+        description="The second CARE Review Paper Competition: four prompts on cancer treatment, ethics, research and risk, and the ten teams that placed."
+      />
 
-
-      <main className="container mx-auto px-4 py-12">
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-12"
-        >
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-green-600 mt-24">
-            CARE Review Paper Competition
+      <Section tone="paper" size="tight" className="pt-10 md:pt-16">
+        <Container>
+          <Link href="/research" className="inline-flex min-h-11 items-center gap-1.5 text-[0.9375rem] font-medium text-care-700 hover:underline underline-offset-4">
+            <Icon name="arrow-left" size={16} />
+            Research
+          </Link>
+          <p className="text-eyebrow mt-4 text-care-700">Review paper competition · Second edition</p>
+          <h1 className="font-display text-display mt-3 max-w-4xl font-semibold text-ink">Four prompts on treatment, ethics, research and risk.</h1>
+          <p className="text-lead mt-6 max-w-2xl text-ink-2">
+            Teams of up to three students picked one prompt. Ten teams placed. Paper titles and the first-place PDF will be added when the
+            team sends them.
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold text-green-600 mt-4 mb-6">
-            2nd Edition
-          </h1>
-          <div className="w-24 h-1 bg-linear-to-r from-green-500 to-emerald-400 mx-auto mb-6 rounded-full" />
-          <p className="text-lg text-gray-700 max-w-3xl mx-auto leading-relaxed">
-            The second edition expands the review paper challenge with new
-            prompts focused on treatment access, ethics, research directions,
-            and the broader impact of cancer on society.
-          </p>
-        </motion.section>
+        </Container>
+      </Section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          viewport={{ once: true }}
-          className="bg-white rounded-2xl shadow-lg p-8 mb-16"
-        >
-          <h2 className="text-2xl font-bold text-green-700 mb-6 text-center">
-            Prompts
-          </h2>
-          <div className="grid gap-4 md:grid-cols-2">
-            {prompts.map((prompt, index) => (
-              <div
-                key={prompt}
-                className="rounded-xl border border-green-100 bg-green-50/60 p-5"
-              >
-                <p className="text-sm font-semibold text-green-700 mb-2">
-                  Prompt {index + 1}
-                </p>
-                <p className="text-gray-700 leading-relaxed">{prompt}</p>
-              </div>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-12 h-1 bg-green-300" />
-            <h2 className="text-3xl font-bold text-center text-green-600 mx-4">
-              First Place Winner
-            </h2>
-            <div className="w-12 h-1 bg-green-300" />
-          </div>
-
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="p-8 flex flex-col justify-between">
-                <div>
-                  <div className="inline-block bg-yellow-400 text-gray-800 px-4 py-1 rounded-full font-bold shadow-md mb-4">
-                    {firstPlace.place}
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                    {firstPlace.authors}
-                  </h3>
-                  <p className="text-gray-600 mb-2">
-                    <span className="font-semibold text-gray-900">Paper:</span>{" "}
-                    {firstPlace.paperTitle}
-                  </p>
-                  <p className="text-gray-600 mb-6">{firstPlace.note}</p>
-                  <div className="rounded-xl border border-dashed border-green-200 bg-green-50 p-4 text-sm text-green-800">
-                    The paper title and PDF link will appear here once they are available.
-                  </div>
-                </div>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <button
-                    disabled
-                    className="inline-flex items-center max-md:min-h-11 bg-gray-100 text-gray-500 py-2 px-4 rounded-md cursor-not-allowed"
-                  >
-                    Download Paper Coming Soon
-                  </button>
-                </div>
-              </div>
-
-              <div className="relative bg-gray-100 min-h-[300px] md:min-h-[500px]">
-                <div className="flex items-center justify-center h-full p-8">
-                  <div className="text-center max-w-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-gray-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <p className="text-gray-600 mb-4">The first-place paper PDF will be embedded here when it is ready.</p>
-                    <p className="text-gray-500 text-sm">Paper title and link are pending.</p>
-                  </div>
-                </div>
-              </div>
+      <Section tone="white" size="tight">
+        <Container>
+          <div className="grid gap-8 md:grid-cols-12">
+            <div className="md:col-span-3">
+              <h2 className="text-eyebrow text-care-700">The prompts</h2>
             </div>
+            <ol className="md:col-span-9 space-y-5">
+              {prompts.map((p, i) => (
+                <li key={p} className="flex gap-4">
+                  <span className="font-display text-h3 font-semibold text-care-700">{i + 1}</span>
+                  <p className="text-lg leading-relaxed text-ink-2">{p}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-        </motion.section>
+        </Container>
+      </Section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-12 h-1 bg-green-300" />
-            <h2 className="text-3xl font-bold text-center text-green-600 mx-4">
-              Runners-Up
-            </h2>
-            <div className="w-12 h-1 bg-green-300" />
-          </div>
+      <Section tone="tint">
+        <Container>
+          <Reveal className="rounded-band bg-white p-6 shadow-card md:p-10">
+            <p className="text-eyebrow text-care-700">First place</p>
+            <h2 className="font-display text-h1 mt-3 font-semibold text-ink">{first.authors}</h2>
+            <p className="mt-4 text-lg text-ink-2">[TODO: paper title]</p>
+            <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-care-50 px-4 py-2 text-sm font-medium text-care-800">
+              <Icon name="file-text" size={16} />
+              [TODO: first-place PDF]
+            </p>
+          </Reveal>
+        </Container>
+      </Section>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {runnerUps.map((paper) => (
-              <motion.div
-                key={paper.place}
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.3 }}
-                className="bg-white rounded-xl overflow-hidden shadow-lg"
-              >
-                <div className="p-6">
-                  <div className="inline-block bg-yellow-400 text-gray-800 px-4 py-1 rounded-full font-bold shadow-md mb-4">
-                    {paper.place}
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">
-                    {paper.authors}
-                  </h3>
-                </div>
-              </motion.div>
+      <Section tone="paper">
+        <Container>
+          <SectionHeading eyebrow="Placements" title="Second through tenth." />
+          <ol className="mt-8 divide-y divide-line border-y border-line">
+            {rest.map((p) => (
+              <li key={p.place} className="grid gap-1 py-4 sm:grid-cols-12 sm:items-baseline">
+                <span className="font-display text-h3 font-semibold text-care-700 sm:col-span-2">{p.place}</span>
+                <span className="font-medium text-ink sm:col-span-6">{p.authors}</span>
+                <span className="text-sm text-muted sm:col-span-4">[TODO: paper title]</span>
+              </li>
             ))}
-          </div>
-        </motion.section>
+          </ol>
+        </Container>
+      </Section>
 
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
-          <div className="flex items-center justify-center mb-8">
-            <div className="w-12 h-1 bg-green-300" />
-            <h2 className="text-3xl font-bold text-center text-green-600 mx-4">
-              Honorable Mentions
-            </h2>
-            <div className="w-12 h-1 bg-green-300" />
-          </div>
-
-          <div className="bg-white rounded-xl overflow-hidden shadow-lg">
-            <div className="grid grid-cols-12 bg-green-600 text-white font-semibold py-4 px-6">
-              <div className="col-span-3 md:col-span-2">Place</div>
-              <div className="col-span-5 md:col-span-7">Paper Title</div>
-              <div className="col-span-4 md:col-span-3">Author</div>
-            </div>
-
-            {otherPlacements.map((paper, index) => (
-              <div
-                key={paper.place}
-                className={`grid grid-cols-12 py-4 px-6 items-center ${
-                  index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                }`}
-              >
-                <div className="col-span-3 md:col-span-2 font-semibold text-gray-900">
-                  {paper.place}
-                </div>
-                <div className="col-span-5 md:col-span-7 font-medium text-gray-800">
-                  Paper title coming soon
-                </div>
-                <div className="col-span-4 md:col-span-3 text-gray-600">
-                  {paper.authors}
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.section>
-      </main>
-    </div>
+      <CtaBand
+        photo={photos.hillmanStaff}
+        eyebrow="Start at the beginning"
+        title="Read the first edition's winning paper."
+        text="A systematic review of the social, ethical and scientific challenges of cervical cancer, by Angela Choi."
+        primary={{ label: "First edition", href: "/research-competition" }}
+        secondary={{ label: "All research", href: "/research" }}
+      />
+    </>
   );
 }
