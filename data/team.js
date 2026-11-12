@@ -82,7 +82,7 @@ const team = [
     category: "board",
     photo: "/team/shruthi.jpg",
     width: 800,
-    height: 635,
+    height: 600,
     bio: ""
   },
   {
