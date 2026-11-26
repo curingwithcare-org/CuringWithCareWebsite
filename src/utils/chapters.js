@@ -1,4 +1,5 @@
 import chapterList from "../../data/chapters";
+import headline from "../../data/stats";
 
 // Everything about chapters comes from data/chapters.js. A "region" (also
 // called a branch on the site) is a city or area with one or more school
@@ -66,13 +67,16 @@ export const regionBySlug = (slug) => regions.find((r) => r.slug === slug) || nu
 
 export const branchSlugs = regions.filter((r) => r.slug).map((r) => r.slug);
 
-const chapterCount = regions.reduce((total, r) => total + r.chapters.length, 0);
+// The official chapter count (data/stats.js), or the chapter list if it has grown past it.
+const chapterCount = Math.max(headline.chapters, regions.reduce((total, r) => total + r.chapters.length, 0));
 
 /** Headline numbers for the home and about pages. */
 export function chapterStats() {
   const countries = [...new Set(regions.map((r) => r.country))];
   return {
     chapters: chapterCount,
+    members: headline.members,
+    raised: headline.raised,
     branches: regions.length,
     countries: countries.length,
     countryNames: countries,

@@ -152,8 +152,8 @@ export default function About({ stats }) {
               stats={[
                 { value: stats.chapters, label: "Chapters", note: `${stats.newChapters} new this year` },
                 { value: stats.branches, label: "Branches" },
-                { value: "900+", label: "Members", note: "Across every chapter" },
-                { value: "$30k+", label: "Raised for cancer causes" },
+                { value: stats.members, label: "Members", note: "Across every chapter" },
+                { value: stats.raised, label: "Raised for cancer causes" },
               ]}
             />
           </Reveal>
