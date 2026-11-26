@@ -95,10 +95,10 @@ export default function Home({ stats, countries, recent }) {
           <Reveal>
             <StatRow
               stats={[
-                { value: stats.chapters, label: "Chapters", note: "Counted from our chapter list" },
+                { value: stats.chapters, label: "Chapters", note: "And growing" },
                 { value: stats.countries, label: "Countries", note: stats.countryNames.join(", ") },
-                { value: "900+", label: "Members", note: "Across every chapter" },
-                { value: "$30k+", label: "Raised for cancer causes" },
+                { value: stats.members, label: "Members", note: "Across every chapter" },
+                { value: stats.raised, label: "Raised for cancer causes" },
               ]}
             />
           </Reveal>
